@@ -1,1 +1,1 @@
-# griplateralityinterface
+# Grip Laterality Interface
