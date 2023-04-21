@@ -25,7 +25,7 @@
                 lbl_ble_supported.innerHTML = `<span style="color:red">Bluetooth is Not Supported on this Browser`;
             }
         </script>
-        
+
         <button id="ble_connected"> Connect Device </button>
         <h3 id="ble_status"> Bluetooth Status... </h3>
         <h3 id="sensor_status"> Sensor Status... </h3>
@@ -36,10 +36,46 @@
         <!--start data collection-->
 
         <div id="error"></div>
-          <button id="select_device">Select a Go Direct Device</button>
-          <div id="error"></div>
-          <pre id="output"></pre>
-          <button id="csv" onclick="download_csv()">Download CSV</button>
+        <button id="select_device">Select a Go Direct Device</button>
+        <div id="error"></div>
+        <pre id="output"></pre>
+        <button id="csv" onclick="download_csv()">Download CSV</button>
+          
+        <script>
+            const btn_connect = document.querySelector('#ble_connected');
+            const lbl_ble_status = document.querySelector('#ble_status');
+            const lbl_sensor_status = document.querySelector('#sensor_status');
+            const output = document.querySelector('#output');
+            const error = document.querySelector('#error');
+
+            // create array to store data to be saved in the csv file
+            let data = [];
+            let sensor = null;
+
+            const ConnectDevice = async() => {
+                error.textContent = "";
+                try {
+                    const gdxDevice = await godirect.selectDevice(true);
+                    lbl_ble_status.innerHTML = '<span style="color:green">Bluetooth Connected';
+                    output.textContent += `\n Connected to `+gdxDevice.name;
+
+                    // set up sensor
+                    sensor = gdxDevice.getSensor(1);
+                    sensor.setEnabled(true);
+                    lbl_sensor_status.innerHTML = '<span style="color:green">Force (N) Sensor Connected';
+                } catch (err) {
+                    lbl_ble_status.innerHTML = '<span style="color:red">Bluetooth Not Connected';
+                    lbl_sensor_status.innerHTML = '<span style="color:red">Force (N) Sensor Not Connected';
+                    console.error(err);
+                    error.innerText += "\n "+err;
+                    if (err.toString().includes('cross-origin')) {
+                    error.innerHTML+= '\n<p><b>Are you running in an embedded iframe? Try running this example in its own window.</b></p>'
+                    }
+                }
+            }
+            btn_connect.addEventListener('click', ConnectDevice);
+        </script>
+          <!--
           <script>
             const usbBtn = document.querySelector('#usb');
             const usbLabel = document.querySelector('#usb_label');
@@ -178,6 +214,6 @@
         
             selectDeviceBtn.addEventListener('click', selectDevice);
           </script>
-
+        -->
     </body>
 </html> 
