@@ -26,23 +26,25 @@
             }
         </script>
 
-        <button id="ble_connected"> Connect Device </button>
+        <button id="ble_connect"> Connect Device </button>
         <h3 id="ble_status"> Bluetooth Status... </h3>
         <h3 id="sensor_status"> Sensor Status... </h3>
         <!--connect device (TODO: run on page load)-->
 
         <br>
         <button id="collect_data"> Start Collecting Data </button>
+        <br>
         <!--start data collection-->
 
-        <div id="error"></div>
-        <button id="select_device">Select a Go Direct Device</button>
+        <button id="ble_disconnect"> Disconnect </button>
+        <br>
+
         <div id="error"></div>
         <pre id="output"></pre>
         <button id="csv" onclick="download_csv()">Download CSV</button>
           
         <script>
-            const btn_connect = document.querySelector('#ble_connected');
+            const btn_connect = document.querySelector('#ble_connect');
             const lbl_ble_status = document.querySelector('#ble_status');
             const lbl_sensor_status = document.querySelector('#sensor_status');
             const output = document.querySelector('#output');
@@ -63,6 +65,20 @@
                     sensor = gdxDevice.getSensor(1);
                     sensor.setEnabled(true);
                     lbl_sensor_status.innerHTML = '<span style="color:green">Force (N) Sensor Connected';
+
+                    gdxDevice.start(1);
+                    sensor.on('value-changed', (sensor) => {
+                        // only collect 10 samples and disconnect.
+                        if (sensor.values.length > 100){
+                        gdxDevice.close();
+                        }
+                        // log the sensor name, new value and units.
+                        console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
+                        // add data points to the data array
+                        data.push(sensor.value);
+                        // output the change to the pre tag
+                        output.textContent += `\n Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`;
+                    }); 
                 } catch (err) {
                     lbl_ble_status.innerHTML = '<span style="color:red">Bluetooth Not Connected';
                     lbl_sensor_status.innerHTML = '<span style="color:red">Force (N) Sensor Not Connected';
@@ -73,7 +89,17 @@
                     }
                 }
             }
+
             btn_connect.addEventListener('click', ConnectDevice);
+        </script>
+
+        <script>
+            const btn_collect = document.querySelector('#collect_data');
+            const CollectData = async() => {
+                alert(hello)
+            }
+
+            btn_collect.addEventListener('click', CollectData);
         </script>
           <!--
           <script>
