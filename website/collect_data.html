@@ -35,7 +35,7 @@
         <!--connect device (TODO: run on page load)-->
 
         <br>
-        <button id="collect_data"> Start Collecting Data </button>
+        <button id ="collect_data" onclick = "CollectData()">Collect Data</button>
         <br>
         <!--start data collection-->
 
@@ -50,7 +50,6 @@
             const btn_connect = document.querySelector('#ble_connect');
             const lbl_ble_status = document.querySelector('#ble_status');
             const lbl_sensor_status = document.querySelector('#sensor_status');
-            const btn_collect = document.querySelector('#collect_data');
             
 
             const output = document.querySelector('#output');
@@ -58,28 +57,27 @@
 
             // create array to store data to be saved in the csv file
             let data = [];
-            let sensor = null;
+            let gdxDevice = "";
+            // let sensor = null;
 
             const ConnectDevice = async() => {
                 error.textContent = "";
-                let gdxDevice;
+                
                 try {
                   const bleDevice = await navigator.bluetooth.requestDevice({
                     filters: [{ namePrefix: 'GDX' }],
                     optionalServices: ['d91714ef-28b9-4f91-ba16-f0d9a604f112']
                   });
-                  // gdxDevice = await godirect.selectDevice(true);
                   gdxDevice = await godirect.createDevice(bleDevice,  {open: true, startMeasurements: false});
                   lbl_ble_status.innerHTML = '<span style="color:green">Bluetooth Connected';
                   output.textContent += `\n Connected to `+gdxDevice.name;
 
-                  gdxDevice.sensors.forEach(sensor => {
-                    lbl_sensor_status.innerHTML = '\n <span>sensor.number</span>: <span>sensor.name</span> units: <span>sensor.unit</span>}`';
+                  //gdxDevice.sensors.forEach(sensor => {
+                    //lbl_sensor_status.innerHTML = '\n <span>sensor.number</span>: <span>sensor.name</span> units: <span>sensor.unit</span>}`';
                     // sensors.textContent += `\n ${sensor.number}: ${sensor.name} units: ${sensor.unit}`  ;
-                  }); 
+                  //}); 
                 } catch (err) {
                     lbl_ble_status.innerHTML = '<span style="color:red">Bluetooth Not Connected</span>';
-                    lbl_sensor_status.innerHTML = '<span style="color:red">Force (N) Sensor Not Connected</span>';
                     console.error(err);
                     error.innerText += "\n "+err;
                     if (err.toString().includes('cross-origin')) {
@@ -89,12 +87,27 @@
             }
 
             function CollectData() {
-                alert("hello")
+                // set up sensor
+                const sensor = gdxDevice.getSensor(1);
+                if (sensor) {
+                  output.textContent = `\n Selected Sensor: ${sensor.name} units: ${sensor.unit}`;
+                  sensor.setEnabled(true);
+                }
+
+                // clear data arrays
+                sensor.values = [];
+                data = [];
+
+                // device closes after collection
+                
+                lbl_sensor_status.innerHTML = '<span style="color:green">Force (N) Sensor Connected';
+                
                 gdxDevice.start(1);
                 sensor.on('value-changed', (sensor) => {
                     // only collect 10 samples and disconnect.
                     if (sensor.values.length > 100){
-                        gdxDevice.close();
+                        // gdxDevice.close();
+                        gdxDevice.stop();
                     }
                     // log the sensor name, new value and units.
                     console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
@@ -105,9 +118,8 @@
                 }); 
             }
 
-            btn_collect.addEventListener('click', CollectData);
-
             btn_connect.addEventListener('click', ConnectDevice);
+
         </script>
           <!--
           <script>
