@@ -61,32 +61,22 @@
                 error.textContent = "";
                 let gdxDevice;
                 try {
-                    if (sensor == null) {
-                        gdxDevice = await godirect.selectDevice(true);
-                        lbl_ble_status.innerHTML = '<span style="color:green">Bluetooth Connected';
-                        output.textContent += `\n Connected to `+gdxDevice.name;
+                  const bleDevice = await navigator.bluetooth.requestDevice({
+                    filters: [{ namePrefix: 'GDX' }],
+                    optionalServices: ['d91714ef-28b9-4f91-ba16-f0d9a604f112']
+                  });
+                  // gdxDevice = await godirect.selectDevice(true);
+                  gdxDevice = await godirect.createDevice(bleDevice,  {open: true, startMeasurements: false});
+                  lbl_ble_status.innerHTML = '<span style="color:green">Bluetooth Connected';
+                  output.textContent += `\n Connected to `+gdxDevice.name;
 
-                        // set up sensor
-                        sensor = gdxDevice.getSensor(1);
-                        sensor.setEnabled(true);
-                        lbl_sensor_status.innerHTML = '<span style="color:green">Force (N) Sensor Connected';
-                    } 
-                    gdxDevice.start(1);
-                    sensor.on('value-changed', (sensor) => {
-                        // only collect 10 samples and disconnect.
-                        if (sensor.values.length > 100){
-                        // gdxDevice.close();
-                        }
-                        // log the sensor name, new value and units.
-                        console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
-                        // add data points to the data array
-                        data.push(sensor.value);
-                        // output the change to the pre tag
-                        output.textContent += `\n Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`;
-                    });
+                  gdxDevice.sensors.forEach(sensor => {
+                    lbl_sensor_status.innerHTML = '\n <span>sensor.number</span>: <span>sensor.name</span> units: <span>sensor.unit</span>}`';
+                    // sensors.textContent += `\n ${sensor.number}: ${sensor.name} units: ${sensor.unit}`  ;
+                  }); 
                 } catch (err) {
-                    lbl_ble_status.innerHTML = '<span style="color:red">Bluetooth Not Connected';
-                    lbl_sensor_status.innerHTML = '<span style="color:red">Force (N) Sensor Not Connected';
+                    lbl_ble_status.innerHTML = '<span style="color:red">Bluetooth Not Connected</span>';
+                    lbl_sensor_status.innerHTML = '<span style="color:red">Force (N) Sensor Not Connected</span>';
                     console.error(err);
                     error.innerText += "\n "+err;
                     if (err.toString().includes('cross-origin')) {
