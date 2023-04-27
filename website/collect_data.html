@@ -9,10 +9,13 @@
         <form action="patient_info.html">
             <input type="submit" value="Back to patient_info" />
         </form>
-        <form action="gdx_example.html">
-            <input type="submit" value="Go to gdx_example" />
+        <form action="gdx_example_5.html">
+            <input type="submit" value="Go to gdx_example_5" />
         </form>
         
+        <form action="gdx_example_3.html">
+          <input type="submit" value="Go to gdx_example_3" />
+      </form>
         <h1> Bluetooth Data Collection</h1>
 
         <h2 id="ble_supported"></h2>
@@ -32,7 +35,7 @@
         <!--connect device (TODO: run on page load)-->
 
         <br>
-        <button id="collect_data"> Start Collecting Data </button>
+        <button id ="collect_data" onclick = "CollectData()">Collect Data</button>
         <br>
         <!--start data collection-->
 
@@ -47,7 +50,6 @@
             const btn_connect = document.querySelector('#ble_connect');
             const lbl_ble_status = document.querySelector('#ble_status');
             const lbl_sensor_status = document.querySelector('#sensor_status');
-            const btn_collect = document.querySelector('#collect_data');
             
 
             const output = document.querySelector('#output');
@@ -55,38 +57,27 @@
 
             // create array to store data to be saved in the csv file
             let data = [];
-            let sensor = null;
+            let gdxDevice = "";
+            // let sensor = null;
 
             const ConnectDevice = async() => {
                 error.textContent = "";
-                let gdxDevice;
+                
                 try {
-                    if (sensor == null) {
-                        gdxDevice = await godirect.selectDevice(true);
-                        lbl_ble_status.innerHTML = '<span style="color:green">Bluetooth Connected';
-                        output.textContent += `\n Connected to `+gdxDevice.name;
+                  const bleDevice = await navigator.bluetooth.requestDevice({
+                    filters: [{ namePrefix: 'GDX' }],
+                    optionalServices: ['d91714ef-28b9-4f91-ba16-f0d9a604f112']
+                  });
+                  gdxDevice = await godirect.createDevice(bleDevice,  {open: true, startMeasurements: false});
+                  lbl_ble_status.innerHTML = '<span style="color:green">Bluetooth Connected';
+                  output.textContent += `\n Connected to `+gdxDevice.name;
 
-                        // set up sensor
-                        sensor = gdxDevice.getSensor(1);
-                        sensor.setEnabled(true);
-                        lbl_sensor_status.innerHTML = '<span style="color:green">Force (N) Sensor Connected';
-                    } 
-                    gdxDevice.start(1);
-                    sensor.on('value-changed', (sensor) => {
-                        // only collect 10 samples and disconnect.
-                        if (sensor.values.length > 100){
-                        // gdxDevice.close();
-                        }
-                        // log the sensor name, new value and units.
-                        console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
-                        // add data points to the data array
-                        data.push(sensor.value);
-                        // output the change to the pre tag
-                        output.textContent += `\n Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`;
-                    });
+                  //gdxDevice.sensors.forEach(sensor => {
+                    //lbl_sensor_status.innerHTML = '\n <span>sensor.number</span>: <span>sensor.name</span> units: <span>sensor.unit</span>}`';
+                    // sensors.textContent += `\n ${sensor.number}: ${sensor.name} units: ${sensor.unit}`  ;
+                  //}); 
                 } catch (err) {
-                    lbl_ble_status.innerHTML = '<span style="color:red">Bluetooth Not Connected';
-                    lbl_sensor_status.innerHTML = '<span style="color:red">Force (N) Sensor Not Connected';
+                    lbl_ble_status.innerHTML = '<span style="color:red">Bluetooth Not Connected</span>';
                     console.error(err);
                     error.innerText += "\n "+err;
                     if (err.toString().includes('cross-origin')) {
@@ -96,12 +87,27 @@
             }
 
             function CollectData() {
-                alert("hello")
+                // set up sensor
+                const sensor = gdxDevice.getSensor(1);
+                if (sensor) {
+                  output.textContent = `\n Selected Sensor: ${sensor.name} units: ${sensor.unit}`;
+                  sensor.setEnabled(true);
+                }
+
+                // clear data arrays
+                sensor.values = [];
+                data = [];
+
+                // device closes after collection
+                
+                lbl_sensor_status.innerHTML = '<span style="color:green">Force (N) Sensor Connected';
+                
                 gdxDevice.start(1);
                 sensor.on('value-changed', (sensor) => {
                     // only collect 10 samples and disconnect.
                     if (sensor.values.length > 100){
-                        gdxDevice.close();
+                        // gdxDevice.close();
+                        gdxDevice.stop();
                     }
                     // log the sensor name, new value and units.
                     console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
@@ -112,9 +118,8 @@
                 }); 
             }
 
-            btn_collect.addEventListener('click', CollectData);
-
             btn_connect.addEventListener('click', ConnectDevice);
+
         </script>
           <!--
           <script>
