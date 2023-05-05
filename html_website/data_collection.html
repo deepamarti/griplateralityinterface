@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Data Collection</title>
+        <script src="https://unpkg.com/@vernier/godirect/dist/godirect.min.umd.js"></script>
+    </head>
+
+    <body>
+        <h1> Bluetooth Data Collection</h1>
+
+        <h2 id="ble_supported"></h2>
+        <!--check if browser support Bluetooth (TODO: move to index.html)-->
+        <script>
+            const lbl_ble_supported = document.querySelector('#ble_supported');
+            if (navigator.bluetooth) {
+                lbl_ble_supported.innerHTML = '<span style="color:green">Bluetooth is Supported on this Browser';
+            } else if (navigator.hid) {
+                lbl_ble_supported.innerHTML = `<span style="color:red">Bluetooth is Not Supported on this Browser`;
+            }
+        </script>
+
+        <button id="ble_connect"> Connect Device </button>
+        <h3 id="ble_status"> Bluetooth Status... </h3>
+        <h3 id="sensor_status"> Sensor Status... </h3>
+        <!--connect device (TODO: run on page load)-->
+
+        <br>
+        <button id ="collect_data" onclick = "CollectData()">Collect Data</button>
+        <br>
+        <!--start data collection-->
+
+        <button id="ble_disconnect"> Disconnect </button>
+        <br>
+
+        <div id="error"></div>
+        <pre id="output"></pre>
+        <button id="csv" onclick="download_csv()">Download CSV</button>
+          
+        <script>
+            const btn_connect = document.querySelector('#ble_connect');
+            const lbl_ble_status = document.querySelector('#ble_status');
+            const lbl_sensor_status = document.querySelector('#sensor_status');
+            
+
+            const output = document.querySelector('#output');
+            const error = document.querySelector('#error');
+
+            // create array to store data to be saved in the csv file
+            let data = [];
+            let gdxDevice = "";
+            // let sensor = null;
+
+            const ConnectDevice = async() => {
+                error.textContent = "";
+                
+                try {
+                  const bleDevice = await navigator.bluetooth.requestDevice({
+                    filters: [{ namePrefix: 'GDX' }],
+                    optionalServices: ['d91714ef-28b9-4f91-ba16-f0d9a604f112']
+                  });
+                  gdxDevice = await godirect.createDevice(bleDevice,  {open: true, startMeasurements: false});
+                  lbl_ble_status.innerHTML = '<span style="color:green">Bluetooth Connected';
+                  output.textContent += `\n Connected to `+gdxDevice.name;
+
+                  //gdxDevice.sensors.forEach(sensor => {
+                    //lbl_sensor_status.innerHTML = '\n <span>sensor.number</span>: <span>sensor.name</span> units: <span>sensor.unit</span>}`';
+                    // sensors.textContent += `\n ${sensor.number}: ${sensor.name} units: ${sensor.unit}`  ;
+                  //}); 
+                } catch (err) {
+                    lbl_ble_status.innerHTML = '<span style="color:red">Bluetooth Not Connected</span>';
+                    console.error(err);
+                    error.innerText += "\n "+err;
+                    if (err.toString().includes('cross-origin')) {
+                    error.innerHTML+= '\n<p><b>Are you running in an embedded iframe? Try running this example in its own window.</b></p>'
+                    }
+                }
+            }
+
+            function CollectData() {
+                // set up sensor
+                const sensor = gdxDevice.getSensor(1);
+                if (sensor) {
+                  output.textContent = `\n Selected Sensor: ${sensor.name} units: ${sensor.unit}`;
+                  sensor.setEnabled(true);
+                }
+
+                // clear data arrays
+                sensor.values = [];
+                data = [];
+
+                // device closes after collection
+                
+                lbl_sensor_status.innerHTML = '<span style="color:green">Force (N) Sensor Connected';
+                
+                gdxDevice.start();
+                sensor.on('value-changed', (sensor) => {
+                    // only collect 10 samples and disconnect.
+                    if (sensor.values.length > 100){
+                        // gdxDevice.close();
+                        gdxDevice.stop();
+                    }
+                    // log the sensor name, new value and units.
+                    console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
+                    // add data points to the data array
+                    data.push(sensor.value);
+                    // output the change to the pre tag
+                    output.textContent += `\n Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`;
+                }); 
+            }
+
+            btn_connect.addEventListener('click', ConnectDevice);
+
+        </script>
+    </body>
+</html> 
