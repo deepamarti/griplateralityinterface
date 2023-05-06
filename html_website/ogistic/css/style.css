@@ -621,28 +621,30 @@ ul.conat_info li a:hover {
 
 /** manual section **/
 .manual {
-
+     text-align: left;
 }
 
 .manual_entry_form {
-     column-count: 2;
-     column-gap: 30px;
+     padding: 0 15px;
+     height: 40px;
+     margin-bottom: 15px;
+     border: #fff solid 1px;
+     font-size: 16px;
 }
 
 /* Create two equal columns that floats next to each other */
-.column {
+.manual_entry_column {
      float: left;
      width: 50%;
      padding: 10px;
-     height: 300px; /* Should be removed. Only for demonstration */
-   }
+}
    
-   /* Clear floats after the columns */
-   .row:after {
+/* Clear floats after the columns */
+.manual_entry_row:after {
      content: "";
      display: table;
      clear: both;
-   }
+}
 
 /** vehicles section **/
 

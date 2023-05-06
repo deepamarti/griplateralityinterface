@@ -29,19 +29,19 @@
                  </div>
                  <div class="col-md-12">
                     <label>Name: </label>
-                    <input class="patient_form" placeholder="Name: " type="text" name="A">
+                    <input class="patient_form" placeholder="A " type="text" name="patient_name">
                  </div>
                  <div class="col-md-12">
                     <label> Age: </label>
-                    <input class="patient_form" placeholder="Age" type="text" name="21">
+                    <input class="patient_form" placeholder="21" type="text" name="patient_age">
                  </div>
                  <div class="col-md-12">
                     <label>Date of Birth: </label>
-                    <input class="patient_form" placeholder="Date of Birth" type="text" name="5/6/23">
+                    <input class="patient_form" placeholder="5/6/23" type="text" name="patient_dob">
                  </div>
                  <div class="col-md-12">
                     <label>Hand Dominance: </label>
-                    <input class="patient_form" placeholder="Hand Dominance" type="text" name="right">
+                    <input class="patient_form" placeholder="Right" type="text" name="patient_hand_dom">
                  </div>
                  <div class="col-md-12">
                     <button class="get_now">Get Now quote</button>
@@ -102,18 +102,45 @@
                      <!--if manual is selected-->
                      <div id="manual_collection" class="manual">
                         <form id="manual_entry">
+                            <h2>Manual Entry </h2>
+                            <div class="manual_entry_row">
+                                <div class="manual_entry_column">
+                                    <div class="col-md-12">
+                                        <h3>Right Hand Measurements</h3>
+                                     </div>
+                                     <div class="col-md-12">
+                                        <label>Trial 1: </label>
+                                        <input class="manual_entry_form" placeholder="60" type="text" name="right_t1">
+                                     </div>
+                                     <div class="col-md-12">
+                                        <label>Trial 2: </label>
+                                        <input class="manual_entry_form" placeholder="60" type="text" name="right_t2">
+                                     </div>
+                                     <div class="col-md-12">
+                                        <label>Trial 3: </label>
+                                        <input class="manual_entry_form" placeholder="60" type="text" name="right_t3">
+                                     </div>
+                                </div>
+                                <div class="manual_entry_column">
+                                    <div class="col-md-12">
+                                        <h3>Left Hand Measurements</h3>
+                                     </div>
+                                     <div class="col-md-12">
+                                        <label>Trial 1: </label>
+                                        <input class="manual_entry_form" placeholder="60" type="text" name="left_t1">
+                                     </div>
+                                     <div class="col-md-12">
+                                        <label>Trial 2: </label>
+                                        <input class="manual_entry_form" placeholder="60" type="text" name="left_t2">
+                                     </div>
+                                     <div class="col-md-12">
+                                        <label>Trial 3: </label>
+                                        <input class="manual_entry_form" placeholder="60" type="text" name="left_t3">
+                                     </div>
+                                </div>
+                            </div>
+                            <input class="manual_entry_form" type="submit" value="Submit">
                         </form>
-                        <h2>Two Equal Columns</h2>
-                        <div class="row">
-                        <div class="column" style="background-color:#aaa;">
-                            <h2>Column 1</h2>
-                            <p>Some text..</p>
-                        </div>
-                        <div class="column" style="background-color:#bbb;">
-                            <h2>Column 2</h2>
-                            <p>Some text..</p>
-                        </div>
-                        </div>
                      </div>
                   </div>
                </div>
@@ -138,36 +165,18 @@
             }
         </script>
         
-        <!--check if browser support Bluetooth-->
+
+
+        <!--bluetooth functions-->
         <script>
+            // checks bluetooth capability of browser
             const lbl_ble_supported = document.querySelector('#ble_supported');
             if (navigator.bluetooth) {
                 lbl_ble_supported.innerHTML = '<span style="color:green">Bluetooth is Supported on this Browser';
-            } else if (navigator.hid) {
+            } else {
                 lbl_ble_supported.innerHTML = `<span style="color:red">Bluetooth is Not Supported on this Browser`;
             }
-        </script>
 
-        <button id="ble_connect"> Connect Device </button>
-        <h3 id="ble_status"> Bluetooth Status... </h3>
-        <h3 id="sensor_status"> Sensor Status... </h3>
-        <!--connect device (TODO: run on page load)-->
-
-        <br>
-        <button id ="collect_data" onclick="CollectData()">Collect Data</button>
-        <text id="start_time"></text>
-        <text id="end_time"></text>
-        <br>
-        <!--start data collection-->
-
-        <button id="ble_disconnect" onclick="DisconnectDevice()"> Disconnect </button>
-        <br>
-
-        <div id="error"></div>
-        <pre id="output"></pre>
-        <button id="csv" onclick="download_csv()">Download CSV</button>
-          
-        <script>
             const btn_connect = document.querySelector('#ble_connect');
             const lbl_ble_status = document.querySelector('#ble_status');
             const lbl_sensor_status = document.querySelector('#sensor_status');
@@ -196,10 +205,6 @@
                   lbl_ble_status.innerHTML = '<span style="color:green">Bluetooth Connected';
                   output.textContent += `\n Connected to `+gdxDevice.name;
 
-                  //gdxDevice.sensors.forEach(sensor => {
-                    //lbl_sensor_status.innerHTML = '\n <span>sensor.number</span>: <span>sensor.name</span> units: <span>sensor.unit</span>}`';
-                    // sensors.textContent += `\n ${sensor.number}: ${sensor.name} units: ${sensor.unit}`  ;
-                  //}); 
                 } catch (err) {
                     lbl_ble_status.innerHTML = '<span style="color:red">Bluetooth Not Connected</span>';
                     console.error(err);
