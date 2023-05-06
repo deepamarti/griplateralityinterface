@@ -18,9 +18,76 @@
 
         <script src="https://unpkg.com/@vernier/godirect/dist/godirect.min.umd.js"></script>
         <script src="./data.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     </head>
 
     <body onload="Initialize()">
+        <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+        <button id="change_data" onclick="changeValue(10)">change value at index 0</button>
+        <script>
+            let xValues = [50,60,70,80,90,100,110,120,130,140,150];
+            let yValues = [7,8,8,9,9,9,10,11,14,14,15];
+            
+            const chart_test = new Chart("myChart", {
+              type: "line",
+              data: {
+                labels: xValues,
+                datasets: [{
+                  fill: false,
+                  lineTension: 0,
+                  backgroundColor: "rgba(0,0,255,1.0)",
+                  borderColor: "rgba(0,0,255,0.1)",
+                  data: yValues
+                }]
+              },
+              options: {
+                legend: {display: false},
+                scales: {
+                  yAxes: [{ticks: {min: 6, max:16}}],
+                }
+              }
+            });
+
+            function changeValue(val) {
+                yValues[0] = val;
+                alert(yValues);
+                chart_test.update();
+            }
+            var canvas = document.getElementById('updating-chart'),
+            ctx = canvas.getContext('2d'),
+            startingData = {
+            labels: [1, 2, 3, 4, 5, 6, 7],
+            datasets: [
+                {
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    data: [65, 59, 80, 81, 56, 55, 40]
+                },
+                {
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    data: [28, 48, 40, 19, 86, 27, 90]
+                }
+            ]
+            },
+            latestLabel = startingData.labels[6];
+
+        // Reduce the animation steps for demo clarity.
+        var myLiveChart = new Chart(ctx).Line(startingData, {animationSteps: 15});
+
+
+        setInterval(function(){
+        // Add two random numbers for each dataset
+        myLiveChart.addData([Math.random() * 100, Math.random() * 100], ++latestLabel);
+        // Remove the first point so we dont just add values forever
+        myLiveChart.removeData();
+    }, 5000);
+        </script>
+
         <div id="display_patient" class="vehicle">
             <form class="patient_info">
                 <div class="col-md-12">
