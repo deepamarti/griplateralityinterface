@@ -616,9 +616,33 @@ ul.conat_info li a:hover {
 
 /** ble section **/
 .ble {
-
+ display: flex;
 }
 
+.ble .row:after {
+     content: "";
+     display: table;
+     clear: both;
+}
+
+.ble .column {
+     float: left;
+     padding: 20px;
+}
+
+.ble .column .right {
+     width: 30%;
+}
+
+.ble .column .left {
+     width: 70%;
+}
+
+/**show a mini graph here**/
+.graph_sample {
+     width:100%;
+     max-width:600px
+}
 /** manual section **/
 .manual {
      text-align: left;
@@ -645,6 +669,9 @@ ul.conat_info li a:hover {
      display: table;
      clear: both;
 }
+
+/** chart section */
+
 
 /** vehicles section **/
 
