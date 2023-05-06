@@ -44,9 +44,6 @@
                     <label>Hand Dominance: </label>
                     <input class="patient_form" placeholder="Right" type="text" name="patient_hand_dom">
                  </div>
-                 <div class="col-md-12">
-                    <button class="get_now">Get Now quote</button>
-                 </div>
             </form>
         </div>
         <div id="choose_data_entry" class="data">
@@ -112,7 +109,7 @@
                         const time = Array.from(
                             { length: 50 }, 
                             (value, index) => Math.round(index * 0.1 *10)/10);
-                        let force_data = Array.from({length: 51}, () => Math.floor(Math.random() * 99));
+                        let force_data = [];
                         let yValues = [7,8,8,9,9,9,10,11,14,14,15];
                         
                         let chart_test = new Chart("myChart", {
@@ -130,7 +127,7 @@
                         options: {
                             legend: {display: false},
                             scales: {
-                            yAxes: [{ticks: {min: -1, max:100}}],
+                            yAxes: [{ticks: {min: -1, max:600}}],
                             }
                         }
                         });
