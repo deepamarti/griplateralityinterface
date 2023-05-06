@@ -93,8 +93,6 @@
                                         <h3 id="ble_status"> Bluetooth Status... </h3>
                                         <h3 id="sensor_status"> Sensor Status... </h3>
                                         <button id ="collect_data" onclick="CollectData()">Collect Data</button>
-                                        <text id="start_time"></text>
-                                        <text id="end_time"></text>
                                         <button id="ble_disconnect" onclick="DisconnectDevice()"> Disconnect </button>
                                         <div id="error"></div>
                                         <pre id="output"></pre>
@@ -104,7 +102,6 @@
                             <div class="column">
                                 <div class="right">
                                     <canvas id="myChart" style="width:100%;"></canvas>
-                                    <button id="change_data" onclick="changeValue(10)">change value at index 0</button>
                                 </div>
                             </div>
                         </div>
@@ -112,33 +109,40 @@
 
                     <script>
                         let xValues = [50,60,70,80,90,100,110,120,130,140,150];
+                        const time = Array.from(
+                            { length: 50 }, 
+                            (value, index) => Math.round(index * 0.1 *10)/10);
+                        let force_data = Array.from({length: 51}, () => Math.floor(Math.random() * 99));
                         let yValues = [7,8,8,9,9,9,10,11,14,14,15];
                         
-                        const chart_test = new Chart("myChart", {
+                        let chart_test = new Chart("myChart", {
                         type: "line",
                         data: {
-                            labels: xValues,
+                            labels: time,
                             datasets: [{
                             fill: false,
                             lineTension: 0,
                             backgroundColor: "rgba(0,0,255,1.0)",
                             borderColor: "rgba(0,0,255,0.1)",
-                            data: yValues
+                            data: force_data
                             }]
                         },
                         options: {
                             legend: {display: false},
                             scales: {
-                            yAxes: [{ticks: {min: 6, max:16}}],
+                            yAxes: [{ticks: {min: -1, max:100}}],
                             }
                         }
                         });
 
-                        function changeValue(val) {
-                            yValues[0] = val;
-                            alert(yValues);
+
+                        function updateValue() {
+                            force_data = sample_data;
+                            chart_test.data.datasets[0].data = force_data;
                             chart_test.update();
                         }
+                        
+                        setInterval(updateValue, 5000);
                     </script>
 
                      <!--if manual is selected-->
@@ -202,17 +206,13 @@
             const btn_connect = document.querySelector('#ble_connect');
             const lbl_ble_status = document.querySelector('#ble_status');
             const lbl_sensor_status = document.querySelector('#sensor_status');
-
-            const lbl_start = document.querySelector('#start_time');
-            const lbl_end = document.querySelector('#end_time');
             
 
             const output = document.querySelector('#output');
             const error = document.querySelector('#error');
 
-            // create array to store data to be saved in the csv file
-            let data = [];
             let gdxDevice = "";
+            let sample_data = [];
             // let sensor = null;
 
             const ConnectDevice = async() => {
@@ -247,25 +247,24 @@
 
                 // clear data arrays
                 sensor.values = [];
-                data = [];
+                sample_data = [];
 
                 // device closes after collection
                 
                 lbl_sensor_status.innerHTML = '<span style="color:green">Force (N) Sensor Connected';
                 
                 gdxDevice.start(100);
-                lbl_start.innerText = new Date();
                 sensor.on('value-changed', (sensor) => {
                     // samples for 5 seconds
                     if (sensor.values.length > 50){
-                        // gdxDevice.close();
                         gdxDevice.stop();
-                        lbl_end.innerText = new Date();
+                        // alert(sample_data.length)
+                        //chart_test.changeValue(sample_data);
                     }
                     // log the sensor name, new value and units.
                     console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
                     // add data points to the data array
-                    data.push(sensor.value);
+                    sample_data.push(sensor.value);
                     // output the change to the pre tag
                     output.textContent += `\n Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`;
                 }); 
