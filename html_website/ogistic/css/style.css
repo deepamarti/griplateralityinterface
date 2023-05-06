@@ -196,9 +196,13 @@ blockquote {
 
 button {
      border: 0;
-     margin: 0;
-     padding: 0;
+     margin: 5px;
+     padding: 5px;
      cursor: pointer;
+     background-color:#0f98f8;
+     color: #fff;
+     font-size: 17px;
+     border-radius: 5px;
 }
 
 .full {
@@ -523,54 +527,69 @@ ul.conat_info li a:hover {
 
 /** end about section **/
 
+/** patient info section **/
+.patient_info {
+     text-align: left;
+     margin-top: 20px;
+     margin-left: 20px;
+}
 
-/** service section **/
+/** patient info form **/
+.patient_form {
+     padding: 0 15px;
+     height: 40px;
+     margin-bottom: 15px;
+     border: #fff solid 1px;
+     font-size: 16px;
+}
 
-.service {
+/** data collection section **/
+
+.data {
      background-color: #f7f7f9;
      margin-top: 80px;
      padding: 90px 0;
 }
 
-.service .titlepage {
+.data .titlepage {
      text-align: center;
      padding-bottom: 30px;
 }
 
-.service .titlepage p {
+.data .titlepage p {
      color: #0c0202;
      font-size: 17px;
      line-height: 30px;
      padding-top: 20px;
 }
 
-.service_main {
+.data_main {
      display: flex;
      flex-wrap: wrap;
      align-items: center;
      justify-content: center;
 }
 
-.service_box {
+.data_box {
      text-align: center;
      width: 16.3%;
      margin-top: 30px !important;
+     margin-right: 15px;
 }
 
-
-.service_box i {
+.data_box i {
      width: 181px;
      display: block;
      height: 181px;
      border-radius: 200px;
 }
 
-.service_box i img {
+.data_box i img {
      text-align: center;
      padding-top: 33%;
 }
 
-.service_box h4 {
+.data_box h4 {
      color: #494949;
      font-size: 17px;
      margin-top: 25px;
@@ -578,38 +597,52 @@ ul.conat_info li a:hover {
      font-weight: 500;
 }
 
-.service_box h4:hover {
+.data_box h4:hover {
      color: #0f98f8;
 }
 
-.blu_colo i {
+.blue_colo i {
      background-color: #0f98f8
-}
-
-.yell_colo i {
-     background-color: #fed806
 }
 
 .pink_colo i {
      background-color: #ff11BBB9
 }
 
-.yelldark_colo {
-     margin: 0 50px;
-}
-
-.yelldark_colo i {
-     background-color: #fe7506
-}
-
-.service .read_more {
+.data .read_more {
      margin: 0 auto;
      padding-top: 70px;
 }
 
+/** ble section **/
+.ble {
 
-/** end service section **/
+}
 
+/** manual section **/
+.manual {
+
+}
+
+.manual_entry_form {
+     column-count: 2;
+     column-gap: 30px;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+     float: left;
+     width: 50%;
+     padding: 10px;
+     height: 300px; /* Should be removed. Only for demonstration */
+   }
+   
+   /* Clear floats after the columns */
+   .row:after {
+     content: "";
+     display: table;
+     clear: both;
+   }
 
 /** vehicles section **/
 
