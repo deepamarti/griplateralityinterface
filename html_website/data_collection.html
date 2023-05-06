@@ -3,15 +3,15 @@
     <head>
         <title>Data Collection</title>
         <!-- bootstrap css -->
-        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="./ogistic/css/bootstrap.min.css">
         <!-- style css -->
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="./ogistic/css/style.css">
         <!-- Responsive-->
-        <link rel="stylesheet" href="css/responsive.css">
+        <link rel="stylesheet" href="./ogistic/css/responsive.css">
         <!-- fevicon -->
-        <link rel="icon" href="images/fevicon.png" type="image/gif" />
+        <link rel="icon" href="./ogistic/images/fevicon.png" type="image/gif" />
         <!-- Scrollbar Custom CSS -->
-        <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
+        <link rel="stylesheet" href="./ogistic/css/jquery.mCustomScrollbar.min.css">
         <!-- Tweaks for older IEs-->
         <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
@@ -21,18 +21,72 @@
     </head>
 
     <body>
-        <h1> Bluetooth Data Collection</h1>
-        
-        <text id="say_hi">bye</text>
-        <button onclick="SayHi()">say hi</button>
-        <!--<script>
-            function SayHi() {
-                alert("hi!");
-                document.getElementById('say_hi').innerText = "hi";
+        <!-- for todo alerts-->
+        <script>
+            function UseBluetooth() {
+                alert("bluetooth");
             }
-        </script>-->
+            function UseManual() {
+                alert("manual");
+            }
+        </script>
+
+        <div id="display_patient" class="vehicle">
+            <p>TODO: display the current patient - then data collection, and graphs displayed below</p>
+            <text id="say_hi">bye</text>
+            <button onclick="SayHi()">say hi</button>
+        </div>
+        <div id="choose_data_entry" class="service">
+            <div class="container">
+               <div class="row">
+                  <div class="col-md-10 offset-md-1">
+                     <div class="titlepage">
+                        <h2>Data Collection</h2>
+                        <h4>Choose Bluetooth or Manual Data Entry</h4>
+                    </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="service_main">
+                        <div class="service_box blu_colo">
+                            <i><img src="./ogistic/images/ser1.png" alt="#" onclick="UseBluetooth()"/></i> 
+                            <h4>Bluetooth</h4>
+                        </div>
+                        <div class="service_box pink_colo">
+                            <i><img src="./ogistic/images/ser2.png" alt="#" onclick="UseManual()"/></i> 
+                            <h4>Manual</h4>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-md-12">
+                     <a class="read_more" href="#">Read More</a>
+                     <h4>todo... enable bluettoh screen for bluettoh , or manual otherwise</h4>
+                     <h2 id="ble_supported">check BLE</h2>
+                     <button id="ble_connect"> Connect Device </button>
+                     <h3 id="ble_status"> Bluetooth Status... </h3>
+                     <h3 id="sensor_status"> Sensor Status... </h3>
+                     <!--connect device (TODO: run on page load)-->
+             
+                     <br>
+                     <button id ="collect_data" onclick="CollectData()">Collect Data</button>
+                     <text id="start_time"></text>
+                     <text id="end_time"></text>
+                     <br>
+                     <!--start data collection-->
+             
+                     <button id="ble_disconnect" onclick="DisconnectDevice()"> Disconnect </button>
+                     <br>
+             
+                     <div id="error"></div>
+                     <pre id="output"></pre>
+                  </div>
+               </div>
+            </div>
+         </div>
 
         <h2 id="ble_supported">check BLE</h2>
+        
         <!--check if browser support Bluetooth (TODO: move to index.html-->
         <script>
             const lbl_ble_supported = document.querySelector('#ble_supported');

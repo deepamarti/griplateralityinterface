@@ -547,6 +547,8 @@ ul.conat_info li a:hover {
 .service_main {
      display: flex;
      flex-wrap: wrap;
+     align-items: center;
+     justify-content: center;
 }
 
 .service_box {
@@ -554,6 +556,7 @@ ul.conat_info li a:hover {
      width: 16.3%;
      margin-top: 30px !important;
 }
+
 
 .service_box i {
      width: 181px;
@@ -571,7 +574,7 @@ ul.conat_info li a:hover {
      color: #494949;
      font-size: 17px;
      margin-top: 25px;
-     padding: 0;
+     padding: 0px;
      font-weight: 500;
 }
 
@@ -585,6 +588,10 @@ ul.conat_info li a:hover {
 
 .yell_colo i {
      background-color: #fed806
+}
+
+.pink_colo i {
+     background-color: #ff11BBB9
 }
 
 .yelldark_colo {
