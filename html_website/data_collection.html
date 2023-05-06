@@ -3,6 +3,7 @@
     <head>
         <title>Data Collection</title>
         <script src="https://unpkg.com/@vernier/godirect/dist/godirect.min.umd.js"></script>
+        <script src="./data.js"></script>
     </head>
 
     <body>
@@ -10,14 +11,15 @@
         
         <text id="say_hi">bye</text>
         <button onclick="SayHi()">say hi</button>
-        <script>
+        <!--<script>
             function SayHi() {
                 alert("hi!");
+                document.getElementById('say_hi').innerText = "hi";
             }
-        </script>
+        </script>-->
 
-        <h2 id="ble_supported"></h2>
-        <!--check if browser support Bluetooth (TODO: move to index.html)-->
+        <h2 id="ble_supported">check BLE</h2>
+        <!--check if browser support Bluetooth (TODO: move to index.html-->
         <script>
             const lbl_ble_supported = document.querySelector('#ble_supported');
             if (navigator.bluetooth) {
@@ -33,11 +35,13 @@
         <!--connect device (TODO: run on page load)-->
 
         <br>
-        <button id ="collect_data" onclick = "CollectData()">Collect Data</button>
+        <button id ="collect_data" onclick="CollectData()">Collect Data</button>
+        <text id="start_time"></text>
+        <text id="end_time"></text>
         <br>
         <!--start data collection-->
 
-        <button id="ble_disconnect"> Disconnect </button>
+        <button id="ble_disconnect" onclick="DisconnectDevice()"> Disconnect </button>
         <br>
 
         <div id="error"></div>
@@ -48,6 +52,9 @@
             const btn_connect = document.querySelector('#ble_connect');
             const lbl_ble_status = document.querySelector('#ble_status');
             const lbl_sensor_status = document.querySelector('#sensor_status');
+
+            const lbl_start = document.querySelector('#start_time');
+            const lbl_end = document.querySelector('#end_time');
             
 
             const output = document.querySelector('#output');
@@ -100,12 +107,14 @@
                 
                 lbl_sensor_status.innerHTML = '<span style="color:green">Force (N) Sensor Connected';
                 
-                gdxDevice.start();
+                gdxDevice.start(100);
+                lbl_start.innerText = new Date();
                 sensor.on('value-changed', (sensor) => {
                     // only collect 10 samples and disconnect.
                     if (sensor.values.length > 100){
                         // gdxDevice.close();
                         gdxDevice.stop();
+                        lbl_end.innerText = new Date();
                     }
                     // log the sensor name, new value and units.
                     console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
@@ -114,6 +123,13 @@
                     // output the change to the pre tag
                     output.textContent += `\n Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`;
                 }); 
+            }
+
+            function DisconnectDevice() {
+                error.textContent = "";
+                gdxDevice.close();
+                output.textContent += `\n Disconnected from `+gdxDevice.name;
+                gdxDevice = "";
             }
 
             btn_connect.addEventListener('click', ConnectDevice);
