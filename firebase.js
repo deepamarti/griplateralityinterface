@@ -266,9 +266,11 @@ async function calcAvgTrials(patientUid, typeEntry) {
     querySnapshot.forEach((doc) => {
       let data = doc.data();
       if (data["hand"] == 0) { // right
-        avgRH += data["measurements"].reduce((a, b) => a + b, 0);
+        let sumRH = data["measurements"].reduce((a, b) => a + b, 0);
+        avgRH += parseFloat((sumRH / data["measurements"].length).toFixed(2));
       } else { // left
-        avgLH += data["measurements"].reduce((a, b) => a + b, 0);
+        let sumLH = data["measurements"].reduce((a, b) => a + b, 0);
+        avgLH += parseFloat((sumLH / data["measurements"].length).toFixed(2));
       }
     });
     avgRH = parseFloat((avgRH/3).toFixed(2));
