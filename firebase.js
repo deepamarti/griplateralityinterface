@@ -42,32 +42,6 @@ submitButton.addEventListener("click", function() {
         // Signed in
         const user = userCredential.user;
         console.log("Success! Welcome back!");
-        //let data = await getAllPatients();
-        //console.log(data);
-        let data = {clinician_uid: "JtqWSdWkmBOuksPUUpfXUxEcdbC2",
-          date_of_birth: "2023-04-30",
-          dominant_hand: 0,
-          dominant_hand_pre_stroke: 0,
-          first_name: "Mike",
-          gender: 0,
-          impaired: 1, 
-          last_name: "Green",
-          stroke_side: 0,
-          uid: "09318e0f-7bf4-429f-8e5c-0b81ae41baf9"};
-        let dataMetrics = "2e74d14f-e469-40a9-83be-a1db58b793a6";
-        let dataDevice = {
-          "uid": dataMetrics,
-          "date": Timestamp.now(),
-          "measurements": [1],
-          "times": [0],
-          "keep": 0,
-          "hand": 0,
-          "maxRange": [0,0],
-          "manualEntry": 0
-        };
-        //let dataRes = await 
-        //await addDeviceData(dataDevice);
-        //console.log(dataRes);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -167,6 +141,7 @@ async function existsPatient(patientData) {
     where("gender", "==", patientData["gender"]),
   );
   const querySnapshot = await getDocs(q);
+  console.log(querySnapshot);
   if (querySnapshot.empty) {
     return {"exists": false, "patient": {}};
   }
@@ -176,6 +151,47 @@ async function existsPatient(patientData) {
       data = doc.data();
     });
     return {"exists": true, "patient": data};
+  }
+}
+
+// Get patient based on uid
+async function getPatient(patientUid) {
+  const q = query(
+    collection(db, "patient_profiles"), 
+    where("uid", "==", patientUid)
+  );
+  const querySnapshot = await getDocs(q);
+  if (querySnapshot.empty) {
+    return {"exists": false, "patient": {}};
+  }
+  else {
+    var data;
+    querySnapshot.forEach((doc) => {
+      data = doc.data();
+    });
+    return {"exists": true, "patient": data};
+  }
+}
+
+// get device data 
+async function getDeviceData(patientUid, typeEntry) {
+  const q = query(
+    collection(db, "device_data"), 
+    where("uid", "==", patientUid),
+    where("manual_entry", "==", typeEntry),
+    orderBy("date", "desc"),
+    limit(1)
+  );
+  const querySnapshot = await getDocs(q);
+  if (querySnapshot.empty) {
+    return {"exists": false, "data": {}};
+  }
+  else {
+    var data;
+    querySnapshot.forEach((doc) => {
+      data = doc.data();
+    });
+    return {"exists": true, "data": data};
   }
 }
 
@@ -199,6 +215,13 @@ async function addOptDeviceData(optData) {
   console.log(ref.id);
 }
 
+// Add metric to db
+async function addMetric(metricData) {
+  // use Timestamp.now() for date
+  const metricRef = await addDoc(collection(db, "metric_data"), metricData);
+  console.log(metricRef.id);
+}
+
 // Get top 5 most recent metrics
 async function getMetricHistory(patientUid) {
   const q = query(
@@ -217,6 +240,243 @@ async function getMetricHistory(patientUid) {
       data.push(doc.data());
     });
     return {"empty": false, "data": data};
+  }
+}
+
+// Calculate avg of both hand trials
+async function calcAvgTrials(patientUid, typeEntry) {
+  let dayBefore = Timestamp.fromMillis(Date.now() - 86400000*2); 
+  const q = query(
+    collection(db, "opt_device_data"), 
+    where("uid", "==", patientUid),
+    where("keep_trial", "==", 1),
+    where("manual_entry", "==", typeEntry),
+    where("date", "<", Timestamp.now()),
+    where("date", ">=", dayBefore),
+    orderBy("date", "desc"),
+    limit(6)
+  );
+  const querySnapshot = await getDocs(q);
+  if (querySnapshot.empty) {
+    return {"empty": true, "data": {}};
+  }
+  else {
+    var avgRH = 0;
+    var avgLH = 0;
+    querySnapshot.forEach((doc) => {
+      let data = doc.data();
+      if (data["hand"] == 0) { // right
+        avgRH += data["measurements"].reduce((a, b) => a + b, 0);
+      } else { // left
+        avgLH += data["measurements"].reduce((a, b) => a + b, 0);
+      }
+    });
+    avgRH = parseFloat((avgRH/3).toFixed(2));
+    avgLH = parseFloat((avgLH/3).toFixed(2));
+    return {"empty": false, "data": {"avgRH": avgRH, "avgLH": avgLH}};
+  }
+}
+
+function findClosestAge(keys, age) {
+  let closestK = parseFloat(keys[0]);
+  for (let k in keys) {
+    let floatK = parseFloat(keys[k]);
+    if (floatK <= age && floatK > closestK) {
+      closestK = floatK;
+    }
+  }
+  return closestK;
+}
+
+// Get normative data
+function getNormativeData(dob, gender) {
+  let age = Math.floor((new Date() - new Date(dob)) / 31557600000);
+
+  let mensNonDominantMap = {
+    "0": [44.5, 39, 50],
+    "18": [44.5, 39, 50],
+    "25": [46, 40, 52],
+    "30": [43, 36, 50],
+    "35": [41.5, 36, 47],
+    "40": [42.5, 38, 47],
+    "45": [38, 32, 44],
+    "50": [41, 36, 46],
+    "55": [37, 34, 40],
+    "60": [39.5, 37, 42],
+    "65": [35, 29, 41],
+    "70": [36, 33, 39],
+    "75": [31.5, 26, 37],
+    "80": [28, 23, 33],
+    "200": [28, 23, 33]
+  };
+
+  let mensDominantMap = {
+    "0": [46, 42, 50],
+    "18": [46, 42, 50],
+    "25": [49.5, 44, 55],
+    "30": [45.5, 37, 54],
+    "35": [45.5, 38, 53],
+    "40": [45, 38, 52],
+    "45": [41.5, 35, 48],
+    "50": [49.5, 39, 50],
+    "55": [39.5, 32, 47],
+    "60": [37.5, 30, 45],
+    "65": [38.5, 31, 46],
+    "70": [37.5, 33, 42],
+    "75": [33.5, 30, 37],
+    "80": [31, 27, 35],
+    "200": [31, 27, 35],
+  };
+
+  let womensDominantMap = {
+    "0": [27.5, 22, 33],
+    "18": [27.5, 22, 33],
+    "25": [29.5, 26, 33],
+    "30": [28, 24, 32],
+    "35": [28.5, 25, 32],
+    "40": [29, 26, 32],
+    "45": [29, 25, 33],
+    "50": [27.5, 24, 31],
+    "55": [25, 21, 29],
+    "60": [22.5, 18, 27],
+    "65": [22, 20, 24],
+    "70": [21, 19, 23],
+    "75": [18.5, 16, 21],
+    "80": [18, 16, 20],
+    "200": [18, 16, 20],
+  };
+
+  let womensNonDominantMap = {
+    "0": [26, 21, 31],
+    "18": [26, 21, 31],
+    "25": [27.5, 23, 32],
+    "30": [26.5, 23, 30],
+    "35": [27.5, 23, 32],
+    "40": [29.5, 25, 34],
+    "45": [27.5, 22, 33],
+    "50": [26, 21, 31],
+    "55": [21.5, 18, 25],
+    "60": [20.5, 17, 24],
+    "65": [18.5, 15, 22],
+    "70": [18.5, 16, 21],
+    "75": [18, 15, 21],
+    "80": [18.5, 16, 21],
+    "200": [18.5, 16, 21],
+  };
+
+  let ageKey = findClosestAge(Object.keys(mensDominantMap), age);
+
+  if (gender == 0) {
+    return {
+      "nonDom": mensDominantMap[ageKey][0],
+      "dom": mensNonDominantMap[ageKey][0]
+    };
+  } else {
+    return {
+      "nonDom": womensDominantMap[ageKey][0],
+      "dom": womensNonDominantMap[ageKey][0]
+    };
+  }
+}
+
+// Calculate grip ratio for stroke patient
+async function calcStrokeGripRatio(patientInfo) {
+  var gripRatio = 0.0;
+
+  let domHand = (patientInfo["dominant_hand"] == 0) ? "Right" : "Left";
+  let normData = getNormativeData(patientInfo["date_of_birth"], patientInfo["gender"]);
+  let preStrokeLaterality = (patientInfo["dominant_hand_pre_stroke"] == 0) ? "Right" : "Left";
+  let pareticSide = (patientInfo["stroke_side"] == 0) ? "Right" : "Left";
+  let avgs = await calcAvgTrials(patientInfo["uid"], 1); // 1 = manual entry
+
+  if (avgs["empty"] == false) {
+    let nonPareticNorm = 0.0;
+    let pareticNorm = 0.0;
+
+    if (pareticSide == "Left" && preStrokeLaterality == "Right") {
+      nonPareticNorm = avgs["data"]["avgRH"] / normData["nonDom"];
+      pareticNorm = avgs["data"]["avgLH"] / normData["nonDom"];
+    } else if (pareticSide == "Left" && preStrokeLaterality == "Left") {
+      pareticNorm = avgs["data"]["avgLH"] / normData["dom"];
+      nonPareticNorm = avgs["data"]["avgRH"] / normData["dom"];
+    } else if (pareticSide == "Right" && preStrokeLaterality == "Right") {
+      pareticNorm = avgs["data"]["avgRH"] / normData["dom"];
+      nonPareticNorm = avgs["data"]["avgLH"] / normData["dom"];
+    } else if (pareticSide == "Right" && preStrokeLaterality == "Left") {
+      pareticNorm = avgs["data"]["avgRH"] / normData["nonDom"];
+      nonPareticNorm = avgs["data"]["avgLH"] / normData["nonDom"];
+    }
+
+    gripRatio = parseFloat(((nonPareticNorm - pareticNorm) / (nonPareticNorm + pareticNorm)).toFixed(2));
+    let metric = {
+      "uid": patientInfo["uid"],
+      "date": Timestamp.now(),
+      "grip_ratio": gripRatio,
+      "right_avg": avgs["data"]["avgRH"],
+      "left_avg": avgs["data"]["avgLH"]
+    };
+    await addMetric(metric);
+
+    return {
+      "ratio": gripRatio,
+      "avgRH": avgs["data"]["avgRH"],
+      "avgLH": avgs["data"]["avgLH"],
+      "hand": domHand,
+      "empty": false
+    }
+  } else {
+    return {
+      "empty": true
+    };
+  }
+}
+
+// Calculate grip ratio
+async function calcGripRatio(patientUid) {
+  var gripRatio = 0.0;
+  let patient = await getPatient(patientUid);
+  let patientInfo = patient["patient"];
+
+  if (patientInfo["impaired"] == 1) {
+    return await calcStrokeGripRatio(patientInfo);
+  }
+  else {
+    let domHand = (patientInfo["dominant_hand"] == 0) ? "Right" : "Left";
+    let avgs = await calcAvgTrials(patientUid, 1); // 1 = manual entry 
+    if (avgs["empty"] == false) {
+      let normData = getNormativeData(patientInfo["date_of_birth"], patientInfo["gender"]);
+      let nonDomNorm = 0.0;
+      let domNorm = 0.0;
+      if (domHand == "Left") {
+        nonDomNorm = avgs["data"]["avgRH"] / normData["nonDom"];
+        domNorm = avgs["data"]["avgLH"] / normData["dom"];
+      } else {
+        domNorm = avgs["data"]["avgRH"] / normData["dom"];
+        nonDomNorm = avgs["data"]["avgLH"] / normData["nonDom"];
+      }
+
+      gripRatio = parseFloat(((domNorm - nonDomNorm) / (domNorm + nonDomNorm)).toFixed(2));
+      let metric = {
+        "uid": patientUid,
+        "date": Timestamp.now(),
+        "grip_ratio": gripRatio,
+        "right_avg": avgs["data"]["avgRH"],
+        "left_avg": avgs["data"]["avgLH"]
+      };
+      await addMetric(metric);
+
+      return {
+        "ratio": gripRatio,
+        "avgRH": avgs["data"]["avgRH"],
+        "avgLH": avgs["data"]["avgLH"],
+        "hand": domHand,
+        "empty": false
+      }
+    } else {
+      return {
+        "empty": true
+      };
+    }
   }
 }
 
