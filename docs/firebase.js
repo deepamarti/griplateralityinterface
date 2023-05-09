@@ -23,36 +23,64 @@ auth.onAuthStateChanged((user) => {
     // User is signed out
     // ...
     // direct to sign in page
-    
+    window.location.href = "./index.html";
   }
 });
 
 const submitButton = document.getElementById("submit");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
+const form = document.getElementById('signInForm');
+
 var email, password;
 
-submitButton.addEventListener("click", function() {
-    console.log('here');
-    email = emailInput.value;
-    console.log(email);
-    password = passwordInput.value;
-    console.log(password);
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  email = emailInput.value;
+  console.log(email);
+  password = passwordInput.value;
+  console.log(password);
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then(async (userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      console.log("Success! Welcome back!");
+      window.location.href = "./data_collection.html";
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("Error occurred. Try again.");
+      console.log(errorCode);
+      console.log(errorMessage);
+    });
+});
+
+
+
+// submitButton.addEventListener("click", function() {
+//     console.log('here');
+//     email = emailInput.value;
+//     console.log(email);
+//     password = passwordInput.value;
+//     console.log(password);
   
-    signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log("Success! Welcome back!");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log("Error occurred. Try again.");
-        console.log(errorCode);
-        console.log(errorMessage);
-      });
-  });
+//     signInWithEmailAndPassword(auth, email, password)
+//       .then(async (userCredential) => {
+//         // Signed in
+//         const user = userCredential.user;
+//         console.log("Success! Welcome back!");
+//       })
+//       .catch((error) => {
+//         const errorCode = error.code;
+//         const errorMessage = error.message;
+//         console.log("Error occurred. Try again.");
+//         console.log(errorCode);
+//         console.log(errorMessage);
+//       });
+//   });
 
 // Update name of user
 function updateName(name) {

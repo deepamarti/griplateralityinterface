@@ -15,7 +15,7 @@
       <!-- Tweaks for older IEs-->
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
-
+      <script type="module" src="firebase.js"></script>
       <title>React Website</title>
       <!--goes to data collections immediately (for testing)-->
       
@@ -62,7 +62,20 @@
      <section class="banner_main">
         <h1> Grip Laterality Website </h1>
         <!--sign in (firebase authentication)-->
+        <form id = "signInForm">
+         <label for="email"><b>Email</b></label>
+         <input type="text" placeholder="Enter Email" id="email" required>
+
+         <label for="password"><b>Password</b></label>
+         <input type="password" placeholder="Enter Password" id="password" required>
+
+         <button id="submit" type="submit">Login</button>
+        </form>
      </section>
+
+     
+      
+
 
     
     <!-- check for bluetooth capability here first, before showing sign in
@@ -71,13 +84,13 @@
 
      <script src="https://unpkg.com/@vernier/godirect/dist/godirect.min.umd.js"></script>
      <!-- Javascript files-->
-     <script src="js/jquery.min.js"></script>
+     <!-- <script src="js/jquery.min.js"></script>
      <script src="js/popper.min.js"></script>
      <script src="js/bootstrap.bundle.min.js"></script>
      <script src="js/jquery-3.0.0.min.js"></script>
-     <!-- sidebar -->
+     
      <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
-     <script src="js/custom.js"></script>
+     <script src="js/custom.js"></script> -->
      <script>
         function openNav() {
           document.getElementById("mySidepanel").style.width = "250px";
