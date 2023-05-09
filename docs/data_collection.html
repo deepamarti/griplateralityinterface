@@ -104,44 +104,6 @@
                         </div>
                      </div>
 
-                    <script>
-                        let xValues = [50,60,70,80,90,100,110,120,130,140,150];
-                        const time = Array.from(
-                            { length: 50 }, 
-                            (value, index) => Math.round(index * 0.1 *10)/10);
-                        let force_data = [];
-                        let yValues = [7,8,8,9,9,9,10,11,14,14,15];
-                        
-                        let chart_test = new Chart("myChart", {
-                        type: "line",
-                        data: {
-                            labels: time,
-                            datasets: [{
-                            fill: false,
-                            lineTension: 0,
-                            backgroundColor: "rgba(0,0,255,1.0)",
-                            borderColor: "rgba(0,0,255,0.1)",
-                            data: force_data
-                            }]
-                        },
-                        options: {
-                            legend: {display: false},
-                            scales: {
-                            yAxes: [{ticks: {min: -1, max:600}}],
-                            }
-                        }
-                        });
-
-
-                        function updateValue() {
-                            force_data = sample_data;
-                            chart_test.data.datasets[0].data = force_data;
-                            chart_test.update();
-                        }
-                        
-                        setInterval(updateValue, 5000);
-                    </script>
-
                      <!--if manual is selected-->
                      <div id="manual_collection" class="manual">
                         <form id="manual_entry">
@@ -255,8 +217,6 @@
                     // samples for 5 seconds
                     if (sensor.values.length > 50){
                         gdxDevice.stop();
-                        // alert(sample_data.length)
-                        //chart_test.changeValue(sample_data);
                     }
                     // log the sensor name, new value and units.
                     console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
@@ -277,5 +237,62 @@
             btn_connect.addEventListener('click', ConnectDevice);
 
         </script>
+
+        <!--graphing functions-->
+        <script>
+            const time = Array.from(
+                { length: 50 }, 
+                (value, index) => Math.round(index * 0.1 *10)/10);
+            let force_data = [];
+            let chart_test = new Chart("myChart", {
+            type: "line",
+            data: {
+                labels: time,
+                datasets: [{
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "rgba(0,0,255,1.0)",
+                borderColor: "rgba(0,0,255,0.1)",
+                data: force_data
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                yAxes: [{ticks: {min: -1, max:600}}],
+                }
+            }
+            });
+
+            function updateValue() {
+                force_data = sample_data;
+                chart_test.data.datasets[0].data = force_data;
+                AnalyzeSample(sample_data);
+                chart_test.update();
+            }
+            
+            setInterval(updateValue, 5000);
+        </script>
+
+        <!--signal processing functions-->
+        <script>
+            function GripStrengthRatio() {
+                let ratio = 0.0;
+            }
+
+            function AnalyzeSample(data) {
+                // return ratio, min, max, average
+                let accept_trial = false;
+
+                // first check min and max
+                let min = data.min();
+                let max = data.max();
+
+                // if min and max differ by too much, reject;
+
+            }
+        </script>
+
+        <!--firebase functions-->
     </body>
 </html> 
