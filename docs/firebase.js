@@ -50,6 +50,7 @@ if (form != null) {
         const user = userCredential.user;
         console.log("Success! Welcome back!");
         window.location.href = "./data_collection.html";
+        //window.location.href = "./patient.html";
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -62,6 +63,7 @@ if (form != null) {
 }
 
 if (formSignOut != null) {
+  console.log("current user: ", currUser);
   formSignOut.addEventListener('submit', (event) => {
     event.preventDefault();
     auth.signOut().then(function() {
@@ -157,6 +159,7 @@ function MetricData(uid, date, gripRatio, avgRH, avgLH) {
 
 // Get patients for search
 async function getAllPatients() {
+  console.log("user uid", currUser);
   const q = query(collection(db, "patient_profiles"), where("clinician_uid", "==", currUser.uid));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
@@ -171,6 +174,30 @@ async function getAllPatients() {
       profiles.push(doc.data());
     });
     return {"empty": false, "profiles": profiles};
+  }
+}
+
+var scorelist = document.querySelector("#scorelist");
+export async function getData() {
+  console.log("in get data");
+  if (scorelist != null) {
+      var result = await getAllPatients();
+      if (result["empty"] == false) {
+          var patients = result["profiles"];
+          for (var i = 0; i < patients.length; i++) {
+              var name = patients[i].first_name;
+              var li = document.createElement("li");
+              li.innerHTML = name;
+              scorelist.appendChild(li);
+          }
+      }
+      else {
+          var li = document.createElement("li");
+          li.innerHTML = "No results found";
+          scorelist.appendChild(li);
+      }
+  } else {
+    console.log("score list is null");
   }
 }
 
