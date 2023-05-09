@@ -6,10 +6,79 @@
     <meta http-equiv="X-US-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aggie Impact</title>
+
+    <!--StyleSheet and Icon Reference-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css">
     <link rel="stylesheet" href="ogistic/css/patientStyle.css">
-    <script type="module" src="firebase.js" defer></script>
+
+    <!--JQuery Import-->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!--Firebase Libraries-->
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-database.js"></script> 
+
+
+    <script id="FireBaseScript">
+        // ---------------------------------------------Insert Config Here-------------------------------------
+        //Followed this template: https://youtu.be/jOau1X5SKDE
+        function SelectAllData(){
+            //firebase.database.ref('Patient?').on    Use this if we want live updates instead of refresh
+            firebase.database.ref('Patient?').once('value',
+            function(AllRecords){
+                AllRecords.forEach(
+                    function(CurrentRecord){
+                        var name = CurrentRecord.val().NameOfPatient;
+                        var age = CurrentRecord.val().AgeOfPatient;
+                        var birthdate = CurrentRecord.val().birthdate;
+                        var healthStatus = CurrentRecord.val().healthStatus; //Stroke, healthy, injured etc
+                        var gripLaterality = CurrentRecord.val().gripLaterality; // Need to look at format for this
+                        AddItemsToTable(name, age, birthdate,healthStatus,gripLaterality);
+                    }
+                )
+            })
+        }
+        window.onload = SelectAllData;
+
+        function AddItemsToTable(name,age,birthdate,healthStatus,gripLaterality){
+            var tbody = document.getElementById('patientTable');
+            var trow = document.createElement('tr');
+            
+            //Data Elements being passed in from firebase calls
+            var td1 = document.createElement('td');
+            var td2 = document.createElement('td');
+            var td3 = document.createElement('td');
+            var td4 = document.createElement('td');
+            var td5 = document.createElement('td');
+
+            //Predesigned data element to be appeneded to all data tables. TODO assign a link to each and 
+            var td6 = document.createElement('td');
+
+            td1.innerHTML=name;
+            td2.innerHTML=age;
+            td3.innerHTML=birthdate;
+            td4.innerHTML=healthStatus;
+            td5.innerHTML=gripLaterality; 
+            
+            td1.className = "Patients";
+            td2.className = "Age";
+            td3.className = "Birthdate";
+            td4.className = "healthStatus";
+            td5.className = "laterality";
+            td6.className = "AddMeasure";
+
+
+            trow.appendChild(td1);
+            trow.appendChild(td2);
+            trow.appendChild(td3);
+            trow.appendChild(td4);
+            trow.appendChild(td5);
+
+            tbody.appendChild(trow);
+        }
+
+    </script>
 </head>
 
 <body>
@@ -70,17 +139,10 @@
                 </div>
             </div>
         </div>
+
         <div class="searchBar">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#000000" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
                     <input type="text" placeholder="Patient Lookup">
-        </div>
-
-        <div>
-            If correct, list values will show below:
-            <p>
-                <ol id ="scorelist">
-                </ol>
-            </p>
         </div>
 
         <div class="board">
@@ -107,12 +169,10 @@
                         </td>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id = "patientTable">
                     <tr>
                         <td class="Patients">
-                            <div class="Patient Description">
-                                <h5>Jane Doe</h5>
-                            </div>
+                            <h5>Jane Doe</h5>
                         </td>
                         <td class="Age">
                             <h5> 25</h5>
@@ -437,12 +497,6 @@
         $('#menu-btn').click(function(){
             $('#menu').toggleClass("active")
         })
-    </script>
-
-    <script type="module"> 
-        import {getData} from "./firebase.js"; 
-        window.getData = getData;
-        getData(); 
     </script>
 
 </body>
