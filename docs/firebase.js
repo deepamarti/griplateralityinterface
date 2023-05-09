@@ -23,7 +23,8 @@ auth.onAuthStateChanged((user) => {
     // User is signed out
     // ...
     // direct to sign in page
-    window.location.href = "./index.html";
+    // window.location.href = "./index.html";
+    console.log("go to next page");
   }
 });
 
@@ -31,33 +32,46 @@ const submitButton = document.getElementById("submit");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const form = document.getElementById('signInForm');
+const formSignOut = document.getElementById('signOutForm');
 
 var email, password;
 
+if (form != null) {
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    email = emailInput.value;
+    console.log(email);
+    password = passwordInput.value;
+    console.log(password);
+  
+    signInWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log("Success! Welcome back!");
+        window.location.href = "./data_collection.html";
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log("Error occurred. Try again.");
+        console.log(errorCode);
+        console.log(errorMessage);
+      });
+  });
+}
 
-form.addEventListener('submit', (event) => {
-  event.preventDefault();
-  email = emailInput.value;
-  console.log(email);
-  password = passwordInput.value;
-  console.log(password);
-
-  signInWithEmailAndPassword(auth, email, password)
-    .then(async (userCredential) => {
-      // Signed in
-      const user = userCredential.user;
-      console.log("Success! Welcome back!");
-      window.location.href = "./data_collection.html";
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log("Error occurred. Try again.");
-      console.log(errorCode);
-      console.log(errorMessage);
+if (formSignOut != null) {
+  formSignOut.addEventListener('submit', (event) => {
+    event.preventDefault();
+    auth.signOut().then(function() {
+      console.log('Signed Out');
+      window.location.href = "./index.html";
+    }, function(error) {
+      console.error('Sign Out Error', error);
     });
-});
-
+  });
+}
 
 
 // submitButton.addEventListener("click", function() {
