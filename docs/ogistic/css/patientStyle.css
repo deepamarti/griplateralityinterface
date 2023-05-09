@@ -89,6 +89,7 @@ body{
 }
 
 #interface .searchBar {
+    width:calc(100%-300px);
     display:flex;
     justify-content: center;
     align-items: center;
@@ -101,6 +102,7 @@ body{
     border:none;
     outline:none;
     font-size:20px;
+    width: 80%;
 
 }
 
