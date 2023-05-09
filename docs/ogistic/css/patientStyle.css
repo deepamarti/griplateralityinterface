@@ -1,0 +1,372 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:wght100;200;300;400;500;600;700;800;900&display=swap');
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body{
+    width:100%;
+    background: #E5E7EB;
+    position:relative;
+    display:flex;
+}
+
+#menu{
+    background: #111827;
+    width: 300px;
+    height: 100%;
+    position: fixed;
+    top:0;
+    left:0;
+}
+
+#menu .logo{
+    display:flex;
+    align-items: center;
+    color:#FFF;
+    padding: 30px 0 0 30px;
+
+}
+
+#menu .logo img{
+    width: 150px;
+    margin-right: 15px;
+}
+
+#menu .MenuItems{
+    margin-top: 40px;
+}
+
+#menu .MenuItems li{
+    list-style: none;
+    padding: 15px 0;
+    transition: 0.3s ease;
+}
+
+#menu .MenuItems li:hover{
+    background:#253047;
+    cursor:pointer;
+}
+
+#menu .MenuItems li:nth-child(1){
+    border-left: 4px solid white;
+}
+
+#menu .MenuItems li svg{
+    width: 30px;
+    height: 30px;
+    margin: 0 10px 0 25px;
+}
+
+#menu .MenuItems li:hover a {
+    color:#F3F4F6;
+}
+
+#menu .MenuItems li a{
+    text-decoration: none;
+    color: rgb(226, 226, 226);
+    font-weight: 300px;
+    transition: 0.3s ease;
+}
+
+
+#interface {
+    width: calc(100% - 300px);
+    margin-left: 300px;
+    position:relative;
+} 
+
+#interface .navBar {
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding:15px 30px;
+    border-bottom: 3px solid #594ef7;
+    position: fixed;
+    width: calc(100% - 300px);
+}
+
+#interface .navBar .searchBar {
+    display:flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px 14px;
+    border: 1px solid #d7bde6;
+    border-radius: 4px;
+}
+
+#interface .navBar .searchBar input {
+    border:none;
+    outline:none;
+    font-size:14px;
+}
+
+#interface .navBar .searchBar svg{
+    width: 25px;
+    height: 25px;
+    margin-right: 14px;
+}
+
+#interface .navBar .Profile{
+    display:flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#interface .navBar .Profile img {
+    width:40px;
+    height:40px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.n1{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#menu-btn{
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 20px;
+    display:none;
+}
+
+.i-name{
+    color: #444a53;
+    padding: 30px 30px 0 30px;
+    font-size:24px;
+    font-weight: 700;
+    margin-top: 70px;
+}
+
+.stats{
+    padding: 30px 30px 0 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.stats .valueBox{
+    background: white;
+    width: 235px;
+    padding: 16px 20px;
+    border-radius: 5px;
+    display:flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.stats .valueBox svg:nth-child(1){
+    background:#7B74EC;
+}
+
+.stats .valueBox svg:nth-child(2){
+    background:#5C8AF0;
+}
+
+.stats .valueBox svg:nth-child(3){
+    background:#E45D99;
+}
+
+.stats .valueBox svg:nth-child(4){
+    background:#74DAEC;
+}
+
+.stats .valueBox svg{
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    text-align:center;
+    color: white;
+    margin-right: 15px;
+}
+
+.stats .valueBox h3{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.stats .valueBox span{
+    font-size: 15px;
+    color: #828997;
+}
+
+.board{
+    width:95%;
+    margin: 30px 0 30px 30px;
+    overflow: auto;
+    background: white;
+    border-radius: 8px;
+}
+
+.board img{
+    width:45px;
+    height:45px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.board h5{
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.board p {
+    font-weight: 400;
+    font-size: 13px;
+    color: #787d8d;
+}
+
+.board .Patients{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: start;
+}
+
+table{
+    border-collapse: collapse;
+}
+
+tr{
+    border-bottom: 1px solid #eef0f3;
+}
+
+thead td {
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 400;
+    background-color: #F9FAFB;
+    text-align: start;
+    padding: 15px;
+}
+
+tbody tr td{
+    padding: 10px 15px;
+}
+
+.healthStatus h5{
+    background-color: #d7fada;
+    padding:2px 10px;
+    display: inline-block;
+    border-radius: 40px;
+    color: #2b2b2b;
+}
+
+.healthStatus .healthy{
+    background-color: #d7fada;
+    padding:2px 10px;
+    display: inline-block;
+    border-radius: 40px;
+    color: #2b2b2b;
+}
+
+.healthStatus .impaired{
+    background-color: #dfa11c;
+    padding:2px 10px;
+    display: inline-block;
+    border-radius: 40px;
+    color: #2b2b2b;
+}
+
+.healthStatus .stroke{
+    background-color: #d41cbc;
+    padding:2px 10px;
+    display: inline-block;
+    border-radius: 40px;
+    color: #2b2b2b;
+}
+
+.Edit a{
+    text-decoration: none;
+    font-size: 14px;
+    color: #554cd1;
+    font-weight:600;
+}
+
+@media (max-width: 769px) {
+    #menu {
+        width: 270px;
+        position:fixed;
+        left:-270px;
+        transition: 0.3s ease;
+    }
+
+    #menu.active{
+        left:-270px;
+    }
+
+    #menu-btn{
+        display:initial;
+    }
+    #menu.active~#interface{
+        width: calc(100%-270px);
+        margin-left: 270px;
+        transition: 0.3s ease;
+    }
+
+    #interface{
+        width:100%;
+        margin-left: 0px;
+        display:inline-block;
+    }
+    #interface .navBar{
+        width:100%;
+    }
+
+    .stats{
+        justify-content: flex-start;
+    }
+
+    .stats .valueBox{
+        padding: 16px 20px;
+        margin: 10px 20px 10px 0;
+    }
+    
+    .board{
+        width:92%;
+        padding: 0;
+        overflow-x: auto;
+    }
+
+    table{
+        width:100%;
+        border-collapse: collapse;
+    }
+}
+
+@media (max-width: 477px){
+    #interface .navBar{
+        padding: 15px;
+    }
+
+    #interface .navBar .searchBar input{
+        width: 150px;
+    }
+
+    .i-name{
+        padding:30px 15px 0 15px; 
+    }
+
+    .stats{
+        padding:15px 15px 0 15px;
+    }
+
+    .stats .valueBox{
+        width:100%;
+        margin: 8px 0;
+    }
+
+    .board{
+        margin:30px 15px 30px 15px;
+    }
+}
