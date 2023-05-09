@@ -22,6 +22,7 @@ auth.onAuthStateChanged((user) => {
   } else {
     // User is signed out
     // ...
+    // direct to sign in page
   }
 });
 
