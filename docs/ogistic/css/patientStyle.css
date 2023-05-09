@@ -88,22 +88,25 @@ body{
     width: calc(100% - 300px);
 }
 
-#interface .navBar .searchBar {
+#interface .searchBar {
+    width:calc(100%-300px);
     display:flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    padding: 10px 14px;
-    border: 1px solid #d7bde6;
+    padding: 15px 20px;
+    border: 3px solid #d7bde6;
     border-radius: 4px;
 }
 
-#interface .navBar .searchBar input {
+#interface .searchBar input {
     border:none;
     outline:none;
-    font-size:14px;
+    font-size:20px;
+    width: 80%;
+
 }
 
-#interface .navBar .searchBar svg{
+#interface .searchBar svg{
     width: 25px;
     height: 25px;
     margin-right: 14px;
@@ -157,6 +160,7 @@ body{
     background: white;
     width: 235px;
     padding: 16px 20px;
+    padding-bottom: 25px;
     border-radius: 5px;
     display:flex;
     justify-content: flex-start;
@@ -169,14 +173,6 @@ body{
 
 .stats .valueBox svg:nth-child(2){
     background:#5C8AF0;
-}
-
-.stats .valueBox svg:nth-child(3){
-    background:#E45D99;
-}
-
-.stats .valueBox svg:nth-child(4){
-    background:#74DAEC;
 }
 
 .stats .valueBox svg{
@@ -252,7 +248,9 @@ thead td {
 
 tbody tr td{
     padding: 10px 15px;
+    text-align: start;
 }
+
 
 .healthStatus h5{
     background-color: #d7fada;
@@ -270,7 +268,7 @@ tbody tr td{
     color: #2b2b2b;
 }
 
-.healthStatus .impaired{
+.healthStatus .Injured{
     background-color: #dfa11c;
     padding:2px 10px;
     display: inline-block;
@@ -286,11 +284,16 @@ tbody tr td{
     color: #2b2b2b;
 }
 
-.Edit a{
+.AddMeasure a{
     text-decoration: none;
     font-size: 14px;
     color: #554cd1;
     font-weight:600;
+}
+
+.AddMeasure svg{
+    width: 20px;
+    height: 20px;
 }
 
 @media (max-width: 769px) {
