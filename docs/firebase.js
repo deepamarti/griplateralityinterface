@@ -2,6 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase
 import { getFirestore, collection, getDocs, query, where, addDoc, orderBy, limit, Timestamp} from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/9.1.1/firebase-auth.js";
 
+window.addEventListener('load', function() {
 const firebaseConfig = {
   apiKey: "AIzaSyCbHB7UiryIBD6GO6qu1egD6nsQ4pnOx8Y",
   authDomain: "aggiempact.firebaseapp.com",
@@ -14,11 +15,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-var currUser = auth.currentUser;
+var currUser; //= auth.currentUser;
 
 auth.onAuthStateChanged((user) => {
   if (user) {
     currUser = user;
+    console.log("auth state changed");
+    console.log(user);
+    console.log("curr", currUser);
+    localStorage.setItem("uid", currUser.uid);
   } else {
     // User is signed out
     // ...
@@ -32,7 +37,8 @@ const submitButton = document.getElementById("submit");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const form = document.getElementById('signInForm');
-const formSignOut = document.getElementById('signOutForm');
+const signOutBtn = document.getElementById('signOut');
+
 
 var email, password;
 
@@ -49,8 +55,9 @@ if (form != null) {
         // Signed in
         const user = userCredential.user;
         console.log("Success! Welcome back!");
-        window.location.href = "./data_collection.html";
-        //window.location.href = "./patient.html";
+        //window.location.href = "./page2.html";
+        // window.location.href = "./data_collection.html";
+        window.location.href = "./patient.html";
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -62,10 +69,8 @@ if (form != null) {
   });
 }
 
-if (formSignOut != null) {
-  console.log("current user: ", currUser);
-  formSignOut.addEventListener('submit', (event) => {
-    event.preventDefault();
+if (signOutBtn != null) {
+  signOutBtn.addEventListener("click", function() {
     auth.signOut().then(function() {
       console.log('Signed Out');
       window.location.href = "./index.html";
@@ -75,6 +80,88 @@ if (formSignOut != null) {
   });
 }
 
+const fireBtn = document.getElementById("firebaseBtn");
+
+// if (fireBtn != null) {
+//     //console.log("not null");
+//     //console.log(currUser);
+//     fireBtn.addEventListener("click", testing);
+// }
+
+// async function testing() {
+//     console.log("here");
+//     console.log("testing:", currUser);
+//     //let profiles = await getAllPatients();
+// }
+
+if (fireBtn != null) {
+//function getPatientDashboard() {
+
+  fireBtn.addEventListener('click', async function(){
+    let result = await getAllPatients();
+    console.log(result);
+    if (result["empty"] == false) {
+      for (let p in result["profiles"]) {
+        let element = result["profiles"][p];
+        var name = element["first_name"] + " " + element["last_name"];
+        var age = 0;
+        var birthdate = element["date_of_birth"];
+        var healthStatus = "Healthy";
+        if (element["impaired"] == 1) {
+            healthStatus = "Stroke";
+        }
+        else if (element["impaired"] == 2) {
+            healthStatus = "Hand injury";
+        }
+        var gripLaterality = 0;
+        AddItemsToTable(name, age, birthdate,healthStatus,gripLaterality);
+      }
+    }
+    
+    function AddItemsToTable(name,age,birthdate,healthStatus,gripLaterality){
+        var tbody = document.getElementById('patientTable');
+        var trow = document.createElement('tr');
+        
+        //Data Elements being passed in from firebase calls
+        var td1 = document.createElement('td');
+        var td2 = document.createElement('td');
+        var td3 = document.createElement('td');
+        var td4 = document.createElement('td');
+        var td5 = document.createElement('td');
+
+        //Predesigned data element to be appeneded to all data tables. TODO assign a link to each and 
+        var td6 = document.createElement('td');
+
+        td1.innerHTML=name;
+        td2.innerHTML=age;
+        td3.innerHTML=birthdate;
+        td4.innerHTML=healthStatus;
+        td5.innerHTML=gripLaterality; 
+        
+        td1.className = "Patients";
+        td2.className = "Age";
+        td3.className = "Birthdate";
+        td4.className = "healthStatus";
+        td5.className = "laterality";
+        td6.className = "AddMeasure";
+
+
+        trow.appendChild(td1);
+        trow.appendChild(td2);
+        trow.appendChild(td3);
+        trow.appendChild(td4);
+        trow.appendChild(td5);
+
+        tbody.appendChild(trow);
+    }
+  });
+//}
+}
+
+
+// function testFire() {
+//   console.log("in test firebase");
+// }
 
 // submitButton.addEventListener("click", function() {
 //     console.log('here');
@@ -159,7 +246,9 @@ function MetricData(uid, date, gripRatio, avgRH, avgLH) {
 
 // Get patients for search
 async function getAllPatients() {
-  console.log("user uid", currUser);
+  console.log("currUSER", currUser);
+  //console.log("user uid", currUser.uid);
+  //console.log("uid", uid);
   const q = query(collection(db, "patient_profiles"), where("clinician_uid", "==", currUser.uid));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
@@ -178,7 +267,7 @@ async function getAllPatients() {
 }
 
 var scorelist = document.querySelector("#scorelist");
-export async function getData() {
+async function getData() {
   console.log("in get data");
   if (scorelist != null) {
       var result = await getAllPatients();
@@ -614,3 +703,4 @@ async function calcGripRatio(patientUid) {
 //       main.style.display = "block";
 //       createacct.style.display = "none";
 //   });
+});

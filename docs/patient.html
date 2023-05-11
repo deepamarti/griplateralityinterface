@@ -18,65 +18,81 @@
     <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-database.js"></script> 
-
+    <script type="module" src="firebase.js"></script>
 
     <script id="FireBaseScript">
+        //getPatientDashboard();
         // ---------------------------------------------Insert Config Here-------------------------------------
         //Followed this template: https://youtu.be/jOau1X5SKDE
-        function SelectAllData(){
-            //firebase.database.ref('Patient?').on    Use this if we want live updates instead of refresh
-            firebase.database.ref('Patient?').once('value',
-            function(AllRecords){
-                AllRecords.forEach(
-                    function(CurrentRecord){
-                        var name = CurrentRecord.val().NameOfPatient;
-                        var age = CurrentRecord.val().AgeOfPatient;
-                        var birthdate = CurrentRecord.val().birthdate;
-                        var healthStatus = CurrentRecord.val().healthStatus; //Stroke, healthy, injured etc
-                        var gripLaterality = CurrentRecord.val().gripLaterality; // Need to look at format for this
-                        AddItemsToTable(name, age, birthdate,healthStatus,gripLaterality);
-                    }
-                )
-            })
-        }
-        window.onload = SelectAllData;
+        // async function SelectAllData(){
+        //     // firebase.database.ref('Patient?').on    Use this if we want live updates instead of refresh
+        //     // firebase.database.ref('Patient?').once('value',
+        //     // function(AllRecords){
+        //     //     AllRecords.forEach(
+        //     //         function(CurrentRecord){
+        //     //             var name = CurrentRecord.val().NameOfPatient;
+        //     //             var age = CurrentRecord.val().AgeOfPatient;
+        //     //             var birthdate = CurrentRecord.val().birthdate;
+        //     //             var healthStatus = CurrentRecord.val().healthStatus; //Stroke, healthy, injured etc
+        //     //             var gripLaterality = CurrentRecord.val().gripLaterality; // Need to look at format for this
+        //     //             AddItemsToTable(name, age, birthdate,healthStatus,gripLaterality);
+        //     //         }
+        //     //     )
+        //     // })
+        //     let profiles = await getAllPatients();
+        //     profiles.array.forEach(element => {
+        //         var name = element["first_name"] + " " + element["last_name"];
+        //         var age = moment(element["date_of_birth"], "YYYY-MM-DD").fromNow();
+        //         var birthdate = element["date_of_birth"];
+        //         var healthStatus = "Healthy";
+        //         if (element["impaired"] == 1) {
+        //             healthStatus = "Stroke";
+        //         }
+        //         else if (element["impaired"] == 2) {
+        //             healthStatus = "Hand injury";
+        //         }
+        //         var gripLaterality = 0;
+        //         AddItemsToTable(name, age, birthdate,healthStatus,gripLaterality);
+        //     });
+        // }
+        // window.onload = SelectAllData;
 
-        function AddItemsToTable(name,age,birthdate,healthStatus,gripLaterality){
-            var tbody = document.getElementById('patientTable');
-            var trow = document.createElement('tr');
+        // function AddItemsToTable(name,age,birthdate,healthStatus,gripLaterality){
+        //     var tbody = document.getElementById('patientTable');
+        //     var trow = document.createElement('tr');
             
-            //Data Elements being passed in from firebase calls
-            var td1 = document.createElement('td');
-            var td2 = document.createElement('td');
-            var td3 = document.createElement('td');
-            var td4 = document.createElement('td');
-            var td5 = document.createElement('td');
+        //     //Data Elements being passed in from firebase calls
+        //     var td1 = document.createElement('td');
+        //     var td2 = document.createElement('td');
+        //     var td3 = document.createElement('td');
+        //     var td4 = document.createElement('td');
+        //     var td5 = document.createElement('td');
 
-            //Predesigned data element to be appeneded to all data tables. TODO assign a link to each and 
-            var td6 = document.createElement('td');
+        //     //Predesigned data element to be appeneded to all data tables. TODO assign a link to each and 
+        //     var td6 = document.createElement('td');
 
-            td1.innerHTML=name;
-            td2.innerHTML=age;
-            td3.innerHTML=birthdate;
-            td4.innerHTML=healthStatus;
-            td5.innerHTML=gripLaterality; 
+        //     td1.innerHTML=name;
+        //     td2.innerHTML=age;
+        //     td3.innerHTML=birthdate;
+        //     td4.innerHTML=healthStatus;
+        //     td5.innerHTML=gripLaterality; 
             
-            td1.className = "Patients";
-            td2.className = "Age";
-            td3.className = "Birthdate";
-            td4.className = "healthStatus";
-            td5.className = "laterality";
-            td6.className = "AddMeasure";
+        //     td1.className = "Patients";
+        //     td2.className = "Age";
+        //     td3.className = "Birthdate";
+        //     td4.className = "healthStatus";
+        //     td5.className = "laterality";
+        //     td6.className = "AddMeasure";
 
 
-            trow.appendChild(td1);
-            trow.appendChild(td2);
-            trow.appendChild(td3);
-            trow.appendChild(td4);
-            trow.appendChild(td5);
+        //     trow.appendChild(td1);
+        //     trow.appendChild(td2);
+        //     trow.appendChild(td3);
+        //     trow.appendChild(td4);
+        //     trow.appendChild(td5);
 
-            tbody.appendChild(trow);
-        }
+        //     tbody.appendChild(trow);
+        // }
 
     </script>
 </head>
@@ -106,7 +122,7 @@
             </li>
             <li>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#FFFFFF" d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/></svg>
-                <a href="#">Sign Out</a>
+                <a id="signOut" href="#">Sign Out</a>
             </li>            
         </div>
     </section>
@@ -144,7 +160,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#000000" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
                     <input type="text" placeholder="Patient Lookup">
         </div>
-
+        <button id="firebaseBtn" type="button">Sync Data</button>
         <div class="board">
             <table width="100%">
                 <thead>
@@ -170,7 +186,7 @@
                     </tr>
                 </thead>
                 <tbody id = "patientTable">
-                    <tr>
+                    <!-- <tr>
                         <td class="Patients">
                             <h5>Jane Doe</h5>
                         </td>
@@ -486,7 +502,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
                             <a href="#">Add Measurement</a>
                         </td>
-                    </tr>
+                    </tr> -->
 
                 </tbody>
             </table>
