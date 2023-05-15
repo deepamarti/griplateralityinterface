@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang ="en">
+
+<head>
+    <meta charset ="UTF-8">
+    <meta http-equiv="X-US-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aggie Impact</title>
+
+    <!--StyleSheet and Icon Reference-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css">
+    <link rel="stylesheet" href="ogistic/css/patientStyle.css">
+
+    <!--JQuery Import-->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!--Firebase Libraries-->
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-database.js"></script> 
+    <script type="module" src="firebase.js"></script>
+
+    <!--BlueTooth connection Script-->
+    <script>
+        // checks bluetooth capability of browser
+        const lbl_ble_supported = document.querySelector('#ble_supported');
+        if (navigator.bluetooth) {
+            lbl_ble_supported.innerHTML = '<span style="color:green">Bluetooth is Supported on this Browser';
+        } else {
+            lbl_ble_supported.innerHTML = `<span style="color:red">Bluetooth is Not Supported on this Browser`;
+        }
+
+        const btn_connect = document.querySelector('#ble_connect');
+        const lbl_ble_status = document.querySelector('#ble_status');
+        const lbl_sensor_status = document.querySelector('#sensor_status');
+        
+
+        const output = document.querySelector('#output');
+        const error = document.querySelector('#error');
+
+        let gdxDevice = "";
+        let sample_data = [];
+        // let sensor = null;
+
+        const ConnectDevice = async() => {
+            error.textContent = "";
+            
+            try {
+              const bleDevice = await navigator.bluetooth.requestDevice({
+                filters: [{ namePrefix: 'GDX' }],
+                optionalServices: ['d91714ef-28b9-4f91-ba16-f0d9a604f112']
+              });
+              gdxDevice = await godirect.createDevice(bleDevice,  {open: true, startMeasurements: false});
+              lbl_ble_status.innerHTML = '<span style="color:green">Bluetooth Connected';
+              output.textContent += `\n Connected to `+gdxDevice.name;
+
+            } catch (err) {
+                lbl_ble_status.innerHTML = '<span style="color:red">Bluetooth Not Connected</span>';
+                console.error(err);
+                error.innerText += "\n "+err;
+                if (err.toString().includes('cross-origin')) {
+                error.innerHTML+= '\n<p><b>Are you running in an embedded iframe? Try running this example in its own window.</b></p>'
+                }
+            }
+        }
+
+        function CollectData() {
+            // set up sensor
+            const sensor = gdxDevice.getSensor(1);
+            if (sensor) {
+              output.textContent = `\n Selected Sensor: ${sensor.name} units: ${sensor.unit}`;
+              sensor.setEnabled(true);
+            }
+
+            // clear data arrays
+            sensor.values = [];
+            sample_data = [];
+
+            // device closes after collection
+            
+            lbl_sensor_status.innerHTML = '<span style="color:green">Force (N) Sensor Connected';
+            
+            gdxDevice.start(100);
+            sensor.on('value-changed', (sensor) => {
+                // samples for 5 seconds
+                if (sensor.values.length > 50){
+                    gdxDevice.stop();
+                }
+                // log the sensor name, new value and units.
+                console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
+                // add data points to the data array
+                sample_data.push(sensor.value);
+                // output the change to the pre tag
+                output.textContent += `\n Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`;
+            }); 
+        }
+
+        function DisconnectDevice() {
+            error.textContent = "";
+            gdxDevice.close();
+            output.textContent += `\n Disconnected from `+gdxDevice.name;
+            gdxDevice = "";
+        }
+
+        btn_connect.addEventListener('click', ConnectDevice);
+
+    </script>
+
+    <!--graphing functions-->
+    <script>
+        const time = Array.from(
+            { length: 50 }, 
+            (value, index) => Math.round(index * 0.1 *10)/10);
+        let force_data = [];
+        let chart_test = new Chart("myChart", {
+        type: "line",
+        data: {
+            labels: time,
+            datasets: [{
+            fill: false,
+            lineTension: 0,
+            backgroundColor: "rgba(0,0,255,1.0)",
+            borderColor: "rgba(0,0,255,0.1)",
+            data: force_data
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+            yAxes: [{ticks: {min: -1, max:600}}],
+            }
+        }
+        });
+
+        function updateValue() {
+            force_data = sample_data;
+            chart_test.data.datasets[0].data = force_data;
+            AnalyzeSample(sample_data);
+            chart_test.update();
+        }
+        
+        setInterval(updateValue, 5000);
+    </script>
+
+    <!--signal processing functions-->
+    <script>
+        function GripStrengthRatio() {
+            let ratio = 0.0;
+        }
+
+        function AnalyzeSample(data) {
+            // return ratio, min, max, average
+            let accept_trial = false;
+
+            // first check min and max
+            let min = data.min();
+            let max = data.max();
+
+            // if min and max differ by too much, reject;
+
+        }
+    </script>
+
+    <!--Tab Controller-->
+    <script>     
+        function switchtab(evt, TabName) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(TabName).style.display = "block";
+            evt.currentTarget.className += " active";
+            }
+    </script>
+    
+</head>   
+<body>
+
+    <section id="menu">
+        <div class="logo">
+            <img src="ogistic/images/logo.png" alt="">
+        </div>
+
+        <div class="MenuItems">
+            <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#FFFFFF" d="M177.9 494.1c-18.7 18.7-49.1 18.7-67.9 0L17.9 401.9c-18.7-18.7-18.7-49.1 0-67.9l50.7-50.7 48 48c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-48-48 41.4-41.4 48 48c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-48-48 41.4-41.4 48 48c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-48-48 41.4-41.4 48 48c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-48-48 50.7-50.7c18.7-18.7 49.1-18.7 67.9 0l92.1 92.1c18.7 18.7 18.7 49.1 0 67.9L177.9 494.1z"/></svg>
+                <a href="#">Take a Measurement</a>
+            </li>
+            <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#FFFFFF" d="M32 32c17.7 0 32 14.3 32 32V400c0 8.8 7.2 16 16 16H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H80c-44.2 0-80-35.8-80-80V64C0 46.3 14.3 32 32 32zM160 224c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V256c0-17.7 14.3-32 32-32zm128-64V320c0 17.7-14.3 32-32 32s-32-14.3-32-32V160c0-17.7 14.3-32 32-32s32 14.3 32 32zm64 32c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32s-32-14.3-32-32V224c0-17.7 14.3-32 32-32zM480 96V320c0 17.7-14.3 32-32 32s-32-14.3-32-32V96c0-17.7 14.3-32 32-32s32 14.3 32 32z"/></svg>
+                <a href="#">Stats</a>
+            </li>
+            <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="#FFFFFF" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                <a href="#">Add a Patient</a>
+            </li>
+            <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="#FFFFFF" d="M48 0C21.5 0 0 21.5 0 48V256H144c8.8 0 16 7.2 16 16s-7.2 16-16 16H0v64H144c8.8 0 16 7.2 16 16s-7.2 16-16 16H0v80c0 26.5 21.5 48 48 48H265.9c-6.3-10.2-9.9-22.2-9.9-35.1c0-46.9 25.8-87.8 64-109.2V271.8 48c0-26.5-21.5-48-48-48H48zM152 64h16c8.8 0 16 7.2 16 16v24h24c8.8 0 16 7.2 16 16v16c0 8.8-7.2 16-16 16H184v24c0 8.8-7.2 16-16 16H152c-8.8 0-16-7.2-16-16V152H112c-8.8 0-16-7.2-16-16V120c0-8.8 7.2-16 16-16h24V80c0-8.8 7.2-16 16-16zM512 272a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM288 477.1c0 19.3 15.6 34.9 34.9 34.9H541.1c19.3 0 34.9-15.6 34.9-34.9c0-51.4-41.7-93.1-93.1-93.1H381.1c-51.4 0-93.1 41.7-93.1 93.1z"/></svg>
+                <a href="#">View Patients</a>
+            </li>
+            <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#FFFFFF" d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/></svg>
+                <a id="signOut" href="#">Sign Out</a>
+            </li>            
+        </div>
+    </section>
+
+    <section id="interface">
+        <div class ="navBar">
+            <div class="n1">
+                <div>
+                    <svg id="menu-btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>
+                </div>
+            </div>
+            <div class="Profile">
+                <img src="ogistic/images/avatar.jpg" alt="">
+            </div>
+        </div>
+        <h3 class="i-name">
+            Patient Viewer
+        </h3>
+
+        <div class="stats">
+            <div class="valueBox">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"/></svg>
+                <div>
+                    <h3>
+                        Patient Name
+                    </h3>
+                    <span>
+                        Age
+                        <br>
+                        Birthday
+                        <br>
+                        Hand Dominance
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- <button id="firebaseBtn" type="button">Sync Data</button> -->
+        
+        <div class="board">
+            
+            <div class="tab">
+                <button class="tablink" onClick="switchtab(event,'Manual')" id="defaultOpen">Manual Entry</button>
+                <button class="tablink" onClick="switchtab(event,'Bluetooth')">Bluetooth</button>
+            </div>
+
+            <div id="Manual" class="tabcontent">
+                <form id="manual_entry">
+                    <h2>Manual Entry </h2>
+                    <h3>Right Hand Measurements</h3>
+                    <label>Trial 1: </label>
+                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="right_t1" min="1" max="1000">
+                    <label>Trial 2: </label>
+                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="right_t2" min="1" max="1000">
+                    <label>Trial 3: </label>
+                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="right_t3" min="1" max="1000">
+                    
+                    <h3>Left Hand Measurements</h3>
+                    <label>Trial 1: </label>
+                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="left_t1" min="1" max="1000">
+                    <label>Trial 2: </label>
+                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="left_t2" min="1" max="1000">
+                    <label>Trial 3: </label>
+                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="left_t3" min="1" max="1000">
+                    <br>
+                    <input class="manual_entry_form" type="submit" value="Submit">
+                </form>
+            </div>
+
+            <div id="Bluetooth" class="tabcontent">
+                <div id="ble_collection" class="ble_collection" >
+                    <h2>Bluetooth Data Collection </h2>
+                    <button id="ble_connect"> Connect Device </button>
+                    <h3 id="ble_status"> Bluetooth Status... </h3>
+                    <h3 id="sensor_status"> Sensor Status... </h3>
+                    <button id ="collect_data" onclick="CollectData()">Collect Data</button>
+                    <button id="ble_disconnect" onclick="DisconnectDevice()"> Disconnect </button>
+                    <div id="error"></div>
+                    <pre id="output"></pre>
+                </div>
+            </div>
+        </div>
+        
+        <div class="graphDisplay">
+            <canvas id="myChart" style="width:100%;"></canvas>
+        </div>
+    </section>
+
+    
+    
+    <!--Menu Bar active or not-->
+    <script>
+        $('#menu-btn').click(function(){
+            $('#menu').toggleClass("active")
+        })
+    </script>
+
+    <!--Default Tab-->
+    <script>
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+    </script>
+
+</body>
+
+</html>
