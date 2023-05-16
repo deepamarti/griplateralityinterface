@@ -139,9 +139,12 @@ if (fireBtn != null) {
         //var td5 = document.createElement('td');
 
         //Predesigned data element to be appeneded to all data tables. TODO assign a link to each and 
-        var link = document.createElement('a');
-        link.setAttribute("href", "#patient");
-        link.innerHTML = "Select";
+        var btn = document.createElement("button");
+        btn.innerHTML = "Select";
+        btn.value = patID;
+        btn.addEventListener("click", function() {
+          set_patient(btn.value); // btn.value = patient id
+        });
 
         td1.innerHTML=name;
         //td2.innerHTML=age;
@@ -161,17 +164,28 @@ if (fireBtn != null) {
         trow.appendChild(td3);
         trow.appendChild(td4);
         //trow.appendChild(td5);
-        trow.appendChild(link);
+        trow.appendChild(btn);
         tbody.appendChild(trow);
     }
   });
 //}
 }
 
-const dataBtn = document.getElementById("dataBtn");
+let global_patient = null;
+
+function set_patient(id) {
+  global_patient = id;
+  console.log(id);
+};
+
+let dataBtn = document.getElementById("dataBtn");
+
 if (dataBtn != null) {
-  dataBtn.addEventListener('click', function() {
-    console.log(patients);
+  let dateNow = Timestamp.fromDate(new Date());
+  dataBtn.addEventListener('click', async function  () {
+    console.log(global_patient);
+    let data = {"uid": global_patient, "date": dateNow, "measurements": [], "times": [], "keep": 1, "hand": 0, maxRange: [], manualEntry: 0};
+    //await addDeviceData(data);
   });
 }
 
