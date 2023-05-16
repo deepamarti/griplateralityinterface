@@ -10,7 +10,6 @@
     text-align: left;
     font-size: xx-large;
     width: 100%;
-    margin-top: 70px;
 }
 
 /* Style the tab */
@@ -103,4 +102,45 @@
     color: #fff;
     font-size: 12px;
     border-radius: 5px;
+}
+
+/** graph display **/
+.graph_entry_column {
+    float: left;
+    padding: 10px;
+}
+  
+/* Clear floats after the columns */
+.graph_entry_row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.accept_button {
+    border: 0;
+    margin: 5px;
+    padding: 5px;
+    width: auto;
+    cursor: pointer;
+    background-color: transparent;
+    color: #fff;
+    font-size: 10px;
+    border-radius: 5px;
+}
+
+.reject_button {
+    border: 0;
+    margin: 5px;
+    padding: 5px;
+    width: auto;
+    cursor: pointer;
+    background-color:transparent;
+    color: #fff;
+    font-size: 10px;
+    border-radius: 5px;
+}
+
+.opt_table {
+    font-size: small;
 }

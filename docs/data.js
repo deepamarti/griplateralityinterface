@@ -132,3 +132,21 @@ function max_index_to_time_range(max_index) {
         { length: 5 }, 
         (value, index) => Math.round((start + (index * 0.1)) * 10) / 10);
     }
+
+function AddToOptTable(opt_sample_time, opt_data) {
+    var tbody = document.getElementById('opt_table');
+        var trow = document.createElement('tr');
+        
+        var td1 = document.createElement('td');
+        var td2 = document.createElement('td');
+
+        for (let i=0;i<5;i++) {
+            td1.innerHTML = opt_sample_time;
+            td2.innerHTML = opt_data;
+            trow.appendChild(td1);
+            trow.appendChild(td2);
+            tbody.appendChild(trow);
+        }
+
+        
+}
