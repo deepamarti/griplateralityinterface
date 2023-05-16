@@ -255,17 +255,6 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
   
 }
 
-/*
-this.uid = uid;
-  this.date = date;
-  this.measurements = measurements;
-  this.times = times;
-  this.keep = keep;
-  this.hand = hand;
-  this.manualEntry = manualEntry;
-}
-*/
-
 // function testFire() {
 //   console.log("in test firebase");
 // }
