@@ -12,18 +12,6 @@ function Initialize() {
     SwitchTab(event,'Bluetooth');
 }
 
-
-function SetCollectionMethod(flag=false) {
-    isBLE = flag;
-    if (isBLE) {
-        document.getElementById('ble_collection').style.visibility = 'visible';
-        document.getElementById('manual_collection').remove();
-    } else {
-        document.getElementById('manual_collection').style.visibility = 'visible';
-        document.getElementById('ble_collection').remove();
-    }
-
-}
 let is_BLE_selected = false;
 let is_method_locked = false;
 // switch between ble and man tabs
@@ -91,4 +79,10 @@ function SwitchTab(evt, TabName) {
 
 function lock_method_selection(){
     is_method_locked = true;
+}
+
+// disables any button
+function disable_button(button_name) {
+    document.getElementById(button_name).disabled = true;
+    document.getElementById(button_name).style.backgroundColor = "darkgray";
 }

@@ -23,6 +23,7 @@
     <script id="FireBaseScript"></script>
 
     <!--Data Collection Functions-->
+    <script src="https://unpkg.com/@vernier/godirect/dist/godirect.min.umd.js"></script>
     <script src="data.js"></script>
     <script>
         function filterTable(){
@@ -122,8 +123,9 @@
             <div id="Bluetooth" class="tabcontent">
                 <div id="ble_collection" class="ble_collection" >
                     <h2>Bluetooth Data Collection </h2>
+                    <img src="./aggieimpact_design/images/bluetooth.png" alt="#" id="ble_status" 
+                    style="height: 45px; width: 45px; padding: 5px; border-radius: 10px; background-color: darkgray;"></img>
                     <button id="ble_connect"> Connect Device </button>
-                    <h3 id="ble_status"> Bluetooth Status... </h3>
                     <h3 id="sensor_status"> Sensor Status... </h3>
                     <button id ="collect_data" onclick="CollectData()">Collect Data</button>
                     <button id="ble_disconnect" onclick="DisconnectDevice()"> Disconnect </button>
@@ -159,8 +161,8 @@
               });
               gdxDevice = await godirect.createDevice(bleDevice,  {open: true, startMeasurements: false});
               ble_status.style.backgroundColor = "lime";
-              graph_interval = setInterval(updateValue, 100);
-              disable_button('ble_connect');
+              //graph_interval = setInterval(updateValue, 100);
+              // disable_button('ble_connect');
               lock_method_selection();
             } catch (err) {
                 console.error(err);
@@ -208,7 +210,7 @@
             gdxDevice.close();
             gdxDevice = "";
             ble_status.style.backgroundColor = "Red";
-            clearInterval(graph_interval);
+            //clearInterval(graph_interval);
         }
 
         btn_connect.addEventListener('click', ConnectDevice);
