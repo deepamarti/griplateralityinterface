@@ -1,1 +1,12 @@
 /* stylesheet for data collection page*/
+.data_collection {
+    width: calc(100% - 300px);
+    margin-left: 20px;
+    position:relative;
+}
+
+.data_collection h2 {
+    text-align: left;
+    font-size: xx-large;
+    width: 100%;
+}

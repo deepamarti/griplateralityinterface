@@ -21,6 +21,9 @@
     <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-database.js"></script> 
     <script type="module" src="firebase.js"></script>
     <script id="FireBaseScript"></script>
+
+    <!--Data Collection Functions-->
+    <script src="data.js"></script>
     <script>
         function filterTable(){
             var input, filter, table, tr, td ,i, txtValue;
@@ -46,7 +49,7 @@
     </script>
 </head>
 
-<body>
+<body onload="Initialize();">
     <section id="menu">
         <div class="logo">
             <img src="aggieimpact_design/images/BRAIN_Lab_Icon.png" alt="">
@@ -62,7 +65,7 @@
     <section id="interface">
         <div class ="navBar">
             <div class="Profile">
-                <p style="margin-right: 15px;">Welcome, User!</p>
+                <p style="margin-right: 15px; color: white;">Welcome, User!</p>
                 <img src="aggieimpact_design/images/avatar.jpg" alt="">
             </div>
         </div>
@@ -86,54 +89,54 @@
             </table>
         </div>
 
-        <div id="data_collection">
+        <div class="data_collection" id="data_collection">
             <h2>Data Collection</h2>
             <button id="dataBtn" type="button">save data</button>
+            <div class="board">
+                <div class="tab">
+                    <button class="tablink" onClick="switchtab(event,'Manual')">Manual Entry</button>
+                    <button class="tablink" onClick="switchtab(event,'Bluetooth')" id="defaultOpen">Bluetooth</button>
+                </div>
 
-        </div>
+                <div id="Manual" class="tabcontent">
+                    <form id="manual_entry">
+                        <h2>Manual Entry </h2>
+                        <h3>Right Hand Measurements</h3>
+                        <label>Trial 1: </label>
+                        <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="right_t1" min="1" max="1000">
+                        <label>Trial 2: </label>
+                        <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="right_t2" min="1" max="1000">
+                        <label>Trial 3: </label>
+                        <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="right_t3" min="1" max="1000">
+                        
+                        <h3>Left Hand Measurements</h3>
+                        <label>Trial 1: </label>
+                        <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="left_t1" min="1" max="1000">
+                        <label>Trial 2: </label>
+                        <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="left_t2" min="1" max="1000">
+                        <label>Trial 3: </label>
+                        <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="left_t3" min="1" max="1000">
+                        <br>
+                        <input class="manual_entry_form" type="submit" value="Submit">
+                    </form>
+                </div>
 
-        <div class="board">
-            <div class="tab">
-                <button class="tablink" onClick="switchtab(event,'Manual')">Manual Entry</button>
-                <button class="tablink" onClick="switchtab(event,'Bluetooth')" id="defaultOpen">Bluetooth</button>
-            </div>
-
-            <div id="Manual" class="tabcontent">
-                <form id="manual_entry">
-                    <h2>Manual Entry </h2>
-                    <h3>Right Hand Measurements</h3>
-                    <label>Trial 1: </label>
-                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="right_t1" min="1" max="1000">
-                    <label>Trial 2: </label>
-                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="right_t2" min="1" max="1000">
-                    <label>Trial 3: </label>
-                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="right_t3" min="1" max="1000">
-                    
-                    <h3>Left Hand Measurements</h3>
-                    <label>Trial 1: </label>
-                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="left_t1" min="1" max="1000">
-                    <label>Trial 2: </label>
-                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="left_t2" min="1" max="1000">
-                    <label>Trial 3: </label>
-                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="left_t3" min="1" max="1000">
-                    <br>
-                    <input class="manual_entry_form" type="submit" value="Submit">
-                </form>
-            </div>
-
-            <div id="Bluetooth" class="tabcontent">
-                <div id="ble_collection" class="ble_collection" >
-                    <h2>Bluetooth Data Collection </h2>
-                    <button id="ble_connect"> Connect Device </button>
-                    <h3 id="ble_status"> Bluetooth Status... </h3>
-                    <h3 id="sensor_status"> Sensor Status... </h3>
-                    <button id ="collect_data" onclick="CollectData()">Collect Data</button>
-                    <button id="ble_disconnect" onclick="DisconnectDevice()"> Disconnect </button>
-                    <div id="error"></div>
-                    <pre id="output"></pre>
+                <div id="Bluetooth" class="tabcontent">
+                    <div id="ble_collection" class="ble_collection" >
+                        <h2>Bluetooth Data Collection </h2>
+                        <button id="ble_connect"> Connect Device </button>
+                        <h3 id="ble_status"> Bluetooth Status... </h3>
+                        <h3 id="sensor_status"> Sensor Status... </h3>
+                        <button id ="collect_data" onclick="CollectData()">Collect Data</button>
+                        <button id="ble_disconnect" onclick="DisconnectDevice()"> Disconnect </button>
+                        <div id="error"></div>
+                        <pre id="output"></pre>
+                    </div>
                 </div>
             </div>
         </div>
+
+        
     </section>
 
     

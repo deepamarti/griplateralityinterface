@@ -13,7 +13,7 @@ body{
 }
 
 #menu{
-    background: #4164da;
+    background: linear-gradient(to bottom, #4164da, #11bbb9);
     width: 250px;
     height: 100%;
     position: fixed;
@@ -80,7 +80,7 @@ body{
     display:flex;
     align-items: center;
     justify-content: space-between;
-    background: white;
+    background: linear-gradient(to right, #4164da, #11bbb9);
     padding:15px 30px;
     position: fixed;
     width: calc(100% - 250px);
