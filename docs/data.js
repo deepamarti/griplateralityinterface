@@ -106,13 +106,7 @@ function FindOptSample(data) {
     let max_index = data.findIndex(sample => sample === max);
 
     let opt_time_sample = max_index_to_time_range(max_index);
-    //alert(opt_time_sample);
-    let opt_sample = [];
-    for (var i=0; i<5; i++) {
-        opt_sample[i] = data[opt_time_sample[i] * 10];
-    }
-    //alert(opt_sample);
-    return [opt_time_sample, opt_sample];
+    return opt_time_sample;
 
     // additional checks for accept/reject
     // if min and max differ by too much, reject;

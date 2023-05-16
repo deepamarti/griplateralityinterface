@@ -255,13 +255,12 @@
     <!--graphing functions-->
     <script>
         let graph_interval = null;
-        let scale_opt_sample = [];
         const time = Array.from(
             { length: 51 },
             (value, index) => Math.round(index * 0.1 *10)/10);
         let force_data = [];
-        let opt_time_sample, opt_sample = [];
-        let opt_data = [];
+        let opt_time_sample = [];
+        let opt_data = Array(51).fill(NaN);
         let color = Array(51).fill("rgba(0,0,255,1.0)");
         let chart = new Chart.Line("chart_sample", {
         data: {
@@ -294,28 +293,14 @@
 
         function updateValue() {
             force_data = sample_data;
-            chart.data.datasets[0].data = force_data;
-            
             if (done_sampling == true) {
-                [opt_time_sample, opt_sample] = FindOptSample(force_data);
-                showOptSample();
-                // fit into full size array
-
-                //TODO: graph opptimal sample
+                opt_time_sample= FindOptSample(force_data);
+                for (let i=0;i<5;i++){
+                    opt_data[opt_time_sample[i]*10] = force_data[opt_time_sample[i]*10];
+                }
                 
-              //FindOptSample(sample_data);  
-            //}
             }
-            chart.update();
-        }
-
-        function showOptSample() {
-            opt_data[20] = 100;
-            opt_data[21] = 150;
-            opt_data[22] = 50;
-            opt_data[35] = 100;
-            opt_data[36] = force_data[36];
-            opt_data[37] = force_data[37];
+            chart.data.datasets[0].data = force_data;
             chart.data.datasets[1].data = opt_data;
             chart.update();
         }
