@@ -176,6 +176,7 @@ let global_patient = null;
 function set_patient(id) {
   global_patient = id;
   console.log(id);
+  location.hash = "#data_collection";
 };
 
 let dataBtn = document.getElementById("dataBtn");
