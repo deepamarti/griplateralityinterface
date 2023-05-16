@@ -223,8 +223,11 @@
             }
 
             // clear data arrays
+            done_sampling = false;
             sensor.values = [];
             sample_data = [];
+            force_data = Array(51).fill(NaN);
+            opt_data = Array(51).fill(NaN);
             
             gdxDevice.start(100);
             sensor.on('value-changed', (sensor) => {
@@ -287,7 +290,8 @@
             legend: {display: false},
             scales: {
             yAxes: [{ticks: {min: -1, max:600}}],
-            }
+            },
+            tooltips: {enabled: false}
         }
         });
 
