@@ -94,6 +94,10 @@ const fireBtn = document.getElementById("firebaseBtn");
 //     //let profiles = await getAllPatients();
 // }
 
+
+let patients = []
+
+
 if (fireBtn != null) {
 //function getPatientDashboard() {
 
@@ -103,13 +107,14 @@ if (fireBtn != null) {
     if (result["empty"] == false) {
       for (let p in result["profiles"]) {
         let element = result["profiles"][p];
+        patients.push(element);
         var name = element["first_name"] + " " + element["last_name"];
         //var age = 0;
         var birthdate = element["date_of_birth"];
         var healthStatus = "Healthy";
 
         //Patient ID
-        var patID = "ID";
+        var patID = element["uid"];
 
         if (element["impaired"] == 1) {
             healthStatus = "Stroke";
@@ -135,7 +140,8 @@ if (fireBtn != null) {
 
         //Predesigned data element to be appeneded to all data tables. TODO assign a link to each and 
         var link = document.createElement('a');
-        link.setAttribute("href", "" + patID)
+        link.setAttribute("href", "#patient");
+        link.innerHTML = "Select";
 
         td1.innerHTML=name;
         //td2.innerHTML=age;
@@ -162,6 +168,12 @@ if (fireBtn != null) {
 //}
 }
 
+const dataBtn = document.getElementById("dataBtn");
+if (dataBtn != null) {
+  dataBtn.addEventListener('click', function() {
+    console.log(patients);
+  });
+}
 
 // function testFire() {
 //   console.log("in test firebase");
