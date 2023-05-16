@@ -104,9 +104,13 @@ if (fireBtn != null) {
       for (let p in result["profiles"]) {
         let element = result["profiles"][p];
         var name = element["first_name"] + " " + element["last_name"];
-        var age = 0;
+        //var age = 0;
         var birthdate = element["date_of_birth"];
         var healthStatus = "Healthy";
+
+        //Patient ID
+        var patID = "ID";
+
         if (element["impaired"] == 1) {
             healthStatus = "Stroke";
         }
@@ -114,44 +118,44 @@ if (fireBtn != null) {
             healthStatus = "Hand injury";
         }
         var gripLaterality = 0;
-        AddItemsToTable(name, age, birthdate,healthStatus,gripLaterality);
+        AddItemsToTable(name, birthdate,healthStatus, patID);
       }
     }
     
-    function AddItemsToTable(name,age,birthdate,healthStatus,gripLaterality){
+    function AddItemsToTable(name,birthdate,healthStatus, patID){
         var tbody = document.getElementById('patientTable');
         var trow = document.createElement('tr');
         
         //Data Elements being passed in from firebase calls
         var td1 = document.createElement('td');
-        var td2 = document.createElement('td');
+        //var td2 = document.createElement('td');
         var td3 = document.createElement('td');
         var td4 = document.createElement('td');
-        var td5 = document.createElement('td');
+        //var td5 = document.createElement('td');
 
         //Predesigned data element to be appeneded to all data tables. TODO assign a link to each and 
-        var td6 = document.createElement('td');
+        var link = document.createElement('a');
+        link.setAttribute("href", "" + patID)
 
         td1.innerHTML=name;
-        td2.innerHTML=age;
+        //td2.innerHTML=age;
         td3.innerHTML=birthdate;
         td4.innerHTML=healthStatus;
-        td5.innerHTML=gripLaterality; 
+        //td5.innerHTML=gripLaterality; 
         
         td1.className = "Patients";
-        td2.className = "Age";
+        //td2.className = "Age";
         td3.className = "Birthdate";
         td4.className = "healthStatus";
-        td5.className = "laterality";
-        td6.className = "AddMeasure";
-
+        //td5.className = "laterality";
+        //td6.className = "AddMeasure";
 
         trow.appendChild(td1);
-        trow.appendChild(td2);
+        //trow.appendChild(td2);
         trow.appendChild(td3);
         trow.appendChild(td4);
-        trow.appendChild(td5);
-
+        //trow.appendChild(td5);
+        trow.appendChild(link);
         tbody.appendChild(trow);
     }
   });
