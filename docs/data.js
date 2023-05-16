@@ -36,6 +36,10 @@ function SwitchTab(evt, TabName) {
         } else if (TabName == 'Manual') {
             is_BLE_selected = false
         } 
+        //reset everything
+        ResetBLE();
+        ResetManual();
+
         // Get all elements with class="tabcontent" and hide them
         tabcontent = document.getElementsByClassName("tabcontent");
         for (i = 0; i < tabcontent.length; i++) {
@@ -61,6 +65,10 @@ function SwitchTab(evt, TabName) {
                 msg_text = "You are about to switch from manual to bluetooth entry. Do you want to proceed?"
             }
             if (confirm(msg_text)) {
+                //reset everything
+                ResetBLE();
+                ResetManual();
+
                 // Get all elements with class="tabcontent" and hide them
                 tabcontent = document.getElementsByClassName("tabcontent");
                 for (i = 0; i < tabcontent.length; i++) {
@@ -92,6 +100,46 @@ function lock_method_selection(){
     is_method_locked = true;
 }
 
+function ResetBLE(){
+    document.getElementById(id="ble_status").style.backgroundColor = "#ffe26a";
+    document.getElementById('ble_submit').disabled = true;
+    document.getElementById('ble_connect').disabled = false;
+    document.getElementById('ble_disconnect').disabled = true;
+
+    // clear all arrays
+
+
+    // reenable all trials
+    for (let i=1;i<=3;i++) {
+        let right_name, left_name = "";
+        right_name = "ble_right_t" + i;
+        left_name = "ble_left_t" + i;
+        
+        enable_trial_button(right_name);
+        enable_trial_button(left_name);
+    }
+}
+
+function ResetManual(){
+    let hand = "";
+    let num = 0;
+    for (let i=0;i<6;i++) {
+        if (i < 3) {
+            // right hand
+            hand = "right";
+            num = i + 1;
+        } else {
+            // left hand
+            hand = "left";
+            num = i - 2;
+        }
+        let input_id = "man_" + hand + "_t" + num;
+        console.log(input_id)
+        document.getElementById(input_id).value = '';
+    }
+    
+}
+
 function enable_button(button_name) {
     document.getElementById(button_name).disabled = false;
     document.getElementById(button_name).style.backgroundColor = "lightgray";
@@ -106,6 +154,12 @@ function disable_trial_button(button_name) {
     // if we accept a trial, turn button green
     document.getElementById(button_name).disabled = true;
     document.getElementById(button_name).style.backgroundColor = "#abd699";
+}
+
+function enable_trial_button(button_name) {
+    // if we accept a trial, turn button green
+    document.getElementById(button_name).disabled = false;
+    document.getElementById(button_name).style.backgroundColor = "#4164da";
 }
 
 function FindOptSample(data) {
@@ -170,7 +224,6 @@ function WaitForAcceptReject() {
 }
 
 document.getElementById('accept_button').addEventListener('click', AcceptTrial);
-document.getElementById('reject_button').addEventListener('click', RejectTrial);
 
 function AcceptTrial(index) {
     let hand = "";
@@ -192,8 +245,4 @@ function AcceptTrial(index) {
     if (trials_complete_left + trials_complete_right == 6) {
         document.getElementById('ble_submit').disabled = false;
     }
-}
-
-function RejectTrial() {
-
 }

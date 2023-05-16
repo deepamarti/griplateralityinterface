@@ -94,8 +94,8 @@
         <div class="data_collection" id="data_collection">
             <h2>Data Collection</h2>
             <div class="tab">
-                <button onClick="SwitchTab(event,'Manual')">Manual Entry</button>
-                <button onClick="SwitchTab(event,'Bluetooth')">Bluetooth</button>
+                <button onClick="SwitchTab(event,'Manual');">Manual Entry</button>
+                <button onClick="SwitchTab(event,'Bluetooth');">Bluetooth</button>
             </div>
 
             <div id="Manual" class="tabcontent">
@@ -107,15 +107,15 @@
                              </div>
                              <div class="col-md-12">
                                 <label>Trial 1: </label>
-                                <input class="manual_entry_form" placeholder="60" type="text" name="right_t1">
+                                <input class="manual_entry_form" type="text" id="man_right_t1">
                              </div>
                              <div class="col-md-12">
                                 <label>Trial 2: </label>
-                                <input class="manual_entry_form" placeholder="60" type="text" name="right_t2">
+                                <input class="manual_entry_form" type="text" id="man_right_t2">
                              </div>
                              <div class="col-md-12">
                                 <label>Trial 3: </label>
-                                <input class="manual_entry_form" placeholder="60" type="text" name="right_t3">
+                                <input class="manual_entry_form" type="text" id="man_right_t3">
                              </div>
                         </div>
                         <div class="form_entry_column">
@@ -124,15 +124,15 @@
                              </div>
                              <div class="col-md-12">
                                 <label>Trial 1: </label>
-                                <input class="manual_entry_form" placeholder="60" type="text" name="left_t1">
+                                <input class="manual_entry_form" type="text" id="man_left_t1">
                              </div>
                              <div class="col-md-12">
                                 <label>Trial 2: </label>
-                                <input class="manual_entry_form" placeholder="60" type="text" name="left_t2">
+                                <input class="manual_entry_form" type="text" id="man_left_t2">
                              </div>
                              <div class="col-md-12">
                                 <label>Trial 3: </label>
-                                <input class="manual_entry_form" placeholder="60" type="text" name="left_t3">
+                                <input class="manual_entry_form" type="text" id="man_left_t3">
                              </div>
                         </div>
                     </div>
@@ -198,7 +198,7 @@
                                 <div class="col-md-12">
                                     <button class="accept_button" id ="accept_button" onclick="Accept()"> <img src="./aggieimpact_design/images/check.png" alt="#" id="ble_status" 
                                         style="height: 45px; width: 45px; padding: 5px; border-radius: 10px; background-color: #abd699;"></img></button>
-                                    <button class="reject_button" id ="reject_button"> <img src="./aggieimpact_design/images/cross.png" alt="#" id="ble_status" 
+                                    <button class="reject_button" id ="reject_button" onclick="Reject()"> <img src="./aggieimpact_design/images/cross.png" alt="#" id="ble_status" 
                                         style="height: 45px; width: 45px; padding: 5px; border-radius: 10px; background-color: #ea8a81;"></img></button>
                                  </div>
                              </div>
@@ -275,9 +275,11 @@
         }
 
         function DisconnectDevice() {
-            gdxDevice.close();
+            if (gdxDevice != null) {
+                gdxDevice.close();
+            }
             gdxDevice = "";
-            ble_status.style.backgroundColor = "#ea8a81";
+            ble_status.style.backgroundColor = "#ffe26a";
             clearInterval(graph_interval);
             enable_button('ble_connect');
             disable_button('ble_disconnect');
@@ -363,7 +365,12 @@
         }
 
         function Reject() {
-            RejectTrial(current_index);
+            ClearOptTable();
+            sample_data[current_index] = [];
+            opt_sample_data[current_index] = [];
+            opt_sample_time[current_index] = [];
+            opt_data = [];
+            updateValue();
         }
     </script>
 
