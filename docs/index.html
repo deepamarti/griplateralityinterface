@@ -6,51 +6,24 @@
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css">
        <link rel="stylesheet" href="./aggieimpact_design/css/patientStyle.css">
       <link rel="stylesheet" href="./aggieimpact_design/css/dataStyle.css">
+      <link rel="stylesheet" href="./aggieimpact_design/css/style.css">
       
       <script type="module" src="firebase.js"></script>
-      <title>Grip Laterality</title>
+      <title>BRaINlab Grip Symmetry Measurement</title>
    </head> 
    <body> 
-     <section class="banner_main">
-        <h1> Grip Laterality Website </h1>
+     <div class="banner_main">
+      <h1>BRaINlab Grip Symmetry Measurement</h1>
         <!--sign in (firebase authentication)-->
-        <form id = "signInForm">
+      <form class="sign_in" id = "signInForm">
          <label for="email"><b>Email</b></label>
-         <input type="text" placeholder="Enter Email" id="email" required>
-
+         <input class="input" type="text" placeholder="Enter Email" id="email" required>
+         <br>
          <label for="password"><b>Password</b></label>
-         <input type="password" placeholder="Enter Password" id="password" required>
-
-         <button id="submit" type="submit">Login</button>
+         <input class="input" type="password" placeholder="Enter Password" id="password" required>
+         <br>
+         <button class="login" id="submit" type="submit">Login</button>
         </form>
-     </section>
-
-     
-      
-
-
-    
-    <!-- check for bluetooth capability here first, before showing sign in
-        if browser won't support bluetooth, then don't even let them use
-    -->
-
-     <script src="https://unpkg.com/@vernier/godirect/dist/godirect.min.umd.js"></script>
-     <!-- Javascript files-->
-     <!-- <script src="js/jquery.min.js"></script>
-     <script src="js/popper.min.js"></script>
-     <script src="js/bootstrap.bundle.min.js"></script>
-     <script src="js/jquery-3.0.0.min.js"></script>
-     
-     <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
-     <script src="js/custom.js"></script> -->
-     <script>
-        function openNav() {
-          document.getElementById("mySidepanel").style.width = "250px";
-        }
-        
-        function closeNav() {
-          document.getElementById("mySidepanel").style.width = "0";
-        }
-     </script>
+      </div>
    </body>
 </html>
