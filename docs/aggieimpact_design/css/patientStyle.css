@@ -14,7 +14,7 @@ body{
 
 #menu{
     background: #4164da;
-    width: 300px;
+    width: 250px;
     height: 100%;
     position: fixed;
     top:0;
@@ -72,7 +72,7 @@ body{
 
 #interface {
     width: calc(100% - 300px);
-    margin-left: 300px;
+    margin-left: 250px;
     position:relative;
 } 
 
@@ -83,11 +83,11 @@ body{
     background: white;
     padding:15px 30px;
     position: fixed;
-    width: calc(100% - 300px);
+    width: calc(100% - 250px);
 }
 
 #interface .searchBar {
-    width:calc(100%-300px);
+    width:calc(100%-250px);
     display:flex;
     justify-content: center;
     align-items: center;
@@ -389,9 +389,9 @@ tbody tr td{
 
 @media (max-width: 769px) {
     #menu {
-        width: 270px;
+        width: 200px;
         position:fixed;
-        left:-270px;
+        left:-200px;
         transition: 0.3s ease;
     }
 
