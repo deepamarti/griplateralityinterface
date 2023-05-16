@@ -34,10 +34,8 @@ function SwitchTab(evt, TabName) {
     if (!is_method_locked){
        if (TabName == 'Bluetooth') {
             is_BLE_selected = true;
-            is_method_locked = true;
         } else if (TabName == 'Manual') {
             is_BLE_selected = false
-            is_method_locked = true;
         } 
         // Get all elements with class="tabcontent" and hide them
         tabcontent = document.getElementsByClassName("tabcontent");
@@ -55,8 +53,6 @@ function SwitchTab(evt, TabName) {
         document.getElementById(TabName).style.display = "block";
         evt.currentTarget.className += " active";
     } else {
-        alert(TabName);
-        alert(is_BLE_selected);
         if ((TabName =='Manual' && is_BLE_selected) || (TabName =='Bluetooth' && !is_BLE_selected)) {
             // confirm if user wants to switch collection method
             let msg_text = "";
@@ -84,15 +80,15 @@ function SwitchTab(evt, TabName) {
 
                 if (TabName == 'Bluetooth') {
                     is_BLE_selected = true;
-                    is_method_locked = false;
                 } else if (TabName == 'Manual') {
                     is_BLE_selected = false
-                    is_method_locked = false;
                 } 
+                is_method_locked = false;
             }
         }
     }
-    
+}
 
-    
-    }
+function lock_method_selection(){
+    is_method_locked = true;
+}

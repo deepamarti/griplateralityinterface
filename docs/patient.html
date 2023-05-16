@@ -136,12 +136,156 @@
         
     </section>
 
-    
+    <!--bluetooth functions-->
     <script>
-        $('#menu-btn').click(function(){
-            $('#menu').toggleClass("active")
-        })
+        const btn_connect = document.querySelector('#ble_connect');
+        const ble_status = document.querySelector('#ble_status');
+        const lbl_countdown = document.getElementById('#lbl_countdown');
+
+        let gdxDevice = "";
+        let sample_data = [];
+        let right_num_samples = 0;
+        let left_num_samples = 0;
+
+        let countdown_interval = null;
+        let countdown_time = 0;
+        let done_sampling = false;
+
+        const ConnectDevice = async() => {
+            try {
+              const bleDevice = await navigator.bluetooth.requestDevice({
+                filters: [{ namePrefix: 'GDX' }],
+                optionalServices: ['d91714ef-28b9-4f91-ba16-f0d9a604f112']
+              });
+              gdxDevice = await godirect.createDevice(bleDevice,  {open: true, startMeasurements: false});
+              ble_status.style.backgroundColor = "lime";
+              graph_interval = setInterval(updateValue, 100);
+              disable_button('ble_connect');
+              lock_method_selection();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function CollectData() {
+            // set up sensor
+            const sensor = gdxDevice.getSensor(1);
+            if (sensor) {
+              sensor.setEnabled(true);
+            }
+
+            // clear data arrays
+            sensor.values = [];
+            sample_data = [];
+            
+            gdxDevice.start(100);
+            sensor.on('value-changed', (sensor) => {
+                // samples for 5 seconds
+                if (sensor.values.length > 51){
+                    done_sampling = true;
+                    gdxDevice.stop();
+                    //clearInterval(countdown_interval);
+                }
+                // log the sensor name, new value and units.
+                console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
+                // add data points to the data array
+                sample_data.push(sensor.value);
+                countdown_time = (countdown_time + 1) % 10;
+                // lbl_countdown.textContent = countdown_time;
+            }); 
+        }
+
+        function countdown() {
+            countdown_interval = setInterval(update_countdown, 1000);
+        }
+
+        function update_countdown() {
+            countdown_time = (countdown_time + 1) / 10;
+            lbl_countdown.innerHTML = countdown_time;
+        }
+
+        function DisconnectDevice() {
+            gdxDevice.close();
+            gdxDevice = "";
+            ble_status.style.backgroundColor = "Red";
+            clearInterval(graph_interval);
+        }
+
+        btn_connect.addEventListener('click', ConnectDevice);
+
     </script>
+
+    <!--graphing functions-->
+    <script>
+        let graph_interval = null;
+        
+        let scale_opt_sample = [];
+        const time = Array.from(
+            { length: 51 },
+            (value, index) => Math.round(index * 0.1 *10)/10);
+        let force_data = [];
+        let opt_time_sample, opt_sample = [];
+        let opt_data = [];
+        let color = Array(51).fill("rgba(0,0,255,1.0)");
+        let chart_test = new Chart.Line("myChart", {
+        data: {
+            labels: time,
+            datasets: [{
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "blue",
+                borderColor: "blue",
+                borderWidth: 1,
+                order: 1,
+                data: force_data
+            }, {
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "lime",
+                borderColor: "lime",
+                borderWidth: 1,
+                order: 0,
+                data: opt_data
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+            yAxes: [{ticks: {min: -1, max:600}}],
+            }
+        }
+        });
+
+        function updateValue() {
+            force_data = sample_data;
+            chart_test.data.datasets[0].data = force_data;
+            
+            if (done_sampling == true) {
+                [opt_time_sample, opt_sample] = FindOptSample(force_data);
+                showOptSample();
+                // fit into full size array
+
+                //TODO: graph opptimal sample
+                
+              //FindOptSample(sample_data);  
+            //}
+            }
+            chart_test.update();
+        }
+
+        function showOptSample() {
+            opt_data[20] = 100;
+            opt_data[21] = 150;
+            opt_data[22] = 50;
+            opt_data[35] = 100;
+            opt_data[36] = force_data[36];
+            opt_data[37] = force_data[37];
+            chart_test.data.datasets[1].data = opt_data;
+            chart_test.update();
+        }
+        
+    </script>
+    
 
 </body>
 
