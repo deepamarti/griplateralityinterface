@@ -102,6 +102,7 @@ if (fireBtn != null) {
 //function getPatientDashboard() {
 
   fireBtn.addEventListener('click', async function(){
+    document.getElementById("firebaseBtn").disabled = true;
     let result = await getAllPatients();
     console.log(result);
     if (result["empty"] == false) {
