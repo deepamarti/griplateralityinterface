@@ -93,7 +93,6 @@
 
         <div class="data_collection" id="data_collection">
             <h2>Data Collection</h2>
-            <button id="dataBtn" type="button">save data</button>
             <div class="tab">
                 <button onClick="SwitchTab(event,'Manual')">Manual Entry</button>
                 <button onClick="SwitchTab(event,'Bluetooth')">Bluetooth</button>
@@ -178,6 +177,11 @@
                                 <button class="trial_button" id ="ble_left_t3" onclick="currentSample(5); CollectData();"> Trial 3</button>
                              </div>
                         </div>
+                        <div class="form_entry_column">
+                            <div class="col-md-12">
+                                <button class="trial_button" id ="ble_submit" style="width:100%"> Submit</button>
+                             </div>
+                        </div>
                     </div>
                     <div class="graph_entry_row">
                         <div class="graph_entry_column" style="width:25%;">
@@ -206,8 +210,6 @@
                 </div>
             </div>
         </div>
-
-        
     </section>
 
     <!--bluetooth functions-->
@@ -218,6 +220,7 @@
         let gdxDevice = "";
         let sample_data = Array(6);
         let opt_sample_data = Array(6)
+        let opt_sample_time = Array(6);
         let current_index = null;
         let right_num_samples = 0;
         let left_num_samples = 0;
@@ -234,6 +237,7 @@
               ble_status.style.backgroundColor = "#abd699";
               graph_interval = setInterval(updateValue, 100);
               disable_button('ble_connect');
+              enable_button('ble_disconnect');
               lock_method_selection();
             } catch (err) {
                 console.error(err);
@@ -275,7 +279,8 @@
             gdxDevice = "";
             ble_status.style.backgroundColor = "#ea8a81";
             clearInterval(graph_interval);
-            console.log(sample_data);
+            enable_button('ble_connect');
+            disable_button('ble_disconnect');
         }
 
         btn_connect.addEventListener('click', ConnectDevice);
@@ -294,7 +299,6 @@
             { length: 51 },
             (value, index) => Math.round(index * 0.1 *10)/10);
         let force_data = [];
-        let opt_sample_time = [];
         let opt_data = Array(51).fill(NaN);
         let color = Array(51).fill("rgba(0,0,255,1.0)");
         let chart = new Chart.Line("chart_sample", {
@@ -330,11 +334,11 @@
         function updateValue() {
             force_data = sample_data[current_index];
             if (done_sampling == true) {
-                opt_sample_time= FindOptSample(force_data);
+                opt_sample_time[current_index]= FindOptSample(force_data);
                 for (let i=0;i<5;i++){
-                    opt_data[opt_sample_time[i]*10] = force_data[opt_sample_time[i]*10];
-                    opt_sample_data[current_index][i] = opt_data[opt_sample_time[i]*10];
-                    AddToOptTable(opt_sample_time[i], opt_sample_data[current_index][i]);
+                    opt_data[opt_sample_time[current_index][i]*10] = force_data[opt_sample_time[current_index][i]*10];
+                    opt_sample_data[current_index][i] = opt_data[opt_sample_time[current_index][i]*10];
+                    AddToOptTable(opt_sample_time[current_index][i], opt_sample_data[current_index][i]);
                 }
                 // disable everything except for the accept reject buttons
                 WaitForAcceptReject();
@@ -357,15 +361,20 @@
         function Accept() {
             AcceptTrial(current_index);
         }
+
+        function Reject() {
+            RejectTrial(current_index);
+        }
     </script>
 
     <!--firebase function-->
     <script type="module">
     import {AddToDatabase} from "./firebase.js";
-        let dBtn = document.getElementById("dataBtn");
+        let dBtn = document.getElementById("ble_submit");
         dBtn.addEventListener('click', StoreData);
         function StoreData() {
-            AddToDatabase(sample_data[0]);
+            AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time);
+            disable_button("ble_submit");
         }
 
     </script>

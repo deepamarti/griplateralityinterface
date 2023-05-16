@@ -76,6 +76,17 @@ body{
     position:relative;
 } 
 
+button { 
+    border: none;
+    border-radius: 5%;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    background-color: lightgray;
+    /* display: inline-block; */
+    font-size: 14px;
+}
+
 #interface .navBar {
     display:flex;
     align-items: center;

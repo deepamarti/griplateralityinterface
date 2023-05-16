@@ -196,14 +196,19 @@ function set_patient(id) {
 //   });
 // }
 
-export function AddToDatabase(sample) {
+export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) {
   alert("store");
+  console.log(sample_data);
   let dateNow = Timestamp.fromDate(new Date());
   const time = Array.from(
     { length: 51 },
     (value, index) => Math.round(index * 0.1 *10)/10);
-  let data = {"uid": global_patient, "date": dateNow, "measurements": sample, "times": time, "keep": 1, "hand": 0, maxRange: [0, 0], manualEntry: 0};
-  addDeviceData(data);
+  let data = "";
+  for (let i=0;i<6;i++) {
+    data = {"uid": global_patient, "date": dateNow, "measurements": sample_data[i], "times": time, "keep_trial": 1, "hand": 0, maxRange: [opt_sample_time[i][0], opt_sample_time[i][4]], manualEntry: 0};
+    addDeviceData(data);
+  }
+  
 }
 
 // function testFire() {

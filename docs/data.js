@@ -2,10 +2,8 @@
 
 function Initialize() {
     document.getElementById('data_collection').style.visibility = 'hidden';
-    //document.getElementById('select_collection_method').style.visibility = 'visible';
-    //document.getElementById('ble_collection').style.visibility = 'hidden';
-    //document.getElementById('manual_collection').style.visibility = 'hidden';
-
+    document.getElementById('ble_submit').disabled = true;
+    document.getElementById('ble_disconnect').disabled = true;
     SwitchTab(event,'Bluetooth');
 }
 
@@ -94,10 +92,20 @@ function lock_method_selection(){
     is_method_locked = true;
 }
 
+function enable_button(button_name) {
+    document.getElementById(button_name).disabled = false;
+    document.getElementById(button_name).style.backgroundColor = "lightgray";
+}
 // disables any button
 function disable_button(button_name) {
     document.getElementById(button_name).disabled = true;
-    document.getElementById(button_name).style.backgroundColor = "darkgray";
+    document.getElementById(button_name).style.backgroundColor = "#ccc";
+}
+
+function disable_trial_button(button_name) {
+    // if we accept a trial, turn button green
+    document.getElementById(button_name).disabled = true;
+    document.getElementById(button_name).style.backgroundColor = "#abd699";
 }
 
 function FindOptSample(data) {
@@ -171,16 +179,19 @@ function AcceptTrial(index) {
         // right hand
         hand = "right";
         num = index + 1;
+        trials_complete_right = trials_complete_right + 1;
     } else {
         // left hand
         hand = "left";
         num = index - 2;
+        trials_complete_left = trials_complete_left + 1;
     }
     let button_name = "ble_" + hand + "_t" + num;
-    console.log(button_name);
     ClearOptTable();
-    // increment number of trials done for the right hand
-    // disable the trial button
+    disable_trial_button(button_name);
+    if (trials_complete_left + trials_complete_right == 6) {
+        document.getElementById('ble_submit').disabled = false;
+    }
 }
 
 function RejectTrial() {
