@@ -184,7 +184,10 @@ if (dataBtn != null) {
   let dateNow = Timestamp.fromDate(new Date());
   dataBtn.addEventListener('click', async function  () {
     console.log(global_patient);
-    let data = {"uid": global_patient, "date": dateNow, "measurements": [], "times": [], "keep": 1, "hand": 0, maxRange: [], manualEntry: 0};
+    let data = {"uid": global_patient, "date": dateNow, "measurements": [], "times": [], "keep": 1, "hand": 0, maxRange: [0, 0], manualEntry: 0};
+    // dateNow = Timestamp.fromDate(new Date());  need timestamp for firebase format
+    // hand => 0 = right, 1 = left
+    // manualEntry => 0 = bluetooth, 1 = manual
     //await addDeviceData(data);
   });
 }
