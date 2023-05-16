@@ -57,9 +57,9 @@
             <img src="aggieimpact_design/images/BRAIN_Lab_Icon.png" alt="">
         </div>
         <div class="MenuItems">
-            <li>
+            <li id="signOut">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#FFFFFF" d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/></svg>
-                <a id="signOut" href="#">Sign Out</a>
+                <a href="#">Sign Out</a>
             </li>            
         </div>
     </section>
@@ -189,21 +189,18 @@
                                             <td> Force </td>
                                         </tr>
                                     </thead>
-                                    <tbody id = "opt_sample_table"></tbody>
+                                    <tbody id="opt_sample_table"></tbody>
                                 </table>
                                 <div class="col-md-12">
-                                    <button class="accept_button" id ="accept_button" onclick=""> <img src="./aggieimpact_design/images/check.png" alt="#" id="ble_status" 
+                                    <button class="accept_button" id ="accept_button" onclick="Accept()"> <img src="./aggieimpact_design/images/check.png" alt="#" id="ble_status" 
                                         style="height: 45px; width: 45px; padding: 5px; border-radius: 10px; background-color: #abd699;"></img></button>
-                                    <button class="reject_button" id ="reject_button" onclick=""> <img src="./aggieimpact_design/images/cross.png" alt="#" id="ble_status" 
+                                    <button class="reject_button" id ="reject_button"> <img src="./aggieimpact_design/images/cross.png" alt="#" id="ble_status" 
                                         style="height: 45px; width: 45px; padding: 5px; border-radius: 10px; background-color: #ea8a81;"></img></button>
                                  </div>
                              </div>
-                            
-                            <!--accept reject-->
                         </div>
                         <div class="graph_entry_column" style="width:75%;">
                             <canvas id="chart_sample" style="width:100%;"></canvas>
-                            <!--graph-->
                         </div>
                     </div>
                 </div>
@@ -339,6 +336,9 @@
                     opt_sample_data[current_index][i] = opt_data[opt_sample_time[i]*10];
                     AddToOptTable(opt_sample_time[i], opt_sample_data[current_index][i]);
                 }
+                // disable everything except for the accept reject buttons
+                WaitForAcceptReject();
+                //
                 done_sampling=false;
 
                 // do accept reject here, and increment counters
@@ -350,6 +350,24 @@
             chart.update();
         }
         
+    </script>
+
+    <!--accept/reject-->
+    <script>
+        function Accept() {
+            AcceptTrial(current_index);
+        }
+    </script>
+
+    <!--firebase function-->
+    <script type="module">
+    import {AddToDatabase} from "./firebase.js";
+        let dBtn = document.getElementById("dataBtn");
+        dBtn.addEventListener('click', StoreData);
+        function StoreData() {
+            AddToDatabase(sample_data[0]);
+        }
+
     </script>
     
 

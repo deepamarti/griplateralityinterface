@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase
 import { getFirestore, collection, getDocs, query, where, addDoc, orderBy, limit, Timestamp} from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/9.1.1/firebase-auth.js";
 
-window.addEventListener('load', function() {
+//window.addEventListener('load', function() {
 const firebaseConfig = {
   apiKey: "AIzaSyCbHB7UiryIBD6GO6qu1egD6nsQ4pnOx8Y",
   authDomain: "aggiempact.firebaseapp.com",
@@ -145,6 +145,7 @@ if (fireBtn != null) {
         btn.value = patID;
         btn.addEventListener("click", function() {
           set_patient(btn.value); // btn.value = patient id
+          btn.disable = true;
         });
 
         td1.innerHTML=name;
@@ -177,23 +178,32 @@ let global_patient = null;
 function set_patient(id) {
   global_patient = id;
   console.log(id);
-  //location.hash = "#data_collection";
-  // set the data collection tabs to be visible
+  location.hash = "#data_collection";
   document.getElementById('data_collection').style.visibility = 'visible';
 };
 
-let dataBtn = document.getElementById("dataBtn");
+// let dataBtn = document.getElementById("dataBtn");
 
-if (dataBtn != null) {
+// if (dataBtn != null) {
+//   let dateNow = Timestamp.fromDate(new Date());
+//   dataBtn.addEventListener('click', async function  () {
+//     console.log(global_patient);
+//     let data = {"uid": global_patient, "date": dateNow, "measurements": [], "times": [], "keep": 1, "hand": 0, maxRange: [0, 0], manualEntry: 0};
+//     // dateNow = Timestamp.fromDate(new Date());  need timestamp for firebase format
+//     // hand => 0 = right, 1 = left
+//     // manualEntry => 0 = bluetooth, 1 = manual
+//     //await addDeviceData(data);
+//   });
+// }
+
+export function AddToDatabase(sample) {
+  alert("store");
   let dateNow = Timestamp.fromDate(new Date());
-  dataBtn.addEventListener('click', async function  () {
-    console.log(global_patient);
-    let data = {"uid": global_patient, "date": dateNow, "measurements": [], "times": [], "keep": 1, "hand": 0, maxRange: [0, 0], manualEntry: 0};
-    // dateNow = Timestamp.fromDate(new Date());  need timestamp for firebase format
-    // hand => 0 = right, 1 = left
-    // manualEntry => 0 = bluetooth, 1 = manual
-    //await addDeviceData(data);
-  });
+  const time = Array.from(
+    { length: 51 },
+    (value, index) => Math.round(index * 0.1 *10)/10);
+  let data = {"uid": global_patient, "date": dateNow, "measurements": sample, "times": time, "keep": 1, "hand": 0, maxRange: [0, 0], manualEntry: 0};
+  addDeviceData(data);
 }
 
 // function testFire() {
@@ -740,4 +750,4 @@ async function calcGripRatio(patientUid) {
 //       main.style.display = "block";
 //       createacct.style.display = "none";
 //   });
-});
+//});

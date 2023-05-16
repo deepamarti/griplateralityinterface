@@ -1,3 +1,5 @@
+
+
 function Initialize() {
     document.getElementById('data_collection').style.visibility = 'hidden';
     //document.getElementById('select_collection_method').style.visibility = 'visible';
@@ -134,19 +136,53 @@ function max_index_to_time_range(max_index) {
     }
 
 function AddToOptTable(opt_sample_time, opt_data) {
-    var tbody = document.getElementById('opt_table');
-        var trow = document.createElement('tr');
+    var tbody = document.getElementById('opt_sample_table');
+    var trow = document.createElement('tr');
         
-        var td1 = document.createElement('td');
-        var td2 = document.createElement('td');
+    var td1 = document.createElement('td');
+    var td2 = document.createElement('td');
 
-        for (let i=0;i<5;i++) {
-            td1.innerHTML = opt_sample_time;
-            td2.innerHTML = opt_data;
-            trow.appendChild(td1);
-            trow.appendChild(td2);
-            tbody.appendChild(trow);
-        }
+    for (let i=0;i<5;i++) {
+        td1.innerHTML = opt_sample_time;
+        td2.innerHTML = opt_data;
+        trow.appendChild(td1);
+        trow.appendChild(td2);
+        tbody.appendChild(trow);
+    }      
+}
 
-        
+function ClearOptTable() {
+    var tbody = document.getElementById('opt_sample_table');
+    tbody.innerHTML = '';
+}
+
+function WaitForAcceptReject() {
+    // disable all trial buttons
+    // enable accept reject buttons
+}
+
+document.getElementById('accept_button').addEventListener('click', AcceptTrial);
+document.getElementById('reject_button').addEventListener('click', RejectTrial);
+
+function AcceptTrial(index) {
+    let hand = "";
+    let num = 0;
+    if (index < 3) {
+        // right hand
+        hand = "right";
+        num = index + 1;
+    } else {
+        // left hand
+        hand = "left";
+        num = index - 2;
+    }
+    let button_name = "ble_" + hand + "_t" + num;
+    console.log(button_name);
+    ClearOptTable();
+    // increment number of trials done for the right hand
+    // disable the trial button
+}
+
+function RejectTrial() {
+
 }
