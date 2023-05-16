@@ -216,7 +216,7 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
         "keep_trial": 1, 
         "hand": 0, 
         maxRange: [opt_sample_time[i][0], opt_sample_time[i][4]], 
-        manualEntry: 0
+        "manual_entry": 0
       };
       opt_data = {
         "uid": global_patient, 
@@ -225,7 +225,7 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
         "times": time,
         "keep_trial": 1, 
         "hand": 0,
-        manualEntry: 0
+        "manual_entry": 0
       };
     } else {
       // left hand
@@ -237,7 +237,7 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
         "keep_trial": 1, 
         "hand": 1, 
         maxRange: [opt_sample_time[i][0], opt_sample_time[i][4]], 
-        manualEntry: 0
+        "manual_entry": 0
       };
       opt_data = {
         "uid": global_patient, 
@@ -246,7 +246,7 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
         "times": time,
         "keep_trial": 1, 
         "hand": 1,
-        manualEntry: 0
+        "manual_entry": 0
       };
     }
     addDeviceData(ble_data);
