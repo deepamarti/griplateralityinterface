@@ -1,8 +1,3 @@
-function SayHi() {
-    alert("hi");
-    document.getElementById('say_hi').innerText = "hello";
-}
-
 function Initialize() {
     document.getElementById('data_collection').style.visibility = 'hidden';
     //document.getElementById('select_collection_method').style.visibility = 'visible';
@@ -14,6 +9,22 @@ function Initialize() {
 
 let is_BLE_selected = false;
 let is_method_locked = false;
+
+let trials_complete_right = 0;
+let trials_complete_left = 0;
+
+function check_BLE_support() {
+    // checks bluetooth capability of browser
+    const lbl_ble_supported = document.querySelector('#ble_supported');
+    is_BLE_supported = navigator.bluetooth;
+    if (is_BLE_supported) {
+        lbl_ble_supported.innerHTML = '<span style="color:green">Bluetooth is Supported on this Browser';
+    } else {
+        lbl_ble_supported.innerHTML = `<span style="color:red">Bluetooth is Not Supported on this Browser`;
+    }
+
+}
+
 // switch between ble and man tabs
 function SwitchTab(evt, TabName) {
     // Declare all variables
@@ -86,3 +97,44 @@ function disable_button(button_name) {
     document.getElementById(button_name).disabled = true;
     document.getElementById(button_name).style.backgroundColor = "darkgray";
 }
+
+function FindOptSample(data) {
+    let accept_trial = false;
+
+    // find max
+    let max = Math.max(...data);
+    let max_index = data.findIndex(sample => sample === max);
+
+    let opt_time_sample = max_index_to_time_range(max_index);
+    //alert(opt_time_sample);
+    let opt_sample = [];
+    for (var i=0; i<5; i++) {
+        opt_sample[i] = data[opt_time_sample[i] * 10];
+    }
+    //alert(opt_sample);
+    return [opt_time_sample, opt_sample];
+
+    // additional checks for accept/reject
+    // if min and max differ by too much, reject;
+    // if double peaks
+    // if let go in middle
+
+}
+
+function max_index_to_time_range(max_index) {
+    let start, end = 0;
+    if (max_index < 2) {
+        start = 0.0;
+        end = 0.4;
+    } else if (max_index > 48) {
+        start = 4.6;
+        end = 5.0;
+    } else {
+        let temp = Math.round((max_index * 0.1 * 10)) / 10
+        start = Math.round((temp - 0.2) * 10) / 10; 
+        end = Math.round((temp + 0.2) * 10) / 10; 
+    }
+    return Array.from(
+        { length: 5 }, 
+        (value, index) => Math.round((start + (index * 0.1)) * 10) / 10);
+    }

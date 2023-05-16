@@ -50,7 +50,7 @@
     </script>
 </head>
 
-<body onload="Initialize();">
+<body onload="Initialize(); check_BLE_support();">
     <section id="menu">
         <div class="logo">
             <img src="aggieimpact_design/images/BRAIN_Lab_Icon.png" alt="">
@@ -140,12 +140,45 @@
                 </form>
             </div>
             <div id="Bluetooth" class="tabcontent">
-                <div id="ble_collection" class="ble_collection" >
-                    <img src="./aggieimpact_design/images/bluetooth.png" alt="#" id="ble_status" 
-                    style="height: 45px; width: 45px; padding: 5px; border-radius: 10px; background-color: #ffe26a;"></img>
-                    <button id="ble_connect"> Connect Device </button>
-                    <button id ="collect_data" onclick="CollectData()">Collect Data</button>
-                    <button id="ble_disconnect" onclick="DisconnectDevice()"> Disconnect </button>
+                <div id="ble_collection" class="ble_collection">
+                    <h3 id="ble_supported">check BLE</h3>
+                    <div class="col-md-12">
+                        <img src="./aggieimpact_design/images/bluetooth.png" alt="#" id="ble_status" 
+                        style="height: 45px; width: 45px; padding: 5px; border-radius: 10px; background-color: #ffe26a;"></img>
+                        <button id="ble_connect"> Connect Device </button>
+                        <button id="ble_disconnect" onclick="DisconnectDevice()"> Disconnect </button>
+                    </div>
+                    <div class="form_entry_row">
+                        <div class="form_entry_column">
+                            <div class="col-md-12">
+                                <h3>Right Hand Measurements</h3>
+                             </div>
+                             <div class="col-md-12">
+                                <button class="trial_button" id ="ble_right_t1" onclick="CollectData(); countdown(); disable_button('ble_right_t1')"> Trial 1</button>
+                             </div>
+                             <div class="col-md-12">
+                                <button class="trial_button" id ="ble_right_t2" onclick="CollectData(); disable_button('ble_right_t2')"> Trial 2</button>
+                             </div>
+                             <div class="col-md-12">
+                                <button class="trial_button" id ="ble_right_t3" onclick="CollectData(); disable_button('ble_right_t3')"> Trial 3</button>
+                             </div>
+                        </div>
+                        <div class="form_entry_column">
+                            <div class="col-md-12">
+                                <h3>Left Hand Measurements</h3>
+                             </div>
+                             <div class="col-md-12">
+                                <button class="trial_button" id ="ble_left_t1" onclick="CollectData(); disable_button('ble_left_t1')"> Trial 1</button>
+                             </div>
+                             <div class="col-md-12">
+                                <button class="trial_button" id ="ble_left_t2" onclick="CollectData(); disable_button('ble_left_t2')"> Trial 2</button>
+                             </div>
+                             <div class="col-md-12">
+                                <button class="trial_button" id ="ble_left_t3" onclick="CollectData(); disable_button('ble_left_t3')"> Trial 3</button>
+                             </div>
+                        </div>
+                    </div>
+                    <canvas id="chart_sample" style="width:100%;"></canvas>
                 </div>
             </div>
         </div>
@@ -173,8 +206,8 @@
               });
               gdxDevice = await godirect.createDevice(bleDevice,  {open: true, startMeasurements: false});
               ble_status.style.backgroundColor = "#abd699";
-              //graph_interval = setInterval(updateValue, 100);
-              // disable_button('ble_connect');
+              graph_interval = setInterval(updateValue, 100);
+              disable_button('ble_connect');
               lock_method_selection();
             } catch (err) {
                 console.error(err);
@@ -204,8 +237,6 @@
                 console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
                 // add data points to the data array
                 sample_data.push(sensor.value);
-                countdown_time = (countdown_time + 1) % 10;
-                // lbl_countdown.textContent = countdown_time;
             }); 
         }
 
@@ -213,7 +244,7 @@
             gdxDevice.close();
             gdxDevice = "";
             ble_status.style.backgroundColor = "#ea8a81";
-            //clearInterval(graph_interval);
+            clearInterval(graph_interval);
         }
 
         btn_connect.addEventListener('click', ConnectDevice);
@@ -232,7 +263,7 @@
         let opt_time_sample, opt_sample = [];
         let opt_data = [];
         let color = Array(51).fill("rgba(0,0,255,1.0)");
-        let chart_test = new Chart.Line("myChart", {
+        let chart = new Chart.Line("chart_sample", {
         data: {
             labels: time,
             datasets: [{
@@ -263,7 +294,7 @@
 
         function updateValue() {
             force_data = sample_data;
-            chart_test.data.datasets[0].data = force_data;
+            chart.data.datasets[0].data = force_data;
             
             if (done_sampling == true) {
                 [opt_time_sample, opt_sample] = FindOptSample(force_data);
@@ -275,7 +306,7 @@
               //FindOptSample(sample_data);  
             //}
             }
-            chart_test.update();
+            chart.update();
         }
 
         function showOptSample() {
@@ -285,8 +316,8 @@
             opt_data[35] = 100;
             opt_data[36] = force_data[36];
             opt_data[37] = force_data[37];
-            chart_test.data.datasets[1].data = opt_data;
-            chart_test.update();
+            chart.data.datasets[1].data = opt_data;
+            chart.update();
         }
         
     </script>

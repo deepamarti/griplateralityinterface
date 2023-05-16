@@ -92,6 +92,17 @@
     clear: both;
 }
 
+.trial_button {
+    border: 0;
+    margin: 5px;
+    width: 60%;
+    cursor: pointer;
+    background-color:#0f98f8;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 5px;
+}
+
 .graphDisplay {
     overflow: hidden;
     border: 1px solid #4164da;
