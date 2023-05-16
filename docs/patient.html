@@ -66,33 +66,73 @@
                 <img src="aggieimpact_design/images/avatar.jpg" alt="">
             </div>
         </div>
-        <div class="patient">
-            <div class="syncButton">
-                <img src="./aggieimpact_design/images/search-interface-symbol.png" 
-                    style="width: 4%; margin-left: 1%; margin-right: 1%;">
-                <button class="firebase_button" id="firebaseBtn" type="button" style="width:90%">Search</button>
-            </div>
-            
+        <div class="syncButton">
+            <img src="./aggieimpact_design/images/search-interface-symbol.png" 
+                style="width: 4%; margin-left: 1%; margin-right: 1%;">
+            <button class="firebase_button" id="firebaseBtn" type="button" style="width:90%">Search</button>
         </div>
-        
             
-            <div class="board">
-                <table width="100%">
-                    <thead>
-                        <tr>
-                            <td> Patient Name </td>
-                            <td> Birth Date </td>
-                            <td> Patient Status </td>
-                            <td> Choose Patient </td>
-                        </tr>
-                    </thead>
-                    <tbody id = "patientTable"></tbody>
-                </table>
-            </div>
+        <div class="board">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <td> Patient Name </td>
+                        <td> Birth Date </td>
+                        <td> Patient Status </td>
+                        <td> Choose Patient </td>
+                    </tr>
+                </thead>
+                <tbody id = "patientTable"></tbody>
+            </table>
+        </div>
+
         <div id="data_collection">
             <h2>Data Collection</h2>
             <button id="dataBtn" type="button">save data</button>
 
+        </div>
+
+        <div class="board">
+            <div class="tab">
+                <button class="tablink" onClick="switchtab(event,'Manual')">Manual Entry</button>
+                <button class="tablink" onClick="switchtab(event,'Bluetooth')" id="defaultOpen">Bluetooth</button>
+            </div>
+
+            <div id="Manual" class="tabcontent">
+                <form id="manual_entry">
+                    <h2>Manual Entry </h2>
+                    <h3>Right Hand Measurements</h3>
+                    <label>Trial 1: </label>
+                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="right_t1" min="1" max="1000">
+                    <label>Trial 2: </label>
+                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="right_t2" min="1" max="1000">
+                    <label>Trial 3: </label>
+                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="right_t3" min="1" max="1000">
+                    
+                    <h3>Left Hand Measurements</h3>
+                    <label>Trial 1: </label>
+                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="left_t1" min="1" max="1000">
+                    <label>Trial 2: </label>
+                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="left_t2" min="1" max="1000">
+                    <label>Trial 3: </label>
+                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="left_t3" min="1" max="1000">
+                    <br>
+                    <input class="manual_entry_form" type="submit" value="Submit">
+                </form>
+            </div>
+
+            <div id="Bluetooth" class="tabcontent">
+                <div id="ble_collection" class="ble_collection" >
+                    <h2>Bluetooth Data Collection </h2>
+                    <button id="ble_connect"> Connect Device </button>
+                    <h3 id="ble_status"> Bluetooth Status... </h3>
+                    <h3 id="sensor_status"> Sensor Status... </h3>
+                    <button id ="collect_data" onclick="CollectData()">Collect Data</button>
+                    <button id="ble_disconnect" onclick="DisconnectDevice()"> Disconnect </button>
+                    <div id="error"></div>
+                    <pre id="output"></pre>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -101,6 +141,29 @@
         $('#menu-btn').click(function(){
             $('#menu').toggleClass("active")
         })
+    </script>
+    <!--Tab Controller-->
+    <script>     
+        function switchtab(evt, TabName) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(TabName).style.display = "block";
+            evt.currentTarget.className += " active";
+            }
     </script>
 
 </body>

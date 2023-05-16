@@ -202,6 +202,7 @@ body{
     justify-content: center;
     padding-top: 20px;
     width: 100%;
+    margin-top: 90px;
 }
 
 .syncButton button{
@@ -215,13 +216,6 @@ body{
     justify-content: center;
     display: flex;
     flex-wrap: wrap;
-}
-
-.patient {
-    display: flex;
-    margin-top: 100px;
-    margin-left: 1%;
-    width: 100%;
 }
 
 .board{
