@@ -100,37 +100,52 @@
 
             <div id="Manual" class="tabcontent">
                 <form id="manual_entry">
-                    <h2>Manual Entry </h2>
-                    <h3>Right Hand Measurements</h3>
-                    <label>Trial 1: </label>
-                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="right_t1" min="1" max="1000">
-                    <label>Trial 2: </label>
-                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="right_t2" min="1" max="1000">
-                    <label>Trial 3: </label>
-                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="right_t3" min="1" max="1000">
-                        
-                    <h3>Left Hand Measurements</h3>
-                    <label>Trial 1: </label>
-                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="left_t1" min="1" max="1000">
-                    <label>Trial 2: </label>
-                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="left_t2" min="1" max="1000">
-                    <label>Trial 3: </label>
-                    <input class="manual_entry_form" placeholder="Enter Measurement" type="number" name="left_t3" min="1" max="1000">
-                    <br>
+                    <div class="form_entry_row">
+                        <div class="form_entry_column">
+                            <div class="col-md-12">
+                                <h3>Right Hand Measurements</h3>
+                             </div>
+                             <div class="col-md-12">
+                                <label>Trial 1: </label>
+                                <input class="manual_entry_form" placeholder="60" type="text" name="right_t1">
+                             </div>
+                             <div class="col-md-12">
+                                <label>Trial 2: </label>
+                                <input class="manual_entry_form" placeholder="60" type="text" name="right_t2">
+                             </div>
+                             <div class="col-md-12">
+                                <label>Trial 3: </label>
+                                <input class="manual_entry_form" placeholder="60" type="text" name="right_t3">
+                             </div>
+                        </div>
+                        <div class="form_entry_column">
+                            <div class="col-md-12">
+                                <h3>Left Hand Measurements</h3>
+                             </div>
+                             <div class="col-md-12">
+                                <label>Trial 1: </label>
+                                <input class="manual_entry_form" placeholder="60" type="text" name="left_t1">
+                             </div>
+                             <div class="col-md-12">
+                                <label>Trial 2: </label>
+                                <input class="manual_entry_form" placeholder="60" type="text" name="left_t2">
+                             </div>
+                             <div class="col-md-12">
+                                <label>Trial 3: </label>
+                                <input class="manual_entry_form" placeholder="60" type="text" name="left_t3">
+                             </div>
+                        </div>
+                    </div>
                     <input class="manual_entry_form" type="submit" value="Submit">
                 </form>
             </div>
             <div id="Bluetooth" class="tabcontent">
                 <div id="ble_collection" class="ble_collection" >
-                    <h2>Bluetooth Data Collection </h2>
                     <img src="./aggieimpact_design/images/bluetooth.png" alt="#" id="ble_status" 
-                    style="height: 45px; width: 45px; padding: 5px; border-radius: 10px; background-color: darkgray;"></img>
+                    style="height: 45px; width: 45px; padding: 5px; border-radius: 10px; background-color: #ffe26a;"></img>
                     <button id="ble_connect"> Connect Device </button>
-                    <h3 id="sensor_status"> Sensor Status... </h3>
                     <button id ="collect_data" onclick="CollectData()">Collect Data</button>
                     <button id="ble_disconnect" onclick="DisconnectDevice()"> Disconnect </button>
-                    <div id="error"></div>
-                    <pre id="output"></pre>
                 </div>
             </div>
         </div>
@@ -142,15 +157,12 @@
     <script>
         const btn_connect = document.querySelector('#ble_connect');
         const ble_status = document.querySelector('#ble_status');
-        const lbl_countdown = document.getElementById('#lbl_countdown');
 
         let gdxDevice = "";
         let sample_data = [];
         let right_num_samples = 0;
         let left_num_samples = 0;
 
-        let countdown_interval = null;
-        let countdown_time = 0;
         let done_sampling = false;
 
         const ConnectDevice = async() => {
@@ -160,7 +172,7 @@
                 optionalServices: ['d91714ef-28b9-4f91-ba16-f0d9a604f112']
               });
               gdxDevice = await godirect.createDevice(bleDevice,  {open: true, startMeasurements: false});
-              ble_status.style.backgroundColor = "lime";
+              ble_status.style.backgroundColor = "#abd699";
               //graph_interval = setInterval(updateValue, 100);
               // disable_button('ble_connect');
               lock_method_selection();
@@ -197,19 +209,10 @@
             }); 
         }
 
-        function countdown() {
-            countdown_interval = setInterval(update_countdown, 1000);
-        }
-
-        function update_countdown() {
-            countdown_time = (countdown_time + 1) / 10;
-            lbl_countdown.innerHTML = countdown_time;
-        }
-
         function DisconnectDevice() {
             gdxDevice.close();
             gdxDevice = "";
-            ble_status.style.backgroundColor = "Red";
+            ble_status.style.backgroundColor = "#ea8a81";
             //clearInterval(graph_interval);
         }
 
