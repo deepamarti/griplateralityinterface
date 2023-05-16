@@ -203,13 +203,68 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
   const time = Array.from(
     { length: 51 },
     (value, index) => Math.round(index * 0.1 *10)/10);
-  let data = "";
+  let ble_data = null;
+  let opt_data = null;
   for (let i=0;i<6;i++) {
-    data = {"uid": global_patient, "date": dateNow, "measurements": sample_data[i], "times": time, "keep_trial": 1, "hand": 0, maxRange: [opt_sample_time[i][0], opt_sample_time[i][4]], manualEntry: 0};
-    addDeviceData(data);
+    if (i<3) {
+      // right hand
+      ble_data = {
+        "uid": global_patient, 
+        "date": dateNow, 
+        "measurements": sample_data[i], 
+        "times": time, 
+        "keep_trial": 1, 
+        "hand": 0, 
+        maxRange: [opt_sample_time[i][0], opt_sample_time[i][4]], 
+        manualEntry: 0
+      };
+      opt_data = {
+        "uid": global_patient, 
+        "date": dateNow,
+        "measurements": opt_sample_data[i], 
+        "times": time,
+        "keep_trial": 1, 
+        "hand": 0,
+        manualEntry: 0
+      };
+    } else {
+      // left hand
+      ble_data = {
+        "uid": global_patient, 
+        "date": dateNow, 
+        "measurements": sample_data[i], 
+        "times": time, 
+        "keep_trial": 1, 
+        "hand": 1, 
+        maxRange: [opt_sample_time[i][0], opt_sample_time[i][4]], 
+        manualEntry: 0
+      };
+      opt_data = {
+        "uid": global_patient, 
+        "date": dateNow,
+        "measurements": opt_sample_data[i], 
+        "times": time,
+        "keep_trial": 1, 
+        "hand": 1,
+        manualEntry: 0
+      };
+    }
+    addDeviceData(ble_data);
+    addOptDeviceData(opt_data);
   }
   
 }
+
+/*
+this.uid = uid;
+  this.date = date;
+  this.measurements = measurements;
+  this.times = times;
+  this.keep = keep;
+  this.hand = hand;
+  this.manualEntry = manualEntry;
+}
+*/
 
 // function testFire() {
 //   console.log("in test firebase");
