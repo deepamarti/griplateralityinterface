@@ -24,6 +24,7 @@
 
     <!--Data Collection Functions-->
     <script src="https://unpkg.com/@vernier/godirect/dist/godirect.min.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="data.js"></script>
     <script>
         function filterTable(){
@@ -254,7 +255,6 @@
     <!--graphing functions-->
     <script>
         let graph_interval = null;
-        
         let scale_opt_sample = [];
         const time = Array.from(
             { length: 51 },

@@ -3,18 +3,20 @@
     width: 95%;
     margin-left: 20px;
     position:relative;
+    overflow: hidden;
 }
 
 .data_collection h2 {
     text-align: left;
     font-size: xx-large;
     width: 100%;
+    margin-top: 70px;
 }
 
 /* Style the tab */
 .tab {
     width: 100%;
-    overflow: hidden;
+    overflow: auto;
     border: 1px solid #ccc;
     background-color: #4164da;
     display:flex;
@@ -101,11 +103,4 @@
     color: #fff;
     font-size: 12px;
     border-radius: 5px;
-}
-
-.graphDisplay {
-    overflow: hidden;
-    border: 1px solid #4164da;
-    background-color: #ccc;
-    display:flex;
 }

@@ -81,7 +81,7 @@ body{
     align-items: center;
     justify-content: space-between;
     background: linear-gradient(to right, #4164da, #11bbb9);
-    padding:15px 30px;
+    padding:15px 15px;
     position: fixed;
     width: calc(100% - 250px);
 }
@@ -119,8 +119,8 @@ body{
 }
 
 #interface .navBar .Profile img {
-    width:40px;
-    height:40px;
+    width:30px;
+    height:30px;
     object-fit: cover;
     border-radius: 50%;
 }
