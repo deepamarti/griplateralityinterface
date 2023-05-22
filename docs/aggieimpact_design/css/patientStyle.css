@@ -281,6 +281,19 @@ thead td {
     padding: 15px;
 }
 
+.add_patient_button {
+    width: 95%;
+    margin: 2.5%;
+    font-size: 14px;
+    text-transform: uppercase;
+    text-align: center;
+    align-items: center;
+    position: relative;
+    font-weight: 400;
+    background-color: lightgray;
+    padding: 15px;
+}
+
 tbody tr td{
     padding: 10px 15px;
     text-align: start;
