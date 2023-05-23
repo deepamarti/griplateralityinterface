@@ -1,12 +1,3 @@
-
-
-function Initialize() {
-    document.getElementById('data_collection').style.visibility = 'hidden';
-    document.getElementById('ble_submit').disabled = true;
-    document.getElementById('ble_disconnect').disabled = true;
-    SwitchTab(event,'Bluetooth');
-}
-
 let is_BLE_selected = false;
 let is_method_locked = false;
 
