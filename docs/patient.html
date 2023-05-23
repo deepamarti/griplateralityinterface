@@ -79,27 +79,30 @@
                 <img src="aggieimpact_design/images/avatar.jpg" alt="">
             </div>
         </div>
-        <div class="syncButton">
-            <img src="./aggieimpact_design/images/search-interface-symbol.png" 
-                style="width: 4%; margin-left: 1%; margin-right: 1%;">
-            <button class="firebase_button" id="firebaseBtn" type="button" style="width:90%">Search</button>
-        </div>
+        <div id="patient_search">
+            <div class="syncButton">
+                <img src="./aggieimpact_design/images/search-interface-symbol.png" 
+                    style="width: 4%; margin-left: 1%; margin-right: 1%;">
+                <button class="firebase_button" id="firebaseBtn" type="button" style="width:90%">Search</button>
+            </div>
 
-        <button class="add_patient_button" id="addPatient">Add New Patient</button>
+            <button class="add_patient_button" id="addPatient">Add New Patient</button>
 
-        <div class="board">
-            <table width="100%">
-                <thead>
-                    <tr>
-                        <td> Patient Name </td>
-                        <td> Birth Date </td>
-                        <td> Patient Status </td>
-                        <td> Choose Patient </td>
-                    </tr>
-                </thead>
-                <tbody id = "patientTable"></tbody>
-            </table>
+            <div class="board">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <td> Patient Name </td>
+                            <td> Birth Date </td>
+                            <td> Patient Status </td>
+                            <td> Choose Patient </td>
+                        </tr>
+                    </thead>
+                    <tbody id = "patientTable"></tbody>
+                </table>
+            </div>
         </div>
+        
 
         <div class="data_collection" id="data_collection">
             <div class="col-md-12">

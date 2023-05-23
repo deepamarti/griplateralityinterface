@@ -4,6 +4,18 @@ let is_method_locked = false;
 let trials_complete_right = 0;
 let trials_complete_left = 0;
 
+function Initialize() {
+    document.getElementById('patient_search').style.visibility = 'visible';
+    document.getElementById('patient_search').style.height = "100%";
+
+
+    document.getElementById('data_collection').style.visibility = 'hidden';
+    document.getElementById('ble_submit').disabled = true;
+    document.getElementById('ble_disconnect').disabled = true;
+    // default to bluetooth measurement
+    SwitchTab(event,'Bluetooth');
+}
+
 function check_BLE_support() {
     // checks bluetooth capability of browser
     const lbl_ble_supported = document.querySelector('#ble_supported');
