@@ -259,7 +259,20 @@ export function AddPatientToDatabase() {
   let myuuid = self.crypto.randomUUID();
   console.log("RFC 4122 Version 4 UUID : " + myuuid);
   alert("add");
-  let dateNow = Timestamp.fromDate(new Date());
+  let patient = {
+    "id": myuuid,
+    "firstName": "Sophie",
+    "lastName": "Mi",
+    "dateOfBirth": "1994-06-02",
+    "dominantHand": 0,
+    "gender": 0,
+    "impaired": 1,
+    "preStrokeDominance": 0,
+    "strokeSide": 1,
+    "authClinicianUid": currUser.uid
+  }
+  addPatient(patient);
+
 }
 
 // function testFire() {
