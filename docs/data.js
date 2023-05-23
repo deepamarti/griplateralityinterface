@@ -25,7 +25,6 @@ function check_BLE_support() {
     } else {
         lbl_ble_supported.innerHTML = `<span style="color:red">Bluetooth is Not Supported on this Browser`;
     }
-
 }
 
 // switch between ble and man tabs

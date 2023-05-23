@@ -152,7 +152,7 @@
                              </div>
                         </div>
                     </div>
-                    <input class="manual_entry_form" type="submit" value="Submit">
+                    <input id="man_submit" class="manual_entry_form" type="submit" value="Submit">
                 </form>
             </div>
             <div id="Bluetooth" class="tabcontent">
@@ -422,8 +422,8 @@
     import {AddBLEToDatabase, AddPatientToDatabase} from "./firebase.js";
 
         let dBtn = document.getElementById("ble_submit");
-        dBtn.addEventListener('click', StoreData);
-        function StoreData() {
+        dBtn.addEventListener('click', StoreBLEData);
+        function StoreBLEData() {
             AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time);
             disable_button("ble_submit");
         }

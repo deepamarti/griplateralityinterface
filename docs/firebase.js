@@ -202,7 +202,6 @@ function set_patient(id) {
 // }
 
 export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) {
-  alert("store");
   console.log(sample_data);
   let dateNow = Timestamp.fromDate(new Date());
   const time = Array.from(
@@ -258,6 +257,48 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
     addOptDeviceData(opt_data);
   }
   
+}
+
+const mForm = document.getElementById("manual_entry");
+  if (mForm != null) {
+    mForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      let r_t1 = parseInt(document.getElementById("man_right_t1").value);
+      let r_t2 = parseInt(document.getElementById("man_right_t2").value);
+      let r_t3 = parseInt(document.getElementById("man_right_t3").value);
+      let l_t1 = parseInt(document.getElementById("man_left_t1").value);
+      let l_t2 = parseInt(document.getElementById("man_left_t2").value);
+      let l_t3 = parseInt(document.getElementById("man_left_t3").value);
+
+      let left_avg = (l_t1 + l_t2 + l_t3) / 3;
+      console.log(left_avg);
+      let right_avg = (r_t1 + r_t2 + r_t3) / 3;
+      // (dominant - nondominant) / (dominant + nondominant)
+      let grip_ratio = (right_avg - left_avg) / (right_avg + left_avg);
+      AddManualToDatabase(left_avg, right_avg, grip_ratio);
+    });
+  }
+
+function AddManualToDatabase(left_avg, right_avg, grip_ratio) {
+  alert('manual');
+  let dateNow = Timestamp.fromDate(new Date());
+  let manual = {
+    "uid": global_patient,
+    "date": dateNow,
+    "gripRatio": grip_ratio,
+    "avgRH": right_avg,
+    "avgLH": left_avg
+  }
+  addMetric(manual);
+
+  /*
+  this.uid = uid;
+  this.date = date;
+  this.gripRatio = gripRatio;
+  this.avgRH = avgRH;
+  this.avgLH = avgLH;
+  */
+
 }
 
 export function AddPatientToDatabase() {
