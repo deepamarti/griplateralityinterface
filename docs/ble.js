@@ -1,6 +1,6 @@
 // ble data collection
 
-import Chart from 'chart.js/auto';
+import Chart from './node_modules/chart.js/auto';
 
 // declare all html objects
 const btn_connect = document.getElementById('ble_connect');
