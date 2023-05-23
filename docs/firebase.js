@@ -255,6 +255,13 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
   
 }
 
+export function AddPatientToDatabase() {
+  let myuuid = self.crypto.randomUUID();
+  console.log("RFC 4122 Version 4 UUID : " + myuuid);
+  alert("add");
+  let dateNow = Timestamp.fromDate(new Date());
+}
+
 // function testFire() {
 //   console.log("in test firebase");
 // }

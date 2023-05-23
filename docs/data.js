@@ -134,7 +134,6 @@ function ResetManual(){
             num = i - 2;
         }
         let input_id = "man_" + hand + "_t" + num;
-        console.log(input_id)
         document.getElementById(input_id).value = '';
     }
     

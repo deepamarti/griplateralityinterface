@@ -386,7 +386,8 @@
 
     <!--firebase function-->
     <script type="module">
-    import {AddBLEToDatabase} from "./firebase.js";
+    import {AddBLEToDatabase, AddPatientToDatabase} from "./firebase.js";
+
         let dBtn = document.getElementById("ble_submit");
         dBtn.addEventListener('click', StoreData);
         function StoreData() {
@@ -394,7 +395,13 @@
             disable_button("ble_submit");
         }
 
+        let pBtn = document.getElementById("addPatient");
+        pBtn.addEventListener('click', StorePatient);
+        function StorePatient() {
+            AddPatientToDatabase();
+        }
     </script>
+
     
 
 </body>
