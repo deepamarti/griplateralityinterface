@@ -153,20 +153,12 @@ function enable_trial_button(button_name) {
 }
 
 function FindOptSample(data) {
-    let accept_trial = false;
-
     // find max
     let max = Math.max(...data);
     let max_index = data.findIndex(sample => sample === max);
 
     let opt_time_sample = max_index_to_time_range(max_index);
     return opt_time_sample;
-
-    // additional checks for accept/reject
-    // if min and max differ by too much, reject;
-    // if double peaks
-    // if let go in middle
-
 }
 
 function max_index_to_time_range(max_index) {
