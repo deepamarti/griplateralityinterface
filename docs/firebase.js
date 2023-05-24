@@ -129,7 +129,7 @@ if (fireBtn != null) {
     }
     
     function AddItemsToTable(name,birthdate,healthStatus, patID){
-        var tbody = document.getElementById('patientTable');
+        var tbody = document.getElementById('patientBody');
         var trow = document.createElement('tr');
         
         //Data Elements being passed in from firebase calls
