@@ -289,14 +289,11 @@ tbody tr td{
 #patientTable
 {
     width:100%;
-    overflow-y: scroll;
-    border-collapse: collapse;
-    height: 500px;
 }
 
 #patientTable thead
 {
-    position:sticky;
+    position: sticky;
     font-size: 14px;
     text-transform: uppercase;
     font-weight: 400;
@@ -308,6 +305,9 @@ tbody tr td{
 #patientBody{
     padding: 10px 15px;
     text-align: start;
+    overflow-y: scroll;
+    border-collapse: collapse;
+    height: 500px;
 }
 
 .healthStatus h5{
