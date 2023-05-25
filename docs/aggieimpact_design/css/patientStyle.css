@@ -93,7 +93,7 @@ button {
     justify-content: space-between;
     background: linear-gradient(to right, #4164da, #11bbb9);
     padding:15px 15px;
-    position: fixed;
+    position: sticky;
     width: calc(100% - 250px);
 }
 
@@ -235,11 +235,13 @@ button {
     overflow-y: scroll;
     background: white;
     border-radius: 8px;
+    border-collapse: collapse;
 }
 
 #patientTable
 {
     width:100%;
+    height:400px;
 }
 
 #patientTable thead
@@ -258,7 +260,7 @@ button {
     text-align: start;
     overflow-y: scroll;
     border-collapse: collapse;
-    height: 400px;
+    height: 200px;
 }
 
 .healthStatus h5{
