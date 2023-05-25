@@ -252,15 +252,15 @@ button {
     font-weight: 400;
     background-color: #F9FAFB;
     text-align: start;
-    padding: 15px;
+    padding: 20px;
 }
 
 #patientBody{
-    padding: 10px 15px;
+    padding: 30px;
     text-align: start;
     overflow-y: scroll;
     border-collapse: collapse;
-    height: 200px;
+    height: 300px;
 }
 
 .healthStatus h5{
