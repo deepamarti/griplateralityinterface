@@ -256,11 +256,15 @@ button {
 }
 
 #patientBody{
-    padding: 30px;
     text-align: start;
     overflow-y: scroll;
     border-collapse: collapse;
     height: 300px;
+}
+
+#patientBody td
+{
+    padding:20px;
 }
 
 .healthStatus h5{
