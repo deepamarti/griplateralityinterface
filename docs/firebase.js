@@ -236,8 +236,12 @@ function set_patient(id) {
 
 // clean up data for database (round to 2 decimal places)
 function Round2(data) {
-  for (let i=0; i<data.length; i++) {
-    data[i] = Math.round(data[i]*100) / 100;
+  console.log(data);
+  console.log(data.length);
+  for (let j=0; j<6; j++) {
+    for (let i=0; i<data.length; i++) {
+      data[i] = Math.round(data[i]*100) / 100;
+    }
   }
   console.log(data);
 
@@ -245,9 +249,20 @@ function Round2(data) {
 
 
 export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) {
-  Round2(sample_data);
-  Round2(opt_sample_data);
-  Round2(opt_sample_time);
+  for (let i=0; i<6; i++) {
+    for (let j=0; j<sample_data.length; j++) {
+      sample_data[i][j] = Math.round(sample_data[i][j]*100) / 100;
+    }
+  }
+  console.log(sample_data);
+  for (let i=0; i<6; i++) {
+    for (let j=0; j<opt_sample_data.length; j++) {
+      opt_sample_data[i][j] = Math.round(opt_sample_data[i][j]*100) / 100;
+      opt_sample_time[i][j] = Math.round(opt_sample_time[i][j]*100) / 100;
+    }
+  }
+  console.log(opt_sample_data);
+  console.log(opt_sample_time);
   let dateNow = Timestamp.fromDate(new Date());
   const time = Array.from(
     { length: 51 },

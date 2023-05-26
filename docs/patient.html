@@ -529,6 +529,9 @@
         let dBtn = document.getElementById("ble_submit");
         dBtn.addEventListener('click', StoreBLEData);
         function StoreBLEData() {
+            console.log(sample_data);
+            console.log(opt_sample_data);
+            console.log(opt_sample_time);
             AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time);
             disable_button("ble_submit");
         }
