@@ -13,6 +13,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const secondaryApp = initializeApp(firebaseConfig, "Secondary");
 const auth = getAuth(app);
 const db = getFirestore(app);
 var currUser; //= auth.currentUser;
@@ -69,6 +70,7 @@ const signUp = document.getElementById('signUpForm');
 const emailSU = document.getElementById('emailSignUp');
 const passwordSU = document.getElementById('passwordSignUp');
 const confirmPassword = document.getElementById('passwordConfirm');
+const nameSU = document.getElementById('nameSignUp');
 const adminBtn = document.getElementById('adminBtn');
 
 var email, password;
@@ -97,38 +99,6 @@ if (form != null) {
         console.log(errorCode);
         console.log(errorMessage);
       });
-  });
-}
-
-var emailUp, passwordUp, conPassUp;
-if (signUp != null) {
-  // add in sign up rules => error occurs is password is 1 letter
-  signUp.addEventListener('submit', (event) => {
-    event.preventDefault();
-    emailUp = emailSU.value;
-    passwordUp = passwordSU.value;
-    conPassUp = confirmPassword.value;
-    console.log(emailUp);
-    console.log(passwordUp);
-    console.log(conPassUp);
-    if (passwordUp != conPassUp) {
-      alert("Passwords do not match!");
-    }
-    else {
-      createUserWithEmailAndPassword(auth, emailUp, passwordUp)
-        .then((userCredential) => {
-        // Signed in 
-        window.location.href = "./patient.html";
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-        console.log(errorCode);
-        console.log(errorMessage);
-        window.alert("Error occurred. Try again.");
-      });
-    }
   });
 }
 
@@ -345,13 +315,12 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
 //   });
 
 // Update name of user
-function updateName(name) {
-  console.log(currUser);
-  if (currUser) {
-    updateProfile(currUser, {
+function updateName(user, name) {
+  if (user) {
+    updateProfile(user, {
       displayName: name
     });
-    print(currUser);
+    print(user);
   }
 }
 
@@ -544,11 +513,12 @@ async function isAdmin() {
   }
 }
 
-var emailUp, passwordUp, conPassUp, adminSelected;
+var emailUp, passwordUp, conPassUp, adminSelected, name;
 if (signUp != null) {
   // add in sign up rules => error occurs is password is 1 letter
   signUp.addEventListener('submit', (event) => {
     event.preventDefault();
+    name = nameSU.value;
     emailUp = emailSU.value;
     passwordUp = passwordSU.value;
     conPassUp = confirmPassword.value;
@@ -560,11 +530,14 @@ if (signUp != null) {
       alert("Passwords do not match!");
     }
     else {
-      createUserWithEmailAndPassword(auth, emailUp, passwordUp)
+      const authSec = getAuth(secondaryApp);
+      createUserWithEmailAndPassword(authSec, emailUp, passwordUp)
         .then((userCredential) => {
         // Signed in 
         const user = userCredential.user;
+        updateName(user, name);
         createClinician(user.uid, adminSelected);
+        authSec.signOut();
       })
       .catch((error) => {
         const errorCode = error.code;
