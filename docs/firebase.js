@@ -33,6 +33,11 @@ auth.onAuthStateChanged(async (user) => {
         document.getElementById("adminNav").style.display = "none";
         document.getElementById("adminPortal").style.display = "none";
       }
+      var nameHeader = document.getElementById("headerName");
+      if (nameHeader != null) {
+        var text = "Welcome, " + user.displayName + "!";
+        nameHeader.innerHTML = text;
+      }
     }
     else {
       // go back to sign in if null
