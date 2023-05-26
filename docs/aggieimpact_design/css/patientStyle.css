@@ -389,3 +389,83 @@ button {
         margin:30px 15px 30px 15px;
     }
 }
+
+#adminPortal {
+    display: grid;
+    place-items: center;
+    padding: 2em;
+}
+
+#adminPortal h2 {
+    margin-bottom: 10px;
+}
+
+#signUpForm {
+    margin: 0 auto;
+    width: 400px;
+    /* Form outline */
+    padding: 1em;
+    border: 1px solid #ccc;
+    border-radius: 1em;
+    background-color: white;
+}
+
+ul {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+}
+  
+#signUpForm li + li {
+margin-top: 1em;
+}
+  
+label {
+    /* Uniform size & alignment */
+    display: inline-block;
+    width: 150px;
+    text-align: left;
+} 
+
+.radio {
+    display: inline-block;
+    width: 80px;
+    text-align: left;
+}
+
+  
+.btnSU {
+    /* This extra margin represent roughly the same space as the space
+       between the labels and their text fields */
+    /* margin-left: 1em; */
+    margin: 0 10em;
+}
+
+.inputSU {
+  /* To make sure that all text fields have the same font settings
+     By default, textareas have a monospace font */
+  font: 1em sans-serif;
+
+  /* Uniform text field size */
+  /* width: 200px;
+  box-sizing: border-box; */
+
+  /* Match form field borders */
+  /* border: 1px solid #999; */
+
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0px;
+  /* display: inline-block; */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.radioBtns {
+    display: inline;
+}
+
+#signUpForm h3 {
+    margin-bottom: 20px;
+}
