@@ -409,6 +409,16 @@ button {
     margin-bottom: 10px;
 }
 
+#adminExport {
+    display: grid;
+    place-items: center;
+    padding: 2em;
+}
+
+#adminExport h2 {
+    margin-bottom: 10px;
+}
+
 #signUpForm {
     margin: 0 auto;
     width: 400px;

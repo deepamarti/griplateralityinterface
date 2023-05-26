@@ -182,12 +182,17 @@ if (fireBtn != null) {
         //var td5 = document.createElement('td');
 
         //Predesigned data element to be appeneded to all data tables. TODO assign a link to each and 
-        var btn = document.createElement("button");
-        btn.innerHTML = "Select";
-        btn.value = patID;
+        // var btn = document.createElement("button");
+        // btn.innerHTML = "Select";
+        // btn.value = patID;
+        var btn = document.createElement("input");
+        btn.setAttribute("type", "radio");
+        btn.setAttribute("name", "Select");
+        btn.setAttribute("value", patID);
         btn.addEventListener("click", function() {
-          set_patient(btn.value); // btn.value = patient id
-          btn.disable = true;
+          //btn.style.backgroundColor = "blue";
+          setPatient(btn.value, name); // btn.value = patient id
+          //btn.disable = true;
         });
 
         td1.innerHTML=name;
@@ -202,13 +207,13 @@ if (fireBtn != null) {
         td4.className = "healthStatus";
         //td5.className = "laterality";
         //td6.className = "AddMeasure";
-
+        trow.appendChild(btn);
         trow.appendChild(td1);
         //trow.appendChild(td2);
         trow.appendChild(td3);
         trow.appendChild(td4);
         //trow.appendChild(td5);
-        trow.appendChild(btn);
+        
         tbody.appendChild(trow);
     }
   });
@@ -217,11 +222,18 @@ if (fireBtn != null) {
 
 let global_patient = null;
 
-function set_patient(id) {
+async function setPatient(id, name) {
   global_patient = id;
   console.log(id);
+  var maybeAdmin = await isAdmin(currUser.uid);
+  if (maybeAdmin) {
+    document.getElementById("adminExport").style.display = "block";
+    document.getElementById("exportNav").style.display = "block";
+    document.getElementById('adminExportH2').innerHTML = "Export " + name + "'s " + "Data";
+  }
   location.hash = "#data_collection";
   document.getElementById('data_collection').style.visibility = 'visible';
+  document.getElementById('dataCollectionH2').innerHTML = "Data Collection for " + name;
 };
 
 // let dataBtn = document.getElementById("dataBtn");
@@ -506,10 +518,10 @@ async function addClinician(clinicianData) {
   console.log(docRef.id);
 }
 
-async function isAdmin() {
+async function isAdmin(uid) {
   const q = query(
     collection(db, "clinicians"), 
-    where("uid", "==", currUser.uid),
+    where("uid", "==", uid),
     where("admin", "==", 1)
   );
   const querySnapshot = await getDocs(q);
