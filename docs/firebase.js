@@ -60,7 +60,7 @@ auth.onAuthStateChanged(async (user) => {
   }
 });
 
-const submitButton = document.getElementById("submit");
+//const submitButton = document.getElementById("submit");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const form = document.getElementById('signInForm');
@@ -70,7 +70,6 @@ const emailSU = document.getElementById('emailSignUp');
 const passwordSU = document.getElementById('passwordSignUp');
 const confirmPassword = document.getElementById('passwordConfirm');
 const adminBtn = document.getElementById('adminBtn');
-
 
 var email, password;
 
@@ -98,6 +97,38 @@ if (form != null) {
         console.log(errorCode);
         console.log(errorMessage);
       });
+  });
+}
+
+var emailUp, passwordUp, conPassUp;
+if (signUp != null) {
+  // add in sign up rules => error occurs is password is 1 letter
+  signUp.addEventListener('submit', (event) => {
+    event.preventDefault();
+    emailUp = emailSU.value;
+    passwordUp = passwordSU.value;
+    conPassUp = confirmPassword.value;
+    console.log(emailUp);
+    console.log(passwordUp);
+    console.log(conPassUp);
+    if (passwordUp != conPassUp) {
+      alert("Passwords do not match!");
+    }
+    else {
+      createUserWithEmailAndPassword(auth, emailUp, passwordUp)
+        .then((userCredential) => {
+        // Signed in 
+        window.location.href = "./patient.html";
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+        console.log(errorCode);
+        console.log(errorMessage);
+        window.alert("Error occurred. Try again.");
+      });
+    }
   });
 }
 
