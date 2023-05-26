@@ -24,7 +24,7 @@ auth.onAuthStateChanged(async (user) => {
     if (user) {
       adminUser = await isAdmin(currUser.uid);
       console.log("admin-user: ", adminUser);
-      document.getElementById("mainBody").style.display = "block";
+      document.getElementById("mainBody").style.display = "inline";
       if (adminUser) {
         document.getElementById("adminNav").style.display = "block";
         document.getElementById("adminPortal").style.display = "block";
