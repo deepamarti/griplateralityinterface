@@ -93,7 +93,7 @@ button {
     justify-content: space-between;
     background: linear-gradient(to right, #4164da, #11bbb9);
     padding:15px 15px;
-    position: fixed;
+    position: sticky;
     width: calc(100% - 250px);
 }
 
@@ -102,7 +102,7 @@ button {
     display:flex;
     justify-content: center;
     align-items: center;
-    padding: 15px 20px;
+    padding: 10px;
     border: 3px solid #4164da;
     border-radius: 4px;
 }
@@ -120,6 +120,7 @@ button {
     height: 25px;
     margin-right: 14px;
 }
+
 
 #interface .navBar .Profile{
     display:flex;
@@ -229,56 +230,37 @@ button {
     flex-wrap: wrap;
 }
 
+.syncButton svg{
+    width: 25px;
+    height: 25px;
+    margin-right: 14px;
+}
+
 .board{
     width:95%;
-    margin: 30px 0 30px 30px;
-    overflow: auto;
+    margin: 30px 0 30px 30px 10px;
     background: white;
     border-radius: 8px;
-}
-
-.board img{
-    width:45px;
-    height:45px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-right: 15px;
-}
-
-.board h5{
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.board p {
-    font-weight: 400;
-    font-size: 13px;
-    color: #787d8d;
-}
-
-.board .Patients{
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    text-align: start;
-}
-
-
-table{
     border-collapse: collapse;
 }
 
-tr{
-    border-bottom: 1px solid #eef0f3;
+#patientTable
+{
+    overflow:hidden;
+    width:100%;
+    height:300px;
+    table-layout:fixed;
 }
 
-thead td {
+#patientTable thead
+{
+    position: sticky;
     font-size: 14px;
     text-transform: uppercase;
     font-weight: 400;
     background-color: #F9FAFB;
     text-align: start;
-    padding: 15px;
+    padding: 20px;
 }
 
 .add_patient_button {
@@ -296,9 +278,19 @@ thead td {
 
 tbody tr td{
     padding: 10px 15px;
+=======
+#patientBody{
     text-align: start;
+    overflow-y: scroll;
+    border-collapse: collapse;
+    height: 300px;
 }
 
+#patientBody td
+{
+    padding:.5%;
+    height 30px;
+}
 
 .healthStatus h5{
     background-color: #d7fada;
@@ -421,4 +413,88 @@ tbody tr td{
     .board{
         margin:30px 15px 30px 15px;
     }
+}
+
+#adminPortal {
+    display: grid;
+    place-items: center;
+    padding: 2em;
+}
+
+#adminPortal h2 {
+    margin-bottom: 10px;
+}
+
+#signUpForm {
+    margin: 0 auto;
+    width: 400px;
+    /* Form outline */
+    padding: 1em;
+    border: 1px solid #ccc;
+    border-radius: 1em;
+    background-color: white;
+}
+
+ul {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+}
+  
+#signUpForm li + li {
+margin-top: 1em;
+}
+  
+label {
+    /* Uniform size & alignment */
+    display: inline-block;
+    width: 150px;
+    text-align: left;
+} 
+
+.radio {
+    display: inline-block;
+    width: 80px;
+    text-align: left;
+}
+
+  
+.btnSU {
+    /* This extra margin represent roughly the same space as the space
+       between the labels and their text fields */
+    /* margin-left: 1em; */
+    margin: 0 10em;
+}
+
+.inputSU {
+  /* To make sure that all text fields have the same font settings
+     By default, textareas have a monospace font */
+  font: 1em sans-serif;
+
+  /* Uniform text field size */
+  /* width: 200px;
+  box-sizing: border-box; */
+
+  /* Match form field borders */
+  /* border: 1px solid #999; */
+
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0px;
+  /* display: inline-block; */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.radioBtns {
+    display: inline;
+}
+
+#signUpForm h3 {
+    margin-bottom: 20px;
+}
+
+#mainBody {
+    width: 100%;
 }

@@ -13,32 +13,65 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const secondaryApp = initializeApp(firebaseConfig, "Secondary");
 const auth = getAuth(app);
 const db = getFirestore(app);
 var currUser; //= auth.currentUser;
-
-auth.onAuthStateChanged((user) => {
+var adminUser = false;
+document.getElementById("mainBody").style.display = "none";
+auth.onAuthStateChanged(async (user) => {
+  setTimeout(async () => {
+    console.log("Delayed for 1 second.");
+    if (user) {
+      adminUser = await isAdmin(currUser.uid);
+      console.log("admin-user: ", adminUser);
+      document.getElementById("mainBody").style.display = "inline";
+      if (adminUser) {
+        document.getElementById("adminNav").style.display = "block";
+        document.getElementById("adminPortal").style.display = "block";
+      } else {
+        document.getElementById("adminNav").style.display = "none";
+        document.getElementById("adminPortal").style.display = "none";
+      }
+    }
+    else {
+      // go back to sign in if null
+      document.getElementById("mainBody").style.display = "block";
+      var path_str = window.location.href;
+      var path = path_str.split("//");
+      if (path[1] != "localhost:3000/") {
+        window.location.href = "./index.html";
+      }
+    }
+  }, 1000);
   if (user) {
     currUser = user;
     console.log("auth state changed");
     console.log(user);
-    console.log("curr", currUser);
-    localStorage.setItem("uid", currUser.uid);
+    console.log("user: ", currUser);
+    //localStorage.setItem("uid", currUser.uid);
   } else {
     // User is signed out
     // ...
     // direct to sign in page
     // window.location.href = "./index.html";
+    console.log("user: ", user);
     console.log("go to next page");
+    //window.location.href = "./index.html";
   }
 });
 
-const submitButton = document.getElementById("submit");
+//const submitButton = document.getElementById("submit");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const form = document.getElementById('signInForm');
 const signOutBtn = document.getElementById('signOut');
-
+const signUp = document.getElementById('signUpForm');
+const emailSU = document.getElementById('emailSignUp');
+const passwordSU = document.getElementById('passwordSignUp');
+const confirmPassword = document.getElementById('passwordConfirm');
+const nameSU = document.getElementById('nameSignUp');
+const adminBtn = document.getElementById('adminBtn');
 
 var email, password;
 
@@ -129,7 +162,7 @@ if (fireBtn != null) {
     }
     
     function AddItemsToTable(name,birthdate,healthStatus, patID){
-        var tbody = document.getElementById('patientTable');
+        var tbody = document.getElementById('patientBody');
         var trow = document.createElement('tr');
         
         //Data Elements being passed in from firebase calls
@@ -348,13 +381,11 @@ export function AddPatientToDatabase() {
 //   });
 
 // Update name of user
-function updateName(name) {
-  console.log(currUser);
-  if (currUser) {
-    updateProfile(currUser, {
+function updateName(user, name) {
+  if (user) {
+    updateProfile(user, {
       displayName: name
     });
-    print(currUser);
   }
 }
 
@@ -373,8 +404,9 @@ class Patient {
   }
 }
 
-function Clinician(uid) {
+function Clinician(uid, admin) {
   this.uid = uid;
+  this.admin = admin;
 }
 
 function OptDeviceData(uid, date, measurements, times, keep, hand, manualEntry) {
@@ -515,6 +547,74 @@ async function getDeviceData(patientUid, typeEntry) {
     });
     return {"exists": true, "data": data};
   }
+}
+
+async function createClinician(uid, admin) {
+  let clinician = {
+    "uid": uid,
+    "admin": admin
+  };
+  await addClinician(clinician);
+}
+
+// Add clinician to db
+async function addClinician(clinicianData) {
+  const docRef = await addDoc(collection(db, "clinicians"), clinicianData);
+  console.log(docRef.id);
+}
+
+async function isAdmin() {
+  const q = query(
+    collection(db, "clinicians"), 
+    where("uid", "==", currUser.uid),
+    where("admin", "==", 1)
+  );
+  const querySnapshot = await getDocs(q);
+  if (querySnapshot.empty) {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
+var emailUp, passwordUp, conPassUp, adminSelected, name;
+if (signUp != null) {
+  // add in sign up rules => error occurs is password is 1 letter
+  signUp.addEventListener('submit', (event) => {
+    event.preventDefault();
+    name = nameSU.value;
+    emailUp = emailSU.value;
+    passwordUp = passwordSU.value;
+    conPassUp = confirmPassword.value;
+    adminSelected = adminBtn.checked ? 1 : 0;
+    console.log(emailUp);
+    console.log(passwordUp);
+    console.log(conPassUp);
+    if (passwordUp != conPassUp) {
+      alert("Passwords do not match!");
+    }
+    else {
+      const authSec = getAuth(secondaryApp);
+      createUserWithEmailAndPassword(authSec, emailUp, passwordUp)
+        .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        updateName(user, name);
+        createClinician(user.uid, adminSelected);
+        authSec.signOut();
+        signUp.reset();
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+        console.log(errorCode);
+        console.log(errorMessage);
+        window.alert("Error occurred. Try again.");
+      });
+    }
+  });
 }
 
 // Add patient to db
