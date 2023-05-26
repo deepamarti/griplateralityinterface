@@ -19,11 +19,19 @@ var currUser; //= auth.currentUser;
 var adminUser = false;
 document.getElementById("mainBody").style.display = "none";
 auth.onAuthStateChanged(async (user) => {
-  setTimeout(() => {
+  setTimeout(async () => {
     console.log("Delayed for 1 second.");
     if (user) {
-      console.log("stop loading symbol, unhide divs");
+      adminUser = await isAdmin(currUser.uid);
+      console.log("admin-user: ", adminUser);
       document.getElementById("mainBody").style.display = "block";
+      if (adminUser) {
+        document.getElementById("adminNav").style.display = "block";
+        document.getElementById("adminPortal").style.display = "block";
+      } else {
+        document.getElementById("adminNav").style.display = "none";
+        document.getElementById("adminPortal").style.display = "none";
+      }
     }
     else {
       // go back to sign in if null
@@ -41,8 +49,6 @@ auth.onAuthStateChanged(async (user) => {
     console.log(user);
     console.log("user: ", currUser);
     //localStorage.setItem("uid", currUser.uid);
-    adminUser = await isAdmin(currUser.uid);
-    console.log("admin-user: ", adminUser);
   } else {
     // User is signed out
     // ...
