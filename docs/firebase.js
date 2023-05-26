@@ -234,8 +234,20 @@ function set_patient(id) {
 //   });
 // }
 
+// clean up data for database (round to 2 decimal places)
+function Round2(data) {
+  for (let i=0; i<data.length; i++) {
+    data[i] = Math.round(data[i]*100) / 100;
+  }
+  console.log(data);
+
+}
+
+
 export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) {
-  console.log(sample_data);
+  Round2(sample_data);
+  Round2(opt_sample_data);
+  Round2(opt_sample_time);
   let dateNow = Timestamp.fromDate(new Date());
   const time = Array.from(
     { length: 51 },

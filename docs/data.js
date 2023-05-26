@@ -12,6 +12,8 @@ function Initialize() {
     document.getElementById('data_collection').style.visibility = 'hidden';
     document.getElementById('ble_submit').disabled = true;
     document.getElementById('ble_disconnect').disabled = true;
+    document.getElementById("graph_accept_reject").style.visibility = 'hidden';
+    document.getElementById("graph_accept_reject").style.height = "0%";
     // default to bluetooth measurement
     SwitchTab(event,'Bluetooth');
 }
