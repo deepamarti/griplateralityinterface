@@ -478,3 +478,7 @@ label {
 #signUpForm h3 {
     margin-bottom: 20px;
 }
+
+#mainBody {
+    width: 100%;
+}

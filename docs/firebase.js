@@ -320,7 +320,6 @@ function updateName(user, name) {
     updateProfile(user, {
       displayName: name
     });
-    print(user);
   }
 }
 
@@ -538,6 +537,7 @@ if (signUp != null) {
         updateName(user, name);
         createClinician(user.uid, adminSelected);
         authSec.signOut();
+        signUp.reset();
       })
       .catch((error) => {
         const errorCode = error.code;
