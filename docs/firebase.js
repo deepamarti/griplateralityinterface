@@ -38,10 +38,14 @@ auth.onAuthStateChanged(async (user) => {
       // go back to sign in if null
       document.getElementById("mainBody").style.display = "block";
       var path_str = window.location.href;
-      var path = path_str.split("//");
-      if (path[1] != "localhost:3000/") {
-        window.location.href = "./index.html";
-      }
+      //var path = path_str.split("//");
+      console.log(path_str);
+      if (path_str.includes("index.html") == false) { // does include /index.html
+        if (path_str.includes(".html") == true) { // does include .html for another file
+          console.log("in here: ", path_str);
+          window.location.href = "./index.html";
+        }
+      } 
     }
   }, 1000);
   if (user) {
