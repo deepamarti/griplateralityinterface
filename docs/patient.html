@@ -64,12 +64,7 @@
             <li id="signOut">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#FFFFFF" d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/></svg>
                 <a href="#">Sign Out</a>
-            </li> 
-            <li id="importData">
-                <img src="./aggieimpact_design/images/plus.png" alt="#" 
-                        style="height: 30px; width: 30px; padding: 5px; margin: 5px;"></img>
-                <a href="#">Import Data</a>
-            </li>            
+            </li>           
             </li>
             <li id="PatientNav">
                 <svg fill="#ffffff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 45.532 45.532" xml:space="preserve" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M22.766,0.001C10.194,0.001,0,10.193,0,22.766s10.193,22.765,22.766,22.765c12.574,0,22.766-10.192,22.766-22.765 S35.34,0.001,22.766,0.001z M22.766,6.808c4.16,0,7.531,3.372,7.531,7.53c0,4.159-3.371,7.53-7.531,7.53 c-4.158,0-7.529-3.371-7.529-7.53C15.237,10.18,18.608,6.808,22.766,6.808z M22.761,39.579c-4.149,0-7.949-1.511-10.88-4.012 c-0.714-0.609-1.126-1.502-1.126-2.439c0-4.217,3.413-7.592,7.631-7.592h8.762c4.219,0,7.619,3.375,7.619,7.592 c0,0.938-0.41,1.829-1.125,2.438C30.712,38.068,26.911,39.579,22.761,39.579z"></path> </g> </g></svg>
@@ -390,7 +385,7 @@
             ProgressBar();
             sensor.on('value-changed', (sensor) => {
                 // samples for 5 seconds
-                if (sensor.values.length > 51){
+                if (sensor.values.length > 50){
                     done_sampling = true;
                     gdxDevice.stop();
                     sample_data[current_index] = sensor.values;
@@ -484,15 +479,22 @@
 
         function updateValue() {
             if (done_sampling == true) {
+                for (let j=0; j<51; j++) {
+                    sample_data[current_index][j] = Math.round(sample_data[current_index][j]*100) / 100;
+                }
                 opt_sample_time[current_index]= FindOptSample(sample_data[current_index]);
                 for (let i=0;i<5;i++){
+                    
+
                     opt_sample_graph_data[current_index][opt_sample_time[current_index][i]*10] = sample_data[current_index][opt_sample_time[current_index][i]*10];
-                    opt_sample_data[current_index][i] = sample_data[current_index][opt_sample_time[current_index][i]*10];
+                    opt_sample_data[current_index][i] = Math.round((sample_data[current_index][opt_sample_time[current_index][i]*10]) * 100) / 100;
                     AddToOptTable(opt_sample_time[current_index][i], opt_sample_data[current_index][i]);
                 }
                 // disable everything except for the accept reject buttons
                 //WaitForAcceptReject();
                 //
+                console.log(opt_sample_data[current_index]);
+                console.log(opt_sample_time[current_index]);
                 done_sampling=false;
 
                 // do accept reject here, and increment counters
