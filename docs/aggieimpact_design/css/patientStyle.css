@@ -102,7 +102,7 @@ button {
     display:flex;
     justify-content: center;
     align-items: center;
-    padding: 15px 20px;
+    padding: 10px;
     border: 3px solid #4164da;
     border-radius: 4px;
 }
@@ -120,6 +120,7 @@ button {
     height: 25px;
     margin-right: 14px;
 }
+
 
 #interface .navBar .Profile{
     display:flex;
@@ -227,6 +228,12 @@ button {
     justify-content: center;
     display: flex;
     flex-wrap: wrap;
+}
+
+.syncButton svg{
+    width: 25px;
+    height: 25px;
+    margin-right: 14px;
 }
 
 .board{
