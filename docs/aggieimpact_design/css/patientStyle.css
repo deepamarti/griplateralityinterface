@@ -246,8 +246,10 @@ button {
 
 #patientTable
 {
+    overflow:hidden;
     width:100%;
     height:300px;
+    table-layout:fixed;
 }
 
 #patientTable thead
