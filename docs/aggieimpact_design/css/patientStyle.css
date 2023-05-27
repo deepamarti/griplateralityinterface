@@ -263,11 +263,22 @@ button {
     padding: 20px;
 }
 
-#patientBody{
-    text-align: start;
-    overflow-y: scroll;
-    border-collapse: collapse;
-    height: 300px;
+.add_patient_button {
+    width: 95%;
+    margin: 2.5%;
+    font-size: 14px;
+    text-transform: uppercase;
+    text-align: center;
+    align-items: center;
+    position: relative;
+    font-weight: 400;
+    background-color: lightgray;
+    padding: 15px;
+}
+
+tbody tr td{
+    padding: 10px 15px;
+
 }
 
 #patientBody td

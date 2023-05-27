@@ -1,17 +1,22 @@
-
-
-function Initialize() {
-    document.getElementById('data_collection').style.visibility = 'hidden';
-    document.getElementById('ble_submit').disabled = true;
-    document.getElementById('ble_disconnect').disabled = true;
-    SwitchTab(event,'Bluetooth');
-}
-
 let is_BLE_selected = false;
 let is_method_locked = false;
 
 let trials_complete_right = 0;
 let trials_complete_left = 0;
+
+function Initialize() {
+    document.getElementById('patient_search').style.visibility = 'visible';
+    document.getElementById('patient_search').style.height = "100%";
+
+
+    document.getElementById('data_collection').style.visibility = 'hidden';
+    document.getElementById('ble_submit').disabled = true;
+    document.getElementById('ble_disconnect').disabled = true;
+    document.getElementById("graph_accept_reject").style.visibility = 'hidden';
+    document.getElementById("graph_accept_reject").style.height = "0%";
+    // default to bluetooth measurement
+    SwitchTab(event,'Bluetooth');
+}
 
 function check_BLE_support() {
     // checks bluetooth capability of browser
@@ -22,7 +27,6 @@ function check_BLE_support() {
     } else {
         lbl_ble_supported.innerHTML = `<span style="color:red">Bluetooth is Not Supported on this Browser`;
     }
-
 }
 
 // switch between ble and man tabs
@@ -134,7 +138,6 @@ function ResetManual(){
             num = i - 2;
         }
         let input_id = "man_" + hand + "_t" + num;
-        console.log(input_id)
         document.getElementById(input_id).value = '';
     }
     
@@ -163,20 +166,12 @@ function enable_trial_button(button_name) {
 }
 
 function FindOptSample(data) {
-    let accept_trial = false;
-
     // find max
     let max = Math.max(...data);
     let max_index = data.findIndex(sample => sample === max);
 
     let opt_time_sample = max_index_to_time_range(max_index);
     return opt_time_sample;
-
-    // additional checks for accept/reject
-    // if min and max differ by too much, reject;
-    // if double peaks
-    // if let go in middle
-
 }
 
 function max_index_to_time_range(max_index) {

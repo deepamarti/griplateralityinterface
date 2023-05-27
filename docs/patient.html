@@ -64,6 +64,7 @@
             <li id="signOut">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#FFFFFF" d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/></svg>
                 <a href="#">Sign Out</a>
+            </li>           
             </li>
             <li id="PatientNav">
                 <svg fill="#ffffff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 45.532 45.532" xml:space="preserve" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M22.766,0.001C10.194,0.001,0,10.193,0,22.766s10.193,22.765,22.766,22.765c12.574,0,22.766-10.192,22.766-22.765 S35.34,0.001,22.766,0.001z M22.766,6.808c4.16,0,7.531,3.372,7.531,7.53c0,4.159-3.371,7.53-7.531,7.53 c-4.158,0-7.529-3.371-7.529-7.53C15.237,10.18,18.608,6.808,22.766,6.808z M22.761,39.579c-4.149,0-7.949-1.511-10.88-4.012 c-0.714-0.609-1.126-1.502-1.126-2.439c0-4.217,3.413-7.592,7.631-7.592h8.762c4.219,0,7.619,3.375,7.619,7.592 c0,0.938-0.41,1.829-1.125,2.438C30.712,38.068,26.911,39.579,22.761,39.579z"></path> </g> </g></svg>
@@ -88,6 +89,28 @@
                 <img src="aggieimpact_design/images/avatar.jpg" alt="">
             </div>
         </div>
+        <div id="patient_search">
+            <div class="syncButton">
+                <img src="./aggieimpact_design/images/search-interface-symbol.png" 
+                    style="width: 4%; margin-left: 1%; margin-right: 1%;">
+                <button class="firebase_button" id="firebaseBtn" type="button" style="width:90%">Search</button>
+            </div>
+
+            <button class="add_patient_button" id="addPatient">Add New Patient</button>
+
+            <div class="board">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <td> Patient Name </td>
+                            <td> Birth Date </td>
+                            <td> Patient Status </td>
+                            <td> Choose Patient </td>
+                        </tr>
+                    </thead>
+                    <tbody id = "patientTable"></tbody>
+                </table>
+            </div>
        <div class="syncButton">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#000000" style="width: 4%; margin-left: 1%; margin-right: 1%;" d="M142.9 142.9c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5c0 0 0 0 0 0H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1C73.2 122 55.6 150.7 44.8 181.4c-5.9 16.7 2.9 34.9 19.5 40.8s34.9-2.9 40.8-19.5c7.7-21.8 20.2-42.3 37.8-59.8zM16 312v7.6 .7V440c0 9.7 5.8 18.5 14.8 22.2s19.3 1.7 26.2-5.2l41.6-41.6c87.6 86.5 228.7 86.2 315.8-1c24.4-24.4 42.1-53.1 52.9-83.7c5.9-16.7-2.9-34.9-19.5-40.8s-34.9 2.9-40.8 19.5c-7.7 21.8-20.2 42.3-37.8 59.8c-62.2 62.2-162.7 62.5-225.3 1L185 329c6.9-6.9 8.9-17.2 5.2-26.2s-12.5-14.8-22.2-14.8H48.4h-.7H40c-13.3 0-24 10.7-24 24z"/></svg>
             <button class="firebase_button" id="firebaseBtn" type="button" style="width:90%">Sync Data</button>
@@ -110,6 +133,7 @@
                 <tbody id = "patientBody"></tbody>
             </table>
         </div>
+        
 
         <div class="data_collection" id="data_collection">
             <div class="col-md-12">
@@ -159,7 +183,7 @@
                              </div>
                         </div>
                     </div>
-                    <input class="manual_entry_form" type="submit" value="Submit">
+                    <input id="man_submit" class="manual_entry_form" type="submit" value="Submit">
                 </form>
             </div>
             <div id="Bluetooth" class="tabcontent">
@@ -169,7 +193,7 @@
                         <img src="./aggieimpact_design/images/bluetooth.png" alt="#" id="ble_status" 
                         style="height: 45px; width: 45px; padding: 5px; border-radius: 10px; background-color: #ffe26a;"></img>
                         <button id="ble_connect"> Connect Device </button>
-                        <button id="ble_disconnect" onclick="DisconnectDevice()"> Disconnect </button>
+                        <button id="ble_disconnect"> Disconnect </button>
                     </div>
                     <div class="form_entry_row">
                         <div class="form_entry_column">
@@ -177,13 +201,13 @@
                                 <h3>Right Hand Measurements</h3>
                              </div>
                              <div class="col-md-12">
-                                <button class="trial_button" id ="ble_right_t1" onclick="currentSample(0); CollectData();"> Trial 1</button>
+                                <button class="trial_button" id ="ble_right_t1"> Trial 1</button>
                              </div>
                              <div class="col-md-12">
-                                <button class="trial_button" id ="ble_right_t2" onclick="currentSample(1); CollectData();"> Trial 2</button>
+                                <button class="trial_button" id ="ble_right_t2"> Trial 2</button>
                              </div>
                              <div class="col-md-12">
-                                <button class="trial_button" id ="ble_right_t3" onclick="currentSample(2); CollectData();"> Trial 3</button>
+                                <button class="trial_button" id ="ble_right_t3"> Trial 3</button>
                              </div>
                         </div>
                         <div class="form_entry_column">
@@ -191,13 +215,13 @@
                                 <h3>Left Hand Measurements</h3>
                              </div>
                              <div class="col-md-12">
-                                <button class="trial_button" id ="ble_left_t1" onclick="currentSample(3); CollectData();"> Trial 1</button>
+                                <button class="trial_button" id ="ble_left_t1"> Trial 1</button>
                              </div>
                              <div class="col-md-12">
-                                <button class="trial_button" id ="ble_left_t2" onclick="currentSample(4); CollectData();"> Trial 2</button>
+                                <button class="trial_button" id ="ble_left_t2"> Trial 2</button>
                              </div>
                              <div class="col-md-12">
-                                <button class="trial_button" id ="ble_left_t3" onclick="currentSample(5); CollectData();"> Trial 3</button>
+                                <button class="trial_button" id ="ble_left_t3"> Trial 3</button>
                              </div>
                         </div>
                         <div class="form_entry_column">
@@ -206,7 +230,14 @@
                              </div>
                         </div>
                     </div>
-                    <div class="graph_entry_row">
+                    <div id="myProgress">
+                        <div id="myBar">
+                            <p id="p_bar_text" class="progress_bar_text">
+                               Collecting... 
+                            </p>
+                        </div>
+                      </div>
+                    <div id="graph_accept_reject">
                         <div class="graph_entry_column" style="width:25%;">
                             <div class="col-md-12">
                                 <table class="opt_table" id="opt_table" width="100%">
@@ -223,11 +254,11 @@
                                         style="height: 45px; width: 45px; padding: 5px; border-radius: 10px; background-color: #abd699;"></img></button>
                                     <button class="reject_button" id ="reject_button" onclick="Reject()"> <img src="./aggieimpact_design/images/cross.png" alt="#" id="ble_status" 
                                         style="height: 45px; width: 45px; padding: 5px; border-radius: 10px; background-color: #ea8a81;"></img></button>
-                                 </div>
-                             </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="graph_entry_column" style="width:75%;">
-                            <canvas id="chart_sample" style="width:100%;"></canvas>
+                            <canvas id="ble_graph_sample" style="width:100%;"></canvas>
                         </div>
                     </div>
                 </div>
@@ -282,85 +313,112 @@
         
     </section>
 
-    <!--bluetooth functions-->
+    <!--ble functions-->
     <script>
-        const btn_connect = document.querySelector('#ble_connect');
-        const ble_status = document.querySelector('#ble_status');
+        const btn_connect = document.getElementById('ble_connect');
+        const btn_disconnect = document.getElementById("ble_disconnect");
+        const btn_collect_0 = document.getElementById('ble_right_t1');
+        const btn_collect_1 = document.getElementById('ble_right_t2');
+        const btn_collect_2 = document.getElementById('ble_right_t3');
+        const btn_collect_3 = document.getElementById('ble_left_t1');
+        const btn_collect_4 = document.getElementById('ble_left_t2');
+        const btn_collect_5 = document.getElementById('ble_left_t3');
+        const ble_status = document.getElementById('ble_status');
 
+        const graph = document.getElementById("ble_graph_sample");
+
+        // declare all global variables
         let gdxDevice = "";
-        let sample_data = Array(6);
-        let opt_sample_data = Array(6)
-        let opt_sample_time = Array(6);
         let current_index = null;
+        let sample_data = Array(6);
+        let opt_sample_data = Array(6);
+        let opt_sample_time = Array(6);
         let right_num_samples = 0;
         let left_num_samples = 0;
 
         let done_sampling = false;
-
+        let count = 0;
         const ConnectDevice = async() => {
             try {
-              const bleDevice = await navigator.bluetooth.requestDevice({
-                filters: [{ namePrefix: 'GDX' }],
-                optionalServices: ['d91714ef-28b9-4f91-ba16-f0d9a604f112']
-              });
-              gdxDevice = await godirect.createDevice(bleDevice,  {open: true, startMeasurements: false});
-              ble_status.style.backgroundColor = "#abd699";
-              graph_interval = setInterval(updateValue, 100);
-              disable_button('ble_connect');
-              enable_button('ble_disconnect');
-              lock_method_selection();
+                const bleDevice = await navigator.bluetooth.requestDevice({
+                    filters: [{ namePrefix: 'GDX' }],
+                    optionalServices: ['d91714ef-28b9-4f91-ba16-f0d9a604f112']
+                });
+                gdxDevice = await godirect.createDevice(bleDevice,  {open: true, startMeasurements: false});
+                ble_status.style.backgroundColor = "#abd699";
+                console.log(`Connected to: ${gdxDevice.name}`);
+                graph_interval = setInterval(updateValue, 100);
+                disable_button('ble_connect');
+                enable_button('ble_disconnect');
+                lock_method_selection();
             } catch (err) {
                 console.error(err);
             }
         }
+        btn_connect.addEventListener('click', ConnectDevice);
 
-        function CollectData() {
+        function DisconnectDevice() {
+            try {
+                if (gdxDevice != null) {
+                    gdxDevice.close();
+                    console.log(`Disconnected from: ${gdxDevice.name}`);
+                    clearInterval(graph_interval);
+                }
+                gdxDevice = "";
+                ble_status.style.backgroundColor = "#ffe26a";
+                enable_button('ble_connect');
+                disable_button('ble_disconnect');
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        btn_disconnect.addEventListener('click', DisconnectDevice);
+
+        function CollectData(evt) {
+            current_index = evt.currentTarget.index;
+            console.log(current_index);
+            
             // set up sensor
             const sensor = gdxDevice.getSensor(1);
             if (sensor) {
-              sensor.setEnabled(true);
+                sensor.setEnabled(true);
             }
 
-            // clear data arrays
             done_sampling = false;
             sensor.values = [];
+                    
+            // clear data arrays
             sample_data[current_index] = [];
             opt_sample_data[current_index] = [];
-            force_data = Array(51).fill(NaN);
-            opt_data = Array(51).fill(NaN);
-            
+            opt_sample_graph_data[current_index] = Array(51).fill(NaN);
+                    
             gdxDevice.start(100);
+            ProgressBar();
             sensor.on('value-changed', (sensor) => {
                 // samples for 5 seconds
-                if (sensor.values.length > 51){
+                if (sensor.values.length > 50){
                     done_sampling = true;
                     gdxDevice.stop();
-                    //clearInterval(countdown_interval);
+                    sample_data[current_index] = sensor.values;
                 }
                 // log the sensor name, new value and units.
                 console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
                 // add data points to the data array
-                sample_data[current_index].push(sensor.value);
+                //sample_data[current_index].push(sensor.value);
             }); 
         }
-
-        function DisconnectDevice() {
-            if (gdxDevice != null) {
-                gdxDevice.close();
-            }
-            gdxDevice = "";
-            ble_status.style.backgroundColor = "#ffe26a";
-            clearInterval(graph_interval);
-            enable_button('ble_connect');
-            disable_button('ble_disconnect');
-        }
-
-        btn_connect.addEventListener('click', ConnectDevice);
-
-        function currentSample(index) {
-            // keeps a variable with the index of the current sample
-            current_index = index;
-        }
+        btn_collect_0.addEventListener('click', CollectData);
+        btn_collect_0.index = 0;
+        btn_collect_1.addEventListener('click', CollectData);
+        btn_collect_1.index = 1;
+        btn_collect_2.addEventListener('click', CollectData);
+        btn_collect_2.index = 2;
+        btn_collect_3.addEventListener('click', CollectData);
+        btn_collect_3.index = 3;
+        btn_collect_4.addEventListener('click', CollectData);
+        btn_collect_4.index = 4;
+        btn_collect_5.addEventListener('click', CollectData);
+        btn_collect_5.index = 5;
 
     </script>
 
@@ -370,10 +428,8 @@
         const time = Array.from(
             { length: 51 },
             (value, index) => Math.round(index * 0.1 *10)/10);
-        let force_data = [];
-        let opt_data = Array(51).fill(NaN);
-        let color = Array(51).fill("rgba(0,0,255,1.0)");
-        let chart = new Chart.Line("chart_sample", {
+        let opt_sample_graph_data = Array(6);       // scale opt_sample_data so it can be graphed at the correct time indexes
+        let chart = new Chart.Line("ble_graph_sample", {
         data: {
             labels: time,
             datasets: [{
@@ -383,7 +439,7 @@
                 borderColor: "#75c9b7",
                 borderWidth: 1,
                 order: 1,
-                data: force_data
+                data: []
             }, {
                 fill: false,
                 lineTension: 0,
@@ -391,7 +447,7 @@
                 borderColor: "#ea8a81",
                 borderWidth: 1,
                 order: 0,
-                data: opt_data
+                data: []
             }]
         },
         options: {
@@ -403,26 +459,61 @@
         }
         });
 
+        // TODO: progress bar (for sampling)
+        async function ProgressBar() {
+            if (count == 0) {
+                count = 1;
+                document.getElementById("graph_accept_reject").style.visibility = 'hidden';
+                document.getElementById("graph_accept_reject").style.height = "0%";
+                document.getElementById("p_bar_text").innerHTML = "Connecting";
+                document.getElementById("myProgress").style.visibility = 'visible';
+                document.getElementById("myProgress").style.height = "100%";
+                var elem = document.getElementById("myBar");
+                var width = 1;
+                var id = setInterval(frame, 10);
+                function frame() {
+                if (width >= 500) {
+                    document.getElementById("p_bar_text").innerHTML = "Done!";
+                    document.getElementById("myProgress").style.visibility = 'hidden';
+                    document.getElementById("myProgress").style.height = "0%";
+                    document.getElementById("graph_accept_reject").style.visibility = 'visible';
+                    document.getElementById("graph_accept_reject").style.height = "100%";
+                    clearInterval(id);
+                    count = 0;
+                } else {
+                    width++;
+                    elem.style.width = (width*.2) + "%";
+                }
+                }
+            }
+        }
+
         function updateValue() {
-            force_data = sample_data[current_index];
             if (done_sampling == true) {
-                opt_sample_time[current_index]= FindOptSample(force_data);
+                for (let j=0; j<51; j++) {
+                    sample_data[current_index][j] = Math.round(sample_data[current_index][j]*100) / 100;
+                }
+                opt_sample_time[current_index]= FindOptSample(sample_data[current_index]);
                 for (let i=0;i<5;i++){
-                    opt_data[opt_sample_time[current_index][i]*10] = force_data[opt_sample_time[current_index][i]*10];
-                    opt_sample_data[current_index][i] = opt_data[opt_sample_time[current_index][i]*10];
+                    
+
+                    opt_sample_graph_data[current_index][opt_sample_time[current_index][i]*10] = sample_data[current_index][opt_sample_time[current_index][i]*10];
+                    opt_sample_data[current_index][i] = Math.round((sample_data[current_index][opt_sample_time[current_index][i]*10]) * 100) / 100;
                     AddToOptTable(opt_sample_time[current_index][i], opt_sample_data[current_index][i]);
                 }
                 // disable everything except for the accept reject buttons
-                WaitForAcceptReject();
+                //WaitForAcceptReject();
                 //
+                console.log(opt_sample_data[current_index]);
+                console.log(opt_sample_time[current_index]);
                 done_sampling=false;
 
                 // do accept reject here, and increment counters
                 // disable buttons in accept reject listeners
                 
             }
-            chart.data.datasets[0].data = force_data;
-            chart.data.datasets[1].data = opt_data;
+            chart.data.datasets[0].data = sample_data[current_index];
+            chart.data.datasets[1].data = opt_sample_graph_data[current_index];
             chart.update();
         }
         
@@ -446,15 +537,25 @@
 
     <!--firebase function-->
     <script type="module">
-    import {AddBLEToDatabase} from "./firebase.js";
+    import {AddBLEToDatabase, AddPatientToDatabase} from "./firebase.js";
+
         let dBtn = document.getElementById("ble_submit");
-        dBtn.addEventListener('click', StoreData);
-        function StoreData() {
+        dBtn.addEventListener('click', StoreBLEData);
+        function StoreBLEData() {
+            console.log(sample_data);
+            console.log(opt_sample_data);
+            console.log(opt_sample_time);
             AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time);
             disable_button("ble_submit");
         }
 
+        let pBtn = document.getElementById("addPatient");
+        pBtn.addEventListener('click', StorePatient);
+        function StorePatient() {
+            AddPatientToDatabase();
+        }
     </script>
+
     
 </div>
 </body>

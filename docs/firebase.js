@@ -220,6 +220,12 @@ if (fireBtn != null) {
 //}
 }
 
+function ShowDataCollection() {
+  document.getElementById('patient_search').style.visibility = 'hidden';
+  document.getElementById('patient_search').style.height = "0%";
+  document.getElementById('data_collection').style.visibility = 'visible';
+}
+
 let global_patient = null;
 
 async function setPatient(id, name) {
@@ -251,8 +257,9 @@ async function setPatient(id, name) {
 // }
 
 export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) {
-  alert("store");
   console.log(sample_data);
+  console.log(opt_sample_data);
+  console.log(opt_sample_time);
   let dateNow = Timestamp.fromDate(new Date());
   const time = Array.from(
     { length: 51 },
@@ -276,7 +283,7 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
         "uid": global_patient, 
         "date": dateNow,
         "measurements": opt_sample_data[i], 
-        "times": time,
+        "times": opt_sample_time[i],
         "keep_trial": 1, 
         "hand": 0,
         "manual_entry": 0
@@ -297,7 +304,7 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
         "uid": global_patient, 
         "date": dateNow,
         "measurements": opt_sample_data[i], 
-        "times": time,
+        "times": opt_sample_time[i],
         "keep_trial": 1, 
         "hand": 1,
         "manual_entry": 0
@@ -307,6 +314,68 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
     addOptDeviceData(opt_data);
   }
   
+}
+
+const mForm = document.getElementById("manual_entry");
+  if (mForm != null) {
+    mForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      let r_t1 = parseInt(document.getElementById("man_right_t1").value);
+      let r_t2 = parseInt(document.getElementById("man_right_t2").value);
+      let r_t3 = parseInt(document.getElementById("man_right_t3").value);
+      let l_t1 = parseInt(document.getElementById("man_left_t1").value);
+      let l_t2 = parseInt(document.getElementById("man_left_t2").value);
+      let l_t3 = parseInt(document.getElementById("man_left_t3").value);
+
+      let left_avg = (l_t1 + l_t2 + l_t3) / 3;
+      console.log(left_avg);
+      let right_avg = (r_t1 + r_t2 + r_t3) / 3;
+      // (dominant - nondominant) / (dominant + nondominant)
+      let grip_ratio = (right_avg - left_avg) / (right_avg + left_avg);
+      AddManualToDatabase(left_avg, right_avg, grip_ratio);
+    });
+  }
+
+function AddManualToDatabase(left_avg, right_avg, grip_ratio) {
+  alert('manual');
+  let dateNow = Timestamp.fromDate(new Date());
+  let manual = {
+    "uid": global_patient,
+    "date": dateNow,
+    "gripRatio": grip_ratio,
+    "avgRH": right_avg,
+    "avgLH": left_avg
+  }
+  addMetric(manual);
+
+  /*
+  this.uid = uid;
+  this.date = date;
+  this.gripRatio = gripRatio;
+  this.avgRH = avgRH;
+  this.avgLH = avgLH;
+  */
+
+}
+
+export function AddPatientToDatabase() {
+  let myuuid = self.crypto.randomUUID();
+  console.log("RFC 4122 Version 4 UUID : " + myuuid);
+  alert("add");
+  let patient = {
+    "id": myuuid,
+    "firstName": "Sophie",
+    "lastName": "Mi",
+    "dateOfBirth": "1994-06-02",
+    "dominantHand": 0,
+    "gender": 0,
+    "impaired": 1,
+    "preStrokeDominance": 0,
+    "strokeSide": 1,
+    "authClinicianUid": currUser.uid
+  }
+  addPatient(patient);
+
 }
 
 // function testFire() {

@@ -7,6 +7,8 @@ checkmark:
 <a href="https://www.flaticon.com/free-icons/tick" title="tick icons">Tick icons created by Pixel perfect - Flaticon</a>
 reject icon:
 <a href="https://www.flaticon.com/free-icons/close-button" title="close button icons">Close button icons created by bsd - Flaticon</a>
+add icon:
+<a href="https://www.flaticon.com/free-icons/plus" title="plus icons">Plus icons created by Fuzzee - Flaticon</a>
 
 
 grip icon used in app:
