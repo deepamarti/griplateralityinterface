@@ -300,7 +300,7 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
         maxRange: [opt_sample_time[i][0], opt_sample_time[i][4]], 
         "manual_entry": 0
       };
-      opt_data = {
+      ble_opt_data = {
         "uid": global_patient, 
         "date": dateNow,
         "measurements": opt_sample_data[i], 
@@ -311,7 +311,7 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
       };
     }
     addDeviceData(ble_data);
-    addOptDeviceData(opt_data);
+    addOptDeviceData(ble_opt_data);
   }
   
 }
@@ -320,23 +320,59 @@ const mForm = document.getElementById("manual_entry");
   if (mForm != null) {
     mForm.addEventListener('submit', (event) => {
       event.preventDefault();
-      let r_t1 = parseInt(document.getElementById("man_right_t1").value);
-      let r_t2 = parseInt(document.getElementById("man_right_t2").value);
-      let r_t3 = parseInt(document.getElementById("man_right_t3").value);
-      let l_t1 = parseInt(document.getElementById("man_left_t1").value);
-      let l_t2 = parseInt(document.getElementById("man_left_t2").value);
-      let l_t3 = parseInt(document.getElementById("man_left_t3").value);
 
-      let left_avg = (l_t1 + l_t2 + l_t3) / 3;
-      console.log(left_avg);
-      let right_avg = (r_t1 + r_t2 + r_t3) / 3;
-      // (dominant - nondominant) / (dominant + nondominant)
-      let grip_ratio = (right_avg - left_avg) / (right_avg + left_avg);
-      AddManualToDatabase(left_avg, right_avg, grip_ratio);
+      // TODO: data validation and error checking needed
+
+      let right_trials = Array(3).fill(NaN);
+      let left_trials = Array(3).fill(NaN);
+      let dateNow = Timestamp.fromDate(new Date());
+
+      right_trials[0] = parseFloat(document.getElementById("man_right_t1").value);
+      right_trials[1] = parseFloat(document.getElementById("man_right_t2").value);
+      right_trials[2] = parseFloat(document.getElementById("man_right_t3").value);
+      left_trials[0] = parseFloat(document.getElementById("man_left_t1").value);
+      left_trials[1] = parseFloat(document.getElementById("man_left_t2").value);
+      left_trials[2] = parseFloat(document.getElementById("man_left_t3").value);
+      
+      for (let i=0; i<3; i++) {
+        right_trials[i] = Math.round(right_trials[i] * 100) / 100;
+        left_trials[i] = Math.round(left_trials[i] * 100) / 100;
+      }
+      
+      console.log(right_trials);
+      console.log(left_trials);
+
+      for (let h=0; h<2; h++) {
+        for (let i=0; i<3; i++) {
+          // right hand =0, left hand = 1
+          let manual_data = {
+            "uid": global_patient, 
+            "date": dateNow, 
+            "measurements": right_trials[i], 
+            "times": 0, 
+            "keep_trial": 1, 
+            "hand": h, 
+            maxRange: [0, 0], 
+            "manual_entry": 1
+          }
+          let manual_opt_data = {
+            "uid": global_patient, 
+            "date": dateNow,
+            "measurements": right_trials[i], 
+            "times": 0,
+            "keep_trial": 1, 
+            "hand": h,
+            "manual_entry": 1
+          }
+          addDeviceData(manual_data);
+          addOptDeviceData(manual_opt_data);
+        }
+      }
+      //AddManualToDatabase(left_avg, right_avg, grip_ratio);
     });
   }
 
-function AddManualToDatabase(left_avg, right_avg, grip_ratio) {
+function AddGripRatioToDatabase(left_avg, right_avg, grip_ratio) {
   alert('manual');
   let dateNow = Timestamp.fromDate(new Date());
   let manual = {
