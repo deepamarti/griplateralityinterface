@@ -515,7 +515,7 @@
 
     <!--firebase function-->
     <script type="module">
-    import {AddBLEToDatabase, AddPatientToDatabase} from "./firebase.js";
+    import {AddBLEToDatabase} from "./firebase.js";
 
         let dBtn = document.getElementById("ble_submit");
         dBtn.addEventListener('click', StoreBLEData);
@@ -525,12 +525,6 @@
             console.log(opt_sample_time);
             AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time);
             disable_button("ble_submit");
-        }
-
-        let pBtn = document.getElementById("addPatient");
-        pBtn.addEventListener('click', StorePatient);
-        function StorePatient() {
-            AddPatientToDatabase();
         }
     </script>
 

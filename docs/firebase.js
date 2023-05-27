@@ -265,7 +265,7 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
     { length: 51 },
     (value, index) => Math.round(index * 0.1 *10)/10);
   let ble_data = null;
-  let opt_data = null;
+  let ble_opt_data = null;
   for (let i=0;i<6;i++) {
     if (i<3) {
       // right hand
@@ -279,7 +279,7 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
         maxRange: [opt_sample_time[i][0], opt_sample_time[i][4]], 
         "manual_entry": 0
       };
-      opt_data = {
+      ble_opt_data = {
         "uid": global_patient, 
         "date": dateNow,
         "measurements": opt_sample_data[i], 
@@ -313,7 +313,7 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
     addDeviceData(ble_data);
     addOptDeviceData(ble_opt_data);
   }
-  
+  let grip_ratio = calcGripRatio(global_patient);
 }
 
 const mForm = document.getElementById("manual_entry");
@@ -342,38 +342,61 @@ const mForm = document.getElementById("manual_entry");
       console.log(right_trials);
       console.log(left_trials);
 
-      for (let h=0; h<2; h++) {
-        for (let i=0; i<3; i++) {
-          // right hand =0, left hand = 1
-          let manual_data = {
-            "uid": global_patient, 
-            "date": dateNow, 
-            "measurements": right_trials[i], 
-            "times": 0, 
-            "keep_trial": 1, 
-            "hand": h, 
-            maxRange: [0, 0], 
-            "manual_entry": 1
-          }
-          let manual_opt_data = {
-            "uid": global_patient, 
-            "date": dateNow,
-            "measurements": right_trials[i], 
-            "times": 0,
-            "keep_trial": 1, 
-            "hand": h,
-            "manual_entry": 1
-          }
-          addDeviceData(manual_data);
-          addOptDeviceData(manual_opt_data);
+      for (let i=0; i<3; i++) {
+        // right hand = 0
+        let manual_data = {
+          "uid": global_patient, 
+          "date": dateNow, 
+          "measurements": [right_trials[i]], 
+          "times": 0, 
+          "keep_trial": 1, 
+          "hand": 0, 
+          maxRange: [0, 0], 
+          "manual_entry": 1
         }
+        let manual_opt_data = {
+          "uid": global_patient, 
+          "date": dateNow,
+          "measurements": [right_trials[i]], 
+          "times": 0,
+          "keep_trial": 1, 
+          "hand": 0,
+          "manual_entry": 1
+        }
+        addDeviceData(manual_data);
+        addOptDeviceData(manual_opt_data);
       }
+      for (let i=0; i<3; i++) {
+        // left hand = 1
+        let manual_data = {
+          "uid": global_patient, 
+          "date": dateNow, 
+          "measurements": [left_trials[i]], 
+          "times": 0, 
+          "keep_trial": 1, 
+          "hand": 1, 
+          maxRange: [0, 0], 
+          "manual_entry": 1
+        }
+        let manual_opt_data = {
+          "uid": global_patient, 
+          "date": dateNow,
+          "measurements": [left_trials[i]], 
+          "times": 0,
+          "keep_trial": 1, 
+          "hand": 1,
+          "manual_entry": 1
+        }
+        addDeviceData(manual_data);
+        addOptDeviceData(manual_opt_data);
+      }
+      
       //AddManualToDatabase(left_avg, right_avg, grip_ratio);
+      let grip_ratio = calcGripRatio(global_patient);
     });
   }
 
-function AddGripRatioToDatabase(left_avg, right_avg, grip_ratio) {
-  alert('manual');
+function AddGripRatioToDatabase() {
   let dateNow = Timestamp.fromDate(new Date());
   let manual = {
     "uid": global_patient,
@@ -391,26 +414,6 @@ function AddGripRatioToDatabase(left_avg, right_avg, grip_ratio) {
   this.avgRH = avgRH;
   this.avgLH = avgLH;
   */
-
-}
-
-export function AddPatientToDatabase() {
-  let myuuid = self.crypto.randomUUID();
-  console.log("RFC 4122 Version 4 UUID : " + myuuid);
-  alert("add");
-  let patient = {
-    "id": myuuid,
-    "firstName": "Sophie",
-    "lastName": "Mi",
-    "dateOfBirth": "1994-06-02",
-    "dominantHand": 0,
-    "gender": 0,
-    "impaired": 1,
-    "preStrokeDominance": 0,
-    "strokeSide": 1,
-    "authClinicianUid": currUser.uid
-  }
-  addPatient(patient);
 
 }
 
@@ -748,9 +751,11 @@ async function calcAvgTrials(patientUid, typeEntry) {
     querySnapshot.forEach((doc) => {
       let data = doc.data();
       if (data["hand"] == 0) { // right
+        console.log(data['measurements']);
         let sumRH = data["measurements"].reduce((a, b) => a + b, 0);
         avgRH += parseFloat((sumRH / data["measurements"].length).toFixed(2));
       } else { // left
+        console.log(data['measurements']);
         let sumLH = data["measurements"].reduce((a, b) => a + b, 0);
         avgLH += parseFloat((sumLH / data["measurements"].length).toFixed(2));
       }
