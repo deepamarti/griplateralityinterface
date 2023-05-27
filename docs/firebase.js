@@ -33,15 +33,24 @@ auth.onAuthStateChanged(async (user) => {
         document.getElementById("adminNav").style.display = "none";
         document.getElementById("adminPortal").style.display = "none";
       }
+      var nameHeader = document.getElementById("headerName");
+      if (nameHeader != null) {
+        var text = "Welcome, " + user.displayName + "!";
+        nameHeader.innerHTML = text;
+      }
     }
     else {
       // go back to sign in if null
       document.getElementById("mainBody").style.display = "block";
       var path_str = window.location.href;
-      var path = path_str.split("//");
-      if (path[1] != "localhost:3000/") {
-        window.location.href = "./index.html";
-      }
+      //var path = path_str.split("//");
+      console.log(path_str);
+      if (path_str.includes("index.html") == false) { // does include /index.html
+        if (path_str.includes(".html") == true) { // does include .html for another file
+          console.log("in here: ", path_str);
+          window.location.href = "./index.html";
+        }
+      } 
     }
   }, 1000);
   if (user) {
@@ -173,12 +182,17 @@ if (fireBtn != null) {
         //var td5 = document.createElement('td');
 
         //Predesigned data element to be appeneded to all data tables. TODO assign a link to each and 
-        var btn = document.createElement("button");
-        btn.innerHTML = "Select";
-        btn.value = patID;
+        // var btn = document.createElement("button");
+        // btn.innerHTML = "Select";
+        // btn.value = patID;
+        var btn = document.createElement("input");
+        btn.setAttribute("type", "radio");
+        btn.setAttribute("name", "Select");
+        btn.setAttribute("value", patID);
         btn.addEventListener("click", function() {
-          set_patient(btn.value); // btn.value = patient id
-          btn.disable = true;
+          //btn.style.backgroundColor = "blue";
+          setPatient(btn.value, name); // btn.value = patient id
+          //btn.disable = true;
         });
 
         td1.innerHTML=name;
@@ -193,13 +207,13 @@ if (fireBtn != null) {
         td4.className = "healthStatus";
         //td5.className = "laterality";
         //td6.className = "AddMeasure";
-
+        trow.appendChild(btn);
         trow.appendChild(td1);
         //trow.appendChild(td2);
         trow.appendChild(td3);
         trow.appendChild(td4);
         //trow.appendChild(td5);
-        trow.appendChild(btn);
+        
         tbody.appendChild(trow);
     }
   });
@@ -214,10 +228,18 @@ function ShowDataCollection() {
 
 let global_patient = null;
 
-function set_patient(id) {
+async function setPatient(id, name) {
   global_patient = id;
   console.log(id);
-  ShowDataCollection();
+  var maybeAdmin = await isAdmin(currUser.uid);
+  if (maybeAdmin) {
+    document.getElementById("adminExport").style.display = "block";
+    document.getElementById("exportNav").style.display = "block";
+    document.getElementById('adminExportH2').innerHTML = "Export " + name + "'s " + "Data";
+  }
+  location.hash = "#data_collection";
+  document.getElementById('data_collection').style.visibility = 'visible';
+  document.getElementById('dataCollectionH2').innerHTML = "Data Collection for " + name;
 };
 
 // let dataBtn = document.getElementById("dataBtn");
@@ -565,10 +587,10 @@ async function addClinician(clinicianData) {
   console.log(docRef.id);
 }
 
-async function isAdmin() {
+async function isAdmin(uid) {
   const q = query(
     collection(db, "clinicians"), 
-    where("uid", "==", currUser.uid),
+    where("uid", "==", uid),
     where("admin", "==", 1)
   );
   const querySnapshot = await getDocs(q);
