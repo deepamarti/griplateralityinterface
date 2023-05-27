@@ -246,7 +246,7 @@ button {
 
 #patientTable
 {
-    overflow:hidden;
+    overflow-y:scroll;
     width:100%;
     height:300px;
     table-layout:fixed;
@@ -263,6 +263,12 @@ button {
     padding: 20px;
 }
 
+#patientBody td
+{
+    padding:.5%;
+    height: 30px;
+}
+
 .add_patient_button {
     width: 95%;
     margin: 2.5%;
@@ -274,17 +280,6 @@ button {
     font-weight: 400;
     background-color: lightgray;
     padding: 15px;
-}
-
-tbody tr td{
-    padding: 10px 15px;
-
-}
-
-#patientBody td
-{
-    padding:.5%;
-    height: 30px;
 }
 
 .healthStatus h5{
