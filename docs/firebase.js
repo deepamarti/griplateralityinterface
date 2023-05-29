@@ -392,7 +392,7 @@ function formatDataForCSV(deleteF, dataList, fileName) {
 //   });
 // }
 
-export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) {
+export async function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) {
   console.log(sample_data);
   console.log(opt_sample_data);
   console.log(opt_sample_time);
@@ -451,12 +451,12 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
   }
   document.getElementById('results').style.visibility = 'visible';
   document.getElementById('results').style,height = "100%";
-  let grip_ratio = calcGripRatio(global_patient);
+  PopulateResults(await calcGripRatio(global_patient));
 }
 
 const mForm = document.getElementById("manual_entry");
   if (mForm != null) {
-    mForm.addEventListener('submit', (event) => {
+    mForm.addEventListener('submit', async (event) => {
       event.preventDefault();
       let right_trials = Array(3).fill(NaN);
       let left_trials = Array(3).fill(NaN);
@@ -524,8 +524,20 @@ const mForm = document.getElementById("manual_entry");
         addDeviceData(manual_data);
         addOptDeviceData(manual_opt_data);
       }
-      let grip_ratio = calcGripRatio(global_patient);
+      PopulateResults(await calcGripRatio(global_patient));
     });
+  }
+
+  function PopulateResults(grip_ratio) {
+    console.log(grip_ratio);
+    console.log(grip_ratio['ratio']);
+    let ratio = document.getElementById("grip_ratio_txt");
+    let right = document.getElementById("right_avg_text");
+    let left = document.getElementById("left_avg_text");
+
+    ratio.innerHTML = "Grip Ratio: \n" + grip_ratio['ratio'];
+    right.innerHTML = "Right Avg: \n" + grip_ratio['avgRH'];
+    left.innerHTML = "Left Avg: \n" + grip_ratio['avgLH'];
   }
 
 // function testFire() {
@@ -562,7 +574,6 @@ function updateName(user, name) {
     });
   }
 }
-
 class Patient {
   constructor (uid, firstName, lastName, dateOfBirth, dominantHand, gender, impaired, preStrokeDominance, strokeSide, authClinicianUid) {
     this.uid = uid;
@@ -1119,7 +1130,7 @@ async function calcStrokeGripRatio(patientInfo) {
     await addMetric(metric);
 
     return {
-      "ratio": gripRatio,
+      "grip_ratio": gripRatio,
       "avgRH": avgs["data"]["avgRH"],
       "avgLH": avgs["data"]["avgLH"],
       "hand": domHand,

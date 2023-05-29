@@ -136,15 +136,15 @@
                              </div>
                              <div class="col-md-12">
                                 <label>Trial 1: </label>
-                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_right_t1">
+                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_right_t1" required>
                              </div>
                              <div class="col-md-12">
                                 <label>Trial 2: </label>
-                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_right_t2">
+                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_right_t2" required>
                              </div>
                              <div class="col-md-12">
                                 <label>Trial 3: </label>
-                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_right_t3">
+                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_right_t3" required>
                              </div>
                         </div>
                         <div class="form_entry_column">
@@ -153,15 +153,15 @@
                              </div>
                              <div class="col-md-12">
                                 <label>Trial 1: </label>
-                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_left_t1">
+                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_left_t1" required>
                              </div>
                              <div class="col-md-12">
                                 <label>Trial 2: </label>
-                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_left_t2">
+                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_left_t2" required>
                              </div>
                              <div class="col-md-12">
                                 <label>Trial 3: </label>
-                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_left_t3">
+                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_left_t3" required>
                              </div>
                         </div>
                     </div>
@@ -245,8 +245,25 @@
 
         <div class="results" id="results_section">
             <h2 id="resultsH2">Results</h2> 
-            <p>show overlayed graphs</p>
-            <p>show grip ratio</p>
+            <div class="results_row">
+                <div class="results_column">
+                    <div style="height: 5%; background-color: #4164da; padding: 5px; text-align: center; border-radius: 15px;"> Grip Ratio</div>
+                    <p class="circle_display" id="grip_ratio_txt">grip ratio</p>
+                    <p style="position: relative;">Grip Ratio</p>
+                    <div class="results_column">
+                        <p class="circle_display" id="right_avg_text"> right avg</p>
+                    </div>
+                    <div class="results_column">
+                        <p class="circle_display" id="left_avg_text">left avg</pr>
+                    </div>
+                    
+                </div>
+                <div class="results_column">
+                    <p>show overlayed graphs</p>
+                </div>
+            </div>
+            
+            
         </div>
 
         <!-- <div id="adminExport" style="display:none;">
@@ -541,6 +558,8 @@
 
     <!--firebase function-->
     <script type="module">
+    let ble_grip_ratio = null;
+    let man_grip_ratio = null;
     import {AddBLEToDatabase} from "./firebase.js";
 
         let dBtn = document.getElementById("ble_submit");

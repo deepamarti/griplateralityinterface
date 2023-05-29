@@ -100,7 +100,7 @@
     width: 60%;
     cursor: pointer;
     background-color:#4164da;
-    color: #fff;
+    color: black;
     font-size: 12px;
     border-radius: 5px;
 }
@@ -195,4 +195,28 @@
     text-align: left;
     font-size: xx-large;
     width: 100%;
+}
+
+.results_row::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.results_column {
+    float: left;
+    width: 45%;
+    padding: 10px;
+}
+
+.circle_display {
+    border-radius: 50%;
+    border: 5px solid #4164da;
+    background: transparent;
+    text-align: center;
+    
+    width: 75%;
+    aspect-ratio: 1 / 1;
+    padding: 5%;
+    margin: 5%;
 }
