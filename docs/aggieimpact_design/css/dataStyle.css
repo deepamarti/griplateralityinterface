@@ -2,8 +2,9 @@
 .data_collection {
     width: 95%;
     margin-left: 20px;
-    position:relative;
+    position: relative;
     overflow: hidden;
+    padding-top: 20px;
 }
 
 .data_collection h2 {
@@ -180,3 +181,16 @@
     font-size: small;
 }
 
+.results {
+    width: 95%;
+    margin-left: 20px;
+    position: relative;
+    overflow: hidden;
+    padding-top: 20px;
+}
+
+.results h2 {
+    text-align: left;
+    font-size: xx-large;
+    width: 100%;
+}

@@ -10,13 +10,21 @@ function Initialize() {
     document.getElementById('patient_search').style.height = "100%";
 
     document.getElementById("data_collection_section").style.visibility = 'hidden';
-    document.getElementById("ble_submit").disabled = true;
-    document.getElementById("ble_disconnect").disabled = true;
-    document.getElementById("graph_accept_reject").style.visibility = 'hidden';
-    document.getElementById("graph_accept_reject").style.height = "0%";
+    document.getElementById('data_collection_section').style.height = "0%";
 
-    document.getElementById("results").style.visibility = 'hidden';
-    document.getElementById("results").style.height = "0%";
+    document.getElementById("results_section").style.visibility = 'hidden';
+    document.getElementById("results_section").style.height = "0%";
+
+    document.getElementById("admin_section").style.visibility = 'hidden';
+    document.getElementById("admin_section").style.height = "0%";
+
+    document.getElementById("ble_submit").disabled = true;
+    document.getElementById('ble_submit').style.backgroundColor = "lightgray";
+
+    document.getElementById("ble_disconnect").disabled = true;
+
+    //document.getElementById("graph_accept_reject").style.visibility = 'hidden';
+    //document.getElementById("graph_accept_reject").style.height = "0%";
 
     check_BLE_support();
     SwitchTab(onload, "Bluetooth")
@@ -27,9 +35,9 @@ function check_BLE_support() {
     let lbl_ble_supported = document.getElementById('ble_supported');
     is_BLE_supported = navigator.bluetooth;
     if (is_BLE_supported) {
-        lbl_ble_supported.innerHTML = '<span style="color:green">Bluetooth is Supported on this Browser';
+        lbl_ble_supported.innerHTML = '<h3 style="color:green">Bluetooth is Supported on this Browser </h3>';
     } else {
-        lbl_ble_supported.innerHTML = `<span style="color:red">Bluetooth is Not Supported on this Browser`;
+        lbl_ble_supported.innerHTML = `<h3 style="color:red">Bluetooth is Not Supported on this Browser </h3>`;
     }
 }
 
