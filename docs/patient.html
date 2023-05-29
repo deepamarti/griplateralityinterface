@@ -54,7 +54,7 @@
 </head>
 
 <body onload="Initialize(); check_BLE_support();">
-    <div id="mainBody" style="display:none;">
+<div id="mainBody" style="display:none;">
     
     <section id="menu">
         <div class="logo">
@@ -89,31 +89,33 @@
                 <img src="aggieimpact_design/images/avatar.jpg" alt="">
             </div>
         </div>
-       <div class="syncButton">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#000000" style="width: 4%; margin-left: 1%; margin-right: 1%;" d="M142.9 142.9c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5c0 0 0 0 0 0H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1C73.2 122 55.6 150.7 44.8 181.4c-5.9 16.7 2.9 34.9 19.5 40.8s34.9-2.9 40.8-19.5c7.7-21.8 20.2-42.3 37.8-59.8zM16 312v7.6 .7V440c0 9.7 5.8 18.5 14.8 22.2s19.3 1.7 26.2-5.2l41.6-41.6c87.6 86.5 228.7 86.2 315.8-1c24.4-24.4 42.1-53.1 52.9-83.7c5.9-16.7-2.9-34.9-19.5-40.8s-34.9 2.9-40.8 19.5c-7.7 21.8-20.2 42.3-37.8 59.8c-62.2 62.2-162.7 62.5-225.3 1L185 329c6.9-6.9 8.9-17.2 5.2-26.2s-12.5-14.8-22.2-14.8H48.4h-.7H40c-13.3 0-24 10.7-24 24z"/></svg>
-            <button class="firebase_button" id="firebaseBtn" type="button" style="width:90%">Sync Data</button>
+        <div id="patient_search">
+            <div class="syncButton">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#000000" style="width: 4%; margin-left: 1%; margin-right: 1%;" d="M142.9 142.9c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5c0 0 0 0 0 0H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1C73.2 122 55.6 150.7 44.8 181.4c-5.9 16.7 2.9 34.9 19.5 40.8s34.9-2.9 40.8-19.5c7.7-21.8 20.2-42.3 37.8-59.8zM16 312v7.6 .7V440c0 9.7 5.8 18.5 14.8 22.2s19.3 1.7 26.2-5.2l41.6-41.6c87.6 86.5 228.7 86.2 315.8-1c24.4-24.4 42.1-53.1 52.9-83.7c5.9-16.7-2.9-34.9-19.5-40.8s-34.9 2.9-40.8 19.5c-7.7 21.8-20.2 42.3-37.8 59.8c-62.2 62.2-162.7 62.5-225.3 1L185 329c6.9-6.9 8.9-17.2 5.2-26.2s-12.5-14.8-22.2-14.8H48.4h-.7H40c-13.3 0-24 10.7-24 24z"/></svg>
+                <button class="firebase_button" id="firebaseBtn" type="button" style="width:90%">Sync Data</button>
+            </div>
+            <div class="searchBar">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#000000" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
+                <input type="search" id="searchingFor" placeholder="Patient Lookup" maxlength="20" onkeyup="filterTable()">
+            </div>
+                
+            <div class="board">
+                <table id="patientTable">
+                    <thead>
+                        <tr>
+                            <td> Choose Patient </td>
+                            <td> Patient Name </td>
+                            <td> Birth Date </td>
+                            <td> Patient Status </td>
+                        </tr>
+                    </thead>
+                    <tbody id = "patientBody"></tbody>
+                </table>
+            </div>
         </div>
-        <div class="searchBar">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#000000" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
-            <input type="search" id="searchingFor" placeholder="Patient Lookup" maxlength="20" onkeyup="filterTable()">
-        </div>
-            
-        <div class="board">
-            <table id="patientTable">
-                <thead>
-                    <tr>
-                        <td> Choose Patient </td>
-                        <td> Patient Name </td>
-                        <td> Birth Date </td>
-                        <td> Patient Status </td>
-                    </tr>
-                </thead>
-                <tbody id = "patientBody"></tbody>
-            </table>
-        </div>
-        
+       
 
-        <div class="data_collection" id="data_collection">
+        <div class="data_collection" id="data_collection_section">
             <div class="col-md-12">
                <h2 id="dataCollectionH2">Data Collection</h2> 
             </div>
@@ -210,9 +212,7 @@
                     </div>
                     <div id="myProgress">
                         <div id="myBar">
-                            <p id="p_bar_text" class="progress_bar_text">
-                               Collecting... 
-                            </p>
+                            <p id="p_bar_text"></p>
                         </div>
                       </div>
                     <div id="graph_accept_reject">
@@ -242,6 +242,12 @@
                 </div>
             </div>
         </div>
+
+        <div id="results">
+            <p>display grip ratio</p>
+            <p>display overlayed graphs</p>
+        </div>
+    
 
         <div id="adminExport" style="display:none;">
             <h2 id="adminExportH2">Export Data</h2>
@@ -352,8 +358,13 @@
         }
         btn_disconnect.addEventListener('click', DisconnectDevice);
 
-        function CollectData(evt) {
+        function Collect(evt) {
             current_index = evt.currentTarget.index;
+            ProgressBar();
+            setTimeout(CollectData, 3000);
+        }
+
+        function CollectData(evt) {
             console.log(current_index);
             
             // set up sensor
@@ -368,10 +379,10 @@
             // clear data arrays
             sample_data[current_index] = [];
             opt_sample_data[current_index] = [];
-            opt_sample_graph_data[current_index] = Array(51).fill(NaN);
-                    
+            opt_sample_graph_data[current_index] = Array(51).fill(NaN); 
+            
             gdxDevice.start(100);
-            ProgressBar();
+            
             sensor.on('value-changed', (sensor) => {
                 // samples for 5 seconds
                 if (sensor.values.length > 50){
@@ -385,17 +396,17 @@
                 //sample_data[current_index].push(sensor.value);
             }); 
         }
-        btn_collect_0.addEventListener('click', CollectData);
+        btn_collect_0.addEventListener('click', Collect);
         btn_collect_0.index = 0;
-        btn_collect_1.addEventListener('click', CollectData);
+        btn_collect_1.addEventListener('click', Collect);
         btn_collect_1.index = 1;
-        btn_collect_2.addEventListener('click', CollectData);
+        btn_collect_2.addEventListener('click', Collect);
         btn_collect_2.index = 2;
-        btn_collect_3.addEventListener('click', CollectData);
+        btn_collect_3.addEventListener('click', Collect);
         btn_collect_3.index = 3;
-        btn_collect_4.addEventListener('click', CollectData);
+        btn_collect_4.addEventListener('click', Collect);
         btn_collect_4.index = 4;
-        btn_collect_5.addEventListener('click', CollectData);
+        btn_collect_5.addEventListener('click', Collect);
         btn_collect_5.index = 5;
 
     </script>
@@ -443,25 +454,37 @@
                 count = 1;
                 document.getElementById("graph_accept_reject").style.visibility = 'hidden';
                 document.getElementById("graph_accept_reject").style.height = "0%";
-                document.getElementById("p_bar_text").innerHTML = "Connecting";
                 document.getElementById("myProgress").style.visibility = 'visible';
                 document.getElementById("myProgress").style.height = "100%";
                 var elem = document.getElementById("myBar");
                 var width = 1;
                 var id = setInterval(frame, 10);
                 function frame() {
-                if (width >= 500) {
-                    document.getElementById("p_bar_text").innerHTML = "Done!";
-                    document.getElementById("myProgress").style.visibility = 'hidden';
-                    document.getElementById("myProgress").style.height = "0%";
-                    document.getElementById("graph_accept_reject").style.visibility = 'visible';
-                    document.getElementById("graph_accept_reject").style.height = "100%";
-                    clearInterval(id);
-                    count = 0;
-                } else {
+                    if (width <= 100) {
+                        // ready = yellow
+                        document.getElementById('p_bar_text').innerHTML = "Ready";
+                        document.getElementById('myBar').style.backgroundColor = "#ffe26a";
+                    } else if (width > 100 && width <=200) {
+                        // set
+                        document.getElementById('p_bar_text').innerHTML = "Set";
+                    } else if (width > 200 && width <=300) {
+                        // go
+                        document.getElementById('p_bar_text').innerHTML = "Go";
+                    } else if (width > 300 && width <=800) {
+                        // collecting = green
+                        document.getElementById('p_bar_text').innerHTML = "Collecting";
+                        document.getElementById('myBar').style.backgroundColor = "#abd699";
+                    }else {
+                        // done
+                        document.getElementById("myProgress").style.visibility = 'hidden';
+                        document.getElementById("myProgress").style.height = "0%";
+                        document.getElementById("graph_accept_reject").style.visibility = 'visible';
+                        document.getElementById("graph_accept_reject").style.height = "100%";
+                        clearInterval(id);
+                        count = 0;
+                    }
                     width++;
-                    elem.style.width = (width*.2) + "%";
-                }
+                    elem.style.width = (width*.125) + "%";
                 }
             }
         }

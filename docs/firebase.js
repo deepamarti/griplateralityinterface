@@ -237,8 +237,8 @@ async function setPatient(id, name) {
     document.getElementById("exportNav").style.display = "block";
     document.getElementById('adminExportH2').innerHTML = "Export " + name + "'s " + "Data";
   }
-  location.hash = "#data_collection";
-  document.getElementById('data_collection').style.visibility = 'visible';
+  location.hash = "#data_collection_section";
+  document.getElementById('data_collection_section').style.visibility = 'visible';
   document.getElementById('dataCollectionH2').innerHTML = "Data Collection for " + name;
 };
 
@@ -313,6 +313,8 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
     addDeviceData(ble_data);
     addOptDeviceData(ble_opt_data);
   }
+  document.getElementById('results').style.visibility = 'visible';
+  document.getElementById('results').style,height = "100%";
   let grip_ratio = calcGripRatio(global_patient);
 }
 
@@ -395,27 +397,6 @@ const mForm = document.getElementById("manual_entry");
       let grip_ratio = calcGripRatio(global_patient);
     });
   }
-
-function AddGripRatioToDatabase() {
-  let dateNow = Timestamp.fromDate(new Date());
-  let manual = {
-    "uid": global_patient,
-    "date": dateNow,
-    "gripRatio": grip_ratio,
-    "avgRH": right_avg,
-    "avgLH": left_avg
-  }
-  addMetric(manual);
-
-  /*
-  this.uid = uid;
-  this.date = date;
-  this.gripRatio = gripRatio;
-  this.avgRH = avgRH;
-  this.avgLH = avgLH;
-  */
-
-}
 
 // function testFire() {
 //   console.log("in test firebase");
