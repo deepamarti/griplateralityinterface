@@ -14,3 +14,6 @@ add icon:
 grip icon used in app:
 <a href="https://www.vecteezy.com/free-vector/courage%22%3ECourage Vectors by Vecteezy</a>
 ->
+
+tutorial for blinking text:
+"https://htmleditor.w3schools.in/?filename=html_css_blink" 
