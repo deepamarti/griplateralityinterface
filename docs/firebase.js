@@ -233,16 +233,16 @@ async function setPatient(id, name) {
   console.log(id);
   var maybeAdmin = await isAdmin(currUser.uid);
   if (maybeAdmin) {
-    document.getElementById("adminExport").style.display = "block";
-    document.getElementById("exportNav").style.display = "block";
-    document.getElementById('adminExportH2').innerHTML = "Export " + name + "'s " + "Data";
+    // document.getElementById("adminExport").style.display = "block";
+    // document.getElementById("exportNav").style.display = "block";
+    // document.getElementById('adminExportH2').innerHTML = "Export " + name + "'s " + "Data";
   }
   location.hash = "#data_collection";
   document.getElementById('data_collection').style.visibility = 'visible';
   document.getElementById('dataCollectionH2').innerHTML = "Data Collection for " + name;
 };
 
-async function getAllDataByCollection(patientUid, collectionName) {
+async function getAllDataByCollection(emr, patientUid, collectionName, fields) {
   const q = query(
     collection(db, collectionName), 
     where("uid", "==", patientUid)
@@ -254,7 +254,17 @@ async function getAllDataByCollection(patientUid, collectionName) {
   else {
     var data = []
     querySnapshot.forEach((doc) => {
-      data.push(doc.data());
+      var obj = doc.data();
+      var new_obj = {};
+      new_obj["emr_code"] = emr;
+      for (var i = 0; i < fields.length; i++) {
+        if (Array.isArray(obj[fields[i]]) == true) {
+          obj[fields[i]] = obj[fields[i]].join(' ');
+        }
+        new_obj[fields[i]] = obj[fields[i]];
+      }
+      new_obj["date"] = new_obj["date"].toDate().toDateString();
+      data.push(new_obj);
     });
     return {"empty": false, "data": data};
   }
@@ -273,31 +283,38 @@ if (allDataCSVBtn != null) {
 async function getAllData() {
   var pats = await getAllPatients();
   if (pats["empty"] == false) {
-    var ids = [];
+    var metric = [];
+    var raw = [];
+    var opt = [];
     for (var i = 0; i < pats["profiles"].length; i++) {
-      var emr = pats["profiles"]["emr_code"];
-      var metricData = await getAllDataByCollection(pats["profiles"][i]["uid"], "metric_data");
-      var deviceData = await getAllDataByCollection(pats["profiles"][i]["uid"], "device_data");
-      var optDeviceData = await getAllDataByCollection(pats["profiles"][i]["uid"], "opt_device_data");
+      var emr = pats["profiles"][i]["emr_code"];
+      var uid = pats["profiles"][i]["uid"];
+      var metricData = await getAllDataByCollection(emr, uid, "metric_data", ["date", "grip_ratio", "left_avg", "right_avg"]);
+      metric = metric.concat(metricData["data"]);
+      var deviceData = await getAllDataByCollection(emr, uid, "device_data", ["date", "hand", "manual_entry", "maxRange", "measurements", "times"]);
+      raw = raw.concat(deviceData["data"]);
+      var optDeviceData = await getAllDataByCollection(emr, uid, "opt_device_data", ["date", "hand", "manual_entry", "measurements", "times"]);
+      opt = opt.concat(optDeviceData["data"]);
     }
-    formatDataForCSV(null, ["clinician_uid", "uid"], pats["profiles"], "patients.csv");
+    let today = new Date().toISOString().slice(0, 10);
+    formatDataForCSV(["clinician_uid", "uid"], pats["profiles"], "patients("+today+").csv");
+    formatDataForCSV([], metric, "grip_ratio("+today+").csv");
+    formatDataForCSV([], raw, "raw_measurements("+today+").csv");
+    formatDataForCSV([], opt, "optimal_sample_measurements("+today+").csv");
     return true;
   } else {
     return false;
   }
 }
 
-function formatDataForCSV(emr, deleteFields, dataList, fileName) {
+function formatDataForCSV(deleteF, dataList, fileName) {
   var csvRows = [];
   for (var i = 0; i < dataList.length; i++) {
-    for (var j = 0; j < deleteFields.length; j++) {
-      delete dataList[i][deleteFields[j]];
+    for (var j = 0; j < deleteF.length; j++) {
+      delete dataList[i][deleteF[j]];
     }
-    if (emr != null) {
-      dataList[i]["emr_code"] = emr;
-    }
-    console.log(dataList[i]);
-    const values = Object.values(dataList[i]).join(',')
+    const values = Object.values(dataList[i]).join(',');
+    console.log(values);
     csvRows.push(values);
   }
   csvRows.unshift(Object.keys(dataList[0]));
@@ -309,7 +326,7 @@ function formatDataForCSV(emr, deleteFields, dataList, fileName) {
   a.style.display = 'none';
   document.body.appendChild(a);
   a.click();
-  //document.body.removeChild(a);
+  document.body.removeChild(a);
 }
 // let dataBtn = document.getElementById("dataBtn");
 
@@ -586,7 +603,13 @@ async function getAllPatients() {
   else {
     var profiles = [];
     querySnapshot.forEach((doc) => {
-      profiles.push(doc.data());
+      var obj = doc.data();
+      var new_obj = {};
+      var obj_k = ["emr_code", "first_name", "last_name", "date_of_birth", "dominant_hand", "dominant_hand_pre_stroke", "gender", "height", "weight", "impaired", "stroke_side", "uid", "clinician_uid"];
+      for (var i = 0; i < obj_k.length; i++) {
+        new_obj[obj_k[i]] = obj[obj_k[i]];
+      }
+      profiles.push(new_obj);
     });
     return {"empty": false, "profiles": profiles};
   }
