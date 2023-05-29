@@ -28,7 +28,7 @@ if (backBTN != null) {
 }
 
 function BackToPatient() {
-    // from data collection/ results back to patient search
+    // from data collection/results back to patient search
     document.getElementById('patient_search').style.visibility = 'visible';
     document.getElementById('patient_search').style.height = "100%";
 
