@@ -11,8 +11,8 @@ export function InitializeData() {
     document.getElementById('ble_left_t2').disabled = true;
     document.getElementById('ble_left_t3').disabled = true;
 
-    document.getElementById('graph_accept_reject').style.visibility = 'hidden';
-    document.getElementById('graph_accept_reject').style.height = "0%";
+    document.getElementById('graph_accept_reject').style.display = 'none';
+    //document.getElementById('graph_accept_reject').style.display = 'flex';
 }
 
 export function InitializeResults() {
@@ -40,4 +40,22 @@ function BackToPatient() {
 
     document.getElementById("admin_section").style.visibility = 'hidden';
     document.getElementById("admin_section").style.height = "0%";
+}
+
+const exportBTN = document.getElementById('show_export_data');
+if (exportBTN != null) {
+    exportBTN.addEventListener('click', ShowExportData);
+}
+
+function ShowExportData() {
+    alert('make expoet data viisle')
+}
+
+const adminBTN = document.getElementById('show_admin_portal');
+if (adminBTN != null) {
+    adminBTN.addEventListener('click', ShowAdminPortal);
+}
+
+function ShowAdminPortal() {
+    alert('show admin portal');
 }
