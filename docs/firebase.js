@@ -757,41 +757,136 @@ async function isAdmin(uid) {
 }
 
 var emailUp, passwordUp, conPassUp, adminSelected, name;
+
+function validateUpEmail() {
+  emailUp = emailSU.value;
+  console.log(emailUp);
+
+  // email can be no longer than 64 characters
+  if (emailUp.length > 64) {
+    document.getElementById("bad_email_up_error").innerHTML = "You entered an email address that is too long";
+    emailSU.value = "";
+    return false;
+  }
+
+  // email must be user@domain.extensiion
+  var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  if (re.test(email)) {
+    document.getElementById("bad_email_up_error").innerHTML = "";
+    return true;
+  } else {
+    document.getElementById("bad_email_up_error").innerHTML = "Please enter a valid email address";
+    emailSU.value = "";
+    return false;
+  }
+}
+
+function validateNameUp() {
+  name = nameSU.value;
+
+  console.log(name);
+  // name can't be longer than 256 characters (for now)
+  if (name.length > 256) {
+    document.getElementById("bad_name_up_error").innerHTML = "You entered a name that is too long";
+  }
+
+  // no special characters or numbers
+  var re = /^[A-Za-z ]+$/;
+  if (re.test(name)) {
+    document.getElementById("bad_name_up_error").innerHTML = "";
+    return true;
+  } else {
+    document.getElementById("bad_name_up_error").innerHTML = "Please enter a valid name";
+    passwordSU.value = "";
+    return false;
+  }
+
+}
+
+function validateUpPassword1() {
+  password1Up = passwordSU.value;
+
+  // password can be no longer than 256 characters
+  if (password1Up.length > 256) {
+    console.log("password too long");
+    document.getElementById("bad_password1_up_error").innerHTML = "You entered a password that is too long";
+    passwordSU.value = "";
+    return false;
+  }
+
+  // password can't have special characters
+  var re = /^[A-Za-z0-9 ]+$/;
+  if (re.test(password1Up)) {
+    console.log("valid password");
+    document.getElementById("bad_password1_up_error").innerHTML = "";
+    return true;
+  } else {
+    console.log("invalid password");
+    document.getElementById("bad_password1_up_error").innerHTML = "Please enter a valid password";
+    passwordSU.value = "";
+    return false;
+  }
+}
+
+function validateUpPassword2() {
+  password2Up = confirmPassword.value;
+
+  // password can be no longer than 256 characters
+  if (password2Up.length > 256) {
+    console.log("password too long");
+    document.getElementById("bad_password2_up_error").innerHTML = "You entered a password that is too long";
+    confirmPassword.value = "";
+    return false;
+  }
+
+  // password can't have special characters
+  var re = /^[A-Za-z0-9 ]+$/;
+  if (re.test(password2Up)) {
+    console.log("valid password");
+    document.getElementById("bad_password2_up_error").innerHTML = "";
+    return true;
+  } else {
+    console.log("invalid password");
+    document.getElementById("bad_password2_up_error").innerHTML = "Please enter a valid password";
+    confirmPassword.value = "";
+    return false;
+  }
+}
+
 if (signUp != null) {
   // add in sign up rules => error occurs is password is 1 letter
   signUp.addEventListener('submit', (event) => {
     event.preventDefault();
-    name = nameSU.value;
-    emailUp = emailSU.value;
-    passwordUp = passwordSU.value;
-    conPassUp = confirmPassword.value;
     adminSelected = adminBtn.checked ? 1 : 0;
     console.log(emailUp);
     console.log(passwordUp);
     console.log(conPassUp);
-    if (passwordUp != conPassUp) {
-      alert("Passwords do not match!");
+    if (validateNameUp() && validateUpEmail() && validateUpPassword1() && validateUpPassword2()) {
+      if (passwordUp != conPassUp) {
+        alert("Passwords do not match!");
+      }
+      else {
+        const authSec = getAuth(secondaryApp);
+        createUserWithEmailAndPassword(authSec, emailUp, passwordUp)
+          .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          updateName(user, name);
+          createClinician(user.uid, adminSelected);
+          authSec.signOut();
+          signUp.reset();
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // ..
+          console.log(errorCode);
+          console.log(errorMessage);
+          window.alert("Error occurred. Try again.");
+        });
+      }
     }
-    else {
-      const authSec = getAuth(secondaryApp);
-      createUserWithEmailAndPassword(authSec, emailUp, passwordUp)
-        .then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
-        updateName(user, name);
-        createClinician(user.uid, adminSelected);
-        authSec.signOut();
-        signUp.reset();
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-        console.log(errorCode);
-        console.log(errorMessage);
-        window.alert("Error occurred. Try again.");
-      });
-    }
+    
   });
 }
 
