@@ -17,12 +17,15 @@ function Initialize() {
 
 function check_BLE_support() {
     // checks bluetooth capability of browser
-    let lbl_ble_supported = document.getElementById('ble_supported');
     is_BLE_supported = navigator.bluetooth;
-    if (is_BLE_supported) {
-        lbl_ble_supported.innerHTML = '<h3 style="color:green">Bluetooth is Supported on this Browser </h3>';
-    } else {
-        lbl_ble_supported.innerHTML = `<h3 style="color:red">Bluetooth is Not Supported on this Browser </h3>`;
+    if (!is_BLE_supported) {
+        let msg_text = "Bluetooth is not supported on this browser. Please enter data manually.";
+        ResetBLE();
+        ResetManual();
+        document.getElementById(id="ble_status").style.backgroundColor = "lightgray";
+        if (confirm(msg_text)) {
+            SwitchTab(onload, 'Manual');
+        }
     }
 }
 
