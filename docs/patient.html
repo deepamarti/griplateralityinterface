@@ -183,7 +183,7 @@
                                 <h3>Right Hand Measurements</h3>
                              </div>
                              <div class="col-md-12">
-                                <button class="trial_button" id ="ble_right_t1"> Trial 1</button>
+                                <button class="trial_button" id ="ble_right_t1">Trial 1</button>
                              </div>
                              <div class="col-md-12">
                                 <button class="trial_button" id ="ble_right_t2"> Trial 2</button>
@@ -213,8 +213,8 @@
                         </div>
                     </div>
                     <div id="myProgress">
-                        <p class="blink_display" id="blinking_text"></p>
-                        <div id="myBar"><p id="p_bar_text"></p></div>
+                        <p class="blink_display" id="blinking_text" style="height: 0;"></p>
+                        <div id="myBar" style="height: 45px"></div>
                       </div>
                     <div id="graph_accept_reject">
                         <div class="graph_entry_column" style="width:25%;">
@@ -462,8 +462,7 @@
         async function ProgressBar() {
             if (count == 0) {
                 count = 1;
-                document.getElementById("graph_accept_reject").style.visibility = 'hidden';
-                document.getElementById("graph_accept_reject").style.height = "0%";
+                document.getElementById("graph_accept_reject").style.display = 'none';
                 document.getElementById("myProgress").style.visibility = 'visible';
                 document.getElementById("myProgress").style.height = "100%";
                 var elem = document.getElementById("myBar");
@@ -473,26 +472,23 @@
                     if (width <= 100) {
                         // ready = yellow
                         document.getElementById('blinking_text').style.animationPlayState = 'running';
-                        document.getElementById('blinking_text').innerHTML = "Ready";
+                        document.getElementById('blinking_text').innerHTML = "READY";
                         document.getElementById('myBar').style.backgroundColor = "#ffe26a";
                     } else if (width > 100 && width <=200) {
                         // set
-                        document.getElementById('blinking_text').innerHTML = "Set";
+                        document.getElementById('blinking_text').innerHTML = "SET";
                     } else if (width > 200 && width <=300) {
                         // go
-                        document.getElementById('blinking_text').innerHTML = "Go";
+                        document.getElementById('blinking_text').innerHTML = "GO";
                     } else if (width > 300 && width <=800) {
                         // collecting = green
-                        document.getElementById('blinking_text').style.visibility = 'hidden';
                         document.getElementById('blinking_text').style.animationPlayState = 'paused';
-                        document.getElementById('p_bar_text').innerHTML = "Collecting";
                         document.getElementById('myBar').style.backgroundColor = "#abd699";
                     }else {
                         // done
                         document.getElementById("myProgress").style.visibility = 'hidden';
                         document.getElementById("myProgress").style.height = "0%";
-                        document.getElementById("graph_accept_reject").style.visibility = 'visible';
-                        document.getElementById("graph_accept_reject").style.height = "100%";
+                        document.getElementById("graph_accept_reject").style.display = 'flex';
                         clearInterval(id);
                         count = 0;
                     }
