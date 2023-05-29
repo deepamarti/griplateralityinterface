@@ -153,6 +153,11 @@ if (form != null) {
           console.log("Error occurred. Try again.");
           console.log(errorCode);
           console.log(errorMessage);
+
+          document.getElementById("bad_sign_in").innerHTML = "Account does not exist";
+          emailInput.value = "";
+          passwordInput.value = "";
+
         });
     }
   
@@ -272,7 +277,7 @@ if (fireBtn != null) {
 function ShowDataCollection() {
   document.getElementById('patient_search').style.visibility = 'hidden';
   document.getElementById('patient_search').style.height = "0%";
-  
+
   document.getElementById('data_collection_section').style.visibility = 'visible';
   document.getElementById('data_collection_section').style.height = "100%";
 
