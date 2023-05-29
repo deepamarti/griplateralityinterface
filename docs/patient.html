@@ -27,6 +27,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="data.js"></script>
     
+
+    <script type="module" src="ui.js"></script>
     <!--patient search functions-->
     <script>
         function filterTable(){
@@ -53,7 +55,7 @@
     </script>
 </head>
 
-<body onload="Initialize()">
+<body onload="Initialize();">
 <div id="mainBody" style="display:none;">
     
     <section id="menu">
@@ -243,9 +245,7 @@
         </div>
 
         <div class="results" id="results_section">
-            <div class="col-md-12">
-                <h2 id="resultsH2">Results</h2> 
-             </div>
+            <h2 id="resultsH2">Results</h2> 
             <p>show overlayed graphs</p>
             <p>show grip ratio</p>
         </div>

@@ -18,14 +18,6 @@ function Initialize() {
     document.getElementById("admin_section").style.visibility = 'hidden';
     document.getElementById("admin_section").style.height = "0%";
 
-    document.getElementById("ble_submit").disabled = true;
-    document.getElementById('ble_submit').style.backgroundColor = "lightgray";
-
-    document.getElementById("ble_disconnect").disabled = true;
-
-    //document.getElementById("graph_accept_reject").style.visibility = 'hidden';
-    //document.getElementById("graph_accept_reject").style.height = "0%";
-
     check_BLE_support();
     SwitchTab(onload, "Bluetooth")
 }

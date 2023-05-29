@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-app.js";
 import { getFirestore, collection, getDocs, query, where, addDoc, orderBy, limit, Timestamp} from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/9.1.1/firebase-auth.js";
+import { InitializeData, InitializeResults } from "./ui.js";
 
 //window.addEventListener('load', function() {
 const firebaseConfig = {
@@ -275,8 +276,13 @@ function ShowDataCollection() {
   location.hash = "#data_collection_section";
   document.getElementById('data_collection_section').style.visibility = 'visible';
   document.getElementById('data_collection_section').style.height = "100%";
+
   document.getElementById('results_section').style.visibility = 'visible';
   document.getElementById('results_section').style.height = "100%";
+
+   // initialize data collection section
+   InitializeData();
+   InitializeResults();
 }
 
 let global_patient = null;
