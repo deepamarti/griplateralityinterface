@@ -220,6 +220,12 @@ if (fireBtn != null) {
 //}
 }
 
+function ShowDataCollection() {
+  document.getElementById('patient_search').style.visibility = 'hidden';
+  document.getElementById('patient_search').style.height = "0%";
+  document.getElementById('data_collection').style.visibility = 'visible';
+}
+
 let global_patient = null;
 
 async function setPatient(id, name) {
@@ -320,14 +326,15 @@ function formatDataForCSV(emr, deleteFields, dataList, fileName) {
 // }
 
 export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) {
-  alert("store");
   console.log(sample_data);
+  console.log(opt_sample_data);
+  console.log(opt_sample_time);
   let dateNow = Timestamp.fromDate(new Date());
   const time = Array.from(
     { length: 51 },
     (value, index) => Math.round(index * 0.1 *10)/10);
   let ble_data = null;
-  let opt_data = null;
+  let ble_opt_data = null;
   for (let i=0;i<6;i++) {
     if (i<3) {
       // right hand
@@ -341,11 +348,11 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
         maxRange: [opt_sample_time[i][0], opt_sample_time[i][4]], 
         "manual_entry": 0
       };
-      opt_data = {
+      ble_opt_data = {
         "uid": global_patient, 
         "date": dateNow,
         "measurements": opt_sample_data[i], 
-        "times": time,
+        "times": opt_sample_time[i],
         "keep_trial": 1, 
         "hand": 0,
         "manual_entry": 0
@@ -362,20 +369,121 @@ export function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) 
         maxRange: [opt_sample_time[i][0], opt_sample_time[i][4]], 
         "manual_entry": 0
       };
-      opt_data = {
+      ble_opt_data = {
         "uid": global_patient, 
         "date": dateNow,
         "measurements": opt_sample_data[i], 
-        "times": time,
+        "times": opt_sample_time[i],
         "keep_trial": 1, 
         "hand": 1,
         "manual_entry": 0
       };
     }
     addDeviceData(ble_data);
-    addOptDeviceData(opt_data);
+    addOptDeviceData(ble_opt_data);
   }
-  
+  let grip_ratio = calcGripRatio(global_patient);
+}
+
+const mForm = document.getElementById("manual_entry");
+  if (mForm != null) {
+    mForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      // TODO: data validation and error checking needed
+
+      let right_trials = Array(3).fill(NaN);
+      let left_trials = Array(3).fill(NaN);
+      let dateNow = Timestamp.fromDate(new Date());
+
+      right_trials[0] = parseFloat(document.getElementById("man_right_t1").value);
+      right_trials[1] = parseFloat(document.getElementById("man_right_t2").value);
+      right_trials[2] = parseFloat(document.getElementById("man_right_t3").value);
+      left_trials[0] = parseFloat(document.getElementById("man_left_t1").value);
+      left_trials[1] = parseFloat(document.getElementById("man_left_t2").value);
+      left_trials[2] = parseFloat(document.getElementById("man_left_t3").value);
+      
+      for (let i=0; i<3; i++) {
+        right_trials[i] = Math.round(right_trials[i] * 100) / 100;
+        left_trials[i] = Math.round(left_trials[i] * 100) / 100;
+      }
+      
+      console.log(right_trials);
+      console.log(left_trials);
+
+      for (let i=0; i<3; i++) {
+        // right hand = 0
+        let manual_data = {
+          "uid": global_patient, 
+          "date": dateNow, 
+          "measurements": [right_trials[i]], 
+          "times": 0, 
+          "keep_trial": 1, 
+          "hand": 0, 
+          maxRange: [0, 0], 
+          "manual_entry": 1
+        }
+        let manual_opt_data = {
+          "uid": global_patient, 
+          "date": dateNow,
+          "measurements": [right_trials[i]], 
+          "times": 0,
+          "keep_trial": 1, 
+          "hand": 0,
+          "manual_entry": 1
+        }
+        addDeviceData(manual_data);
+        addOptDeviceData(manual_opt_data);
+      }
+      for (let i=0; i<3; i++) {
+        // left hand = 1
+        let manual_data = {
+          "uid": global_patient, 
+          "date": dateNow, 
+          "measurements": [left_trials[i]], 
+          "times": 0, 
+          "keep_trial": 1, 
+          "hand": 1, 
+          maxRange: [0, 0], 
+          "manual_entry": 1
+        }
+        let manual_opt_data = {
+          "uid": global_patient, 
+          "date": dateNow,
+          "measurements": [left_trials[i]], 
+          "times": 0,
+          "keep_trial": 1, 
+          "hand": 1,
+          "manual_entry": 1
+        }
+        addDeviceData(manual_data);
+        addOptDeviceData(manual_opt_data);
+      }
+      
+      //AddManualToDatabase(left_avg, right_avg, grip_ratio);
+      let grip_ratio = calcGripRatio(global_patient);
+    });
+  }
+
+function AddGripRatioToDatabase() {
+  let dateNow = Timestamp.fromDate(new Date());
+  let manual = {
+    "uid": global_patient,
+    "date": dateNow,
+    "gripRatio": grip_ratio,
+    "avgRH": right_avg,
+    "avgLH": left_avg
+  }
+  addMetric(manual);
+
+  /*
+  this.uid = uid;
+  this.date = date;
+  this.gripRatio = gripRatio;
+  this.avgRH = avgRH;
+  this.avgLH = avgLH;
+  */
+
 }
 
 // function testFire() {
@@ -712,9 +820,11 @@ async function calcAvgTrials(patientUid, typeEntry) {
     querySnapshot.forEach((doc) => {
       let data = doc.data();
       if (data["hand"] == 0) { // right
+        console.log(data['measurements']);
         let sumRH = data["measurements"].reduce((a, b) => a + b, 0);
         avgRH += parseFloat((sumRH / data["measurements"].length).toFixed(2));
       } else { // left
+        console.log(data['measurements']);
         let sumLH = data["measurements"].reduce((a, b) => a + b, 0);
         avgLH += parseFloat((sumLH / data["measurements"].length).toFixed(2));
       }

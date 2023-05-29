@@ -246,9 +246,9 @@ button {
 
 #patientTable
 {
-    overflow:hidden;
+    overflow-y:scroll;
     width:100%;
-    height:300px;
+    height:5px;
     table-layout:fixed;
 }
 
@@ -261,19 +261,27 @@ button {
     background-color: #F9FAFB;
     text-align: start;
     padding: 20px;
-}
-
-#patientBody{
-    text-align: start;
-    overflow-y: scroll;
-    border-collapse: collapse;
-    height: 300px;
+    border:1px;
 }
 
 #patientBody td
 {
+    border:1px;
     padding:.5%;
-    height: 30px;
+    height: 10px;
+}
+
+.add_patient_button {
+    width: 95%;
+    margin: 2.5%;
+    font-size: 14px;
+    text-transform: uppercase;
+    text-align: center;
+    align-items: center;
+    position: relative;
+    font-weight: 400;
+    background-color: lightgray;
+    padding: 15px;
 }
 
 .healthStatus h5{
