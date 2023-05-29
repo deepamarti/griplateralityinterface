@@ -23,7 +23,9 @@ export function InitializeResults() {
 }
 
 const backBTN = document.getElementById("back_to_patient");
-backBTN.addEventListener('click', BackToPatient);
+if (backBTN != null) {
+    backBTN.addEventListener('click', BackToPatient);
+}
 
 function BackToPatient() {
     // from data collection/ results back to patient search
