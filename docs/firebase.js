@@ -84,30 +84,78 @@ const adminBtn = document.getElementById('adminBtn');
 
 var email, password;
 
+function validateEmail() {
+  email = emailInput.value;
+  console.log(email);
+
+  // email can be no longer than 64 characters
+  if (email.length > 64) {
+    document.getElementById("bad_email_error").innerHTML = "You entered an email address that is too long";
+    emailInput.value = "";
+    return false;
+  }
+
+  // email must be user@domain.extensiion
+  var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  if (re.test(email)) {
+    document.getElementById("bad_email_error").innerHTML = "";
+    return true;
+  } else {
+    document.getElementById("bad_email_error").innerHTML = "Please enter a valid email address";
+    emailInput.value = "";
+    return false;
+  }
+}
+
+function validatePassword() {
+  password = passwordInput.value;
+
+  // password can be no longer than 256 characters
+  if (password.length > 256) {
+    console.log("password too long");
+    document.getElementById("bad_password_error").innerHTML = "You entered a password that is too long";
+    passwordInput.value = "";
+    return false;
+  }
+
+  // password can't have special characters
+  var re = /^[A-Za-z0-9 ]+$/;
+  if (re.test(password)) {
+    console.log("valid password");
+    document.getElementById("bad_password_error").innerHTML = "";
+    return true;
+  } else {
+    console.log("invalid password");
+    document.getElementById("bad_password_error").innerHTML = "Please enter a valid password";
+    passwordInput.value = "";
+    return false;
+  }
+  
+}
+
 if (form != null) {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    email = emailInput.value;
-    console.log(email);
-    password = passwordInput.value;
-    console.log(password);
+
+    // data validation for email
+    if (validateEmail() && validatePassword()) {
+      signInWithEmailAndPassword(auth, email, password)
+        .then(async (userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log("Success! Welcome back!");
+          window.location.href = "./patient.html";
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log("Error occurred. Try again.");
+          console.log(errorCode);
+          console.log(errorMessage);
+        });
+    }
   
-    signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log("Success! Welcome back!");
-        //window.location.href = "./page2.html";
-        // window.location.href = "./data_collection.html";
-        window.location.href = "./patient.html";
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log("Error occurred. Try again.");
-        console.log(errorCode);
-        console.log(errorMessage);
-      });
+    
   });
 }
 
