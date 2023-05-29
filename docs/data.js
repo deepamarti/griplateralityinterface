@@ -162,6 +162,10 @@ function enable_trial_button(button_name) {
     document.getElementById(button_name).style.backgroundColor = "#4164da";
 }
 
+function ShowGraphs() {
+    document.getElementById('graph_accept_reject').style.display = 'flex';
+}
+
 function FindOptSample(data) {
     // find max
     let max = Math.max(...data);

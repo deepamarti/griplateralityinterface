@@ -173,7 +173,7 @@
                     <h3 id="ble_supported">check BLE</h3>
                     <div class="col-md-12">
                         <img src="./aggieimpact_design/images/bluetooth.png" alt="#" id="ble_status" 
-                        style="height: 45px; width: 45px; padding: 5px; border-radius: 10px; background-color: #ffe26a;"></img>
+                        style="width: 30px; padding: 5px; border-radius: 10px; background-color: #ffe26a;"></img>
                         <button id="ble_connect"> Connect Device </button>
                         <button id="ble_disconnect"> Disconnect </button>
                     </div>
@@ -230,9 +230,9 @@
                                 </table>
                                 <div class="col-md-12">
                                     <button class="accept_button" id ="accept_button" onclick="Accept()"> <img src="./aggieimpact_design/images/check.png" alt="#" id="ble_status" 
-                                        style="height: 45px; width: 45px; padding: 5px; border-radius: 10px; background-color: #abd699;"></img></button>
+                                        style="width: 30px; padding: 5px; border-radius: 10px; background-color: #abd699;"></img></button>
                                     <button class="reject_button" id ="reject_button" onclick="Reject()"> <img src="./aggieimpact_design/images/cross.png" alt="#" id="ble_status" 
-                                        style="height: 45px; width: 45px; padding: 5px; border-radius: 10px; background-color: #ea8a81;"></img></button>
+                                        style="width: 30px; padding: 5px; border-radius: 10px; background-color: #ea8a81;"></img></button>
                                 </div>
                             </div>
                         </div>
@@ -380,7 +380,6 @@
             if (sensor) {
                 sensor.setEnabled(true);
             }
-
             done_sampling = false;
             sensor.values = [];
                     
@@ -390,13 +389,16 @@
             opt_sample_graph_data[current_index] = Array(51).fill(NaN); 
             
             gdxDevice.start(100);
-            
             sensor.on('value-changed', (sensor) => {
                 // samples for 5 seconds
                 if (sensor.values.length > 50){
                     done_sampling = true;
                     gdxDevice.stop();
                     sample_data[current_index] = sensor.values;
+                    for (let j=0; j<51; j++) {
+                        sample_data[current_index][j] = Math.round(sample_data[current_index][j]*100) / 100;
+                    }
+                    ShowGraphs();
                 }
                 // log the sensor name, new value and units.
                 console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
@@ -502,13 +504,8 @@
 
         function updateValue() {
             if (done_sampling == true) {
-                for (let j=0; j<51; j++) {
-                    sample_data[current_index][j] = Math.round(sample_data[current_index][j]*100) / 100;
-                }
                 opt_sample_time[current_index]= FindOptSample(sample_data[current_index]);
                 for (let i=0;i<5;i++){
-                    
-
                     opt_sample_graph_data[current_index][opt_sample_time[current_index][i]*10] = sample_data[current_index][opt_sample_time[current_index][i]*10];
                     opt_sample_data[current_index][i] = Math.round((sample_data[current_index][opt_sample_time[current_index][i]*10]) * 100) / 100;
                     AddToOptTable(opt_sample_time[current_index][i], opt_sample_data[current_index][i]);
