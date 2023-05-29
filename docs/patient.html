@@ -341,7 +341,6 @@
                 console.log(`Connected to: ${gdxDevice.name}`);
                 graph_interval = setInterval(updateValue, 100);
                 disable_button('ble_connect');
-                enable_button('ble_disconnect');
                 lock_method_selection();
             } catch (err) {
                 console.error(err);
@@ -398,6 +397,7 @@
                     for (let j=0; j<51; j++) {
                         sample_data[current_index][j] = Math.round(sample_data[current_index][j]*100) / 100;
                     }
+                    enable_button('ble_disconnect');
                     ShowGraphs();
                 }
                 // log the sensor name, new value and units.
