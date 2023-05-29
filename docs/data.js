@@ -19,6 +19,7 @@ function Initialize() {
     document.getElementById("results").style.height = "0%";
 
     check_BLE_support();
+    SwitchTab(onload, "Bluetooth")
 }
 
 function check_BLE_support() {
