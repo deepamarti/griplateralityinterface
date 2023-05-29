@@ -271,7 +271,7 @@ if (fireBtn != null) {
 function ShowDataCollection() {
   document.getElementById('patient_search').style.visibility = 'hidden';
   document.getElementById('patient_search').style.height = "0%";
-  
+
   location.hash = "#data_collection_section";
   document.getElementById('data_collection_section').style.visibility = 'visible';
   document.getElementById('data_collection_section').style.height = "100%";
@@ -793,8 +793,8 @@ function validateNameUp() {
   name = nameSU.value;
 
   console.log(name);
-  // name can't be longer than 256 characters (for now)
-  if (name.length > 256) {
+  // name can't be longer than 25 characters
+  if (name.length > 25) {
     document.getElementById("bad_name_up_error").innerHTML = "You entered a name that is too long";
   }
 
