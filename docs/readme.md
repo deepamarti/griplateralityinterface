@@ -8,6 +8,9 @@ reject icon:
 <a href="https://www.flaticon.com/free-icons/close-button" title="close button icons">Close button icons created by bsd - Flaticon</a>
 add icon:
 <a href="https://www.flaticon.com/free-icons/plus" title="plus icons">Plus icons created by Fuzzee - Flaticon</a>
+back icon:
+<a href="https://www.flaticon.com/free-icons/arrow" title="arrow icons">Arrow icons created by Kirill Kazachek - Flaticon</a>
+
 
 
 grip icon used in app:

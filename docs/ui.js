@@ -21,3 +21,21 @@ export function InitializeResults() {
     // legend (to coor code hand and trial)
     // loading for grip ratio
 }
+
+const backBTN = document.getElementById("back_to_patient");
+backBTN.addEventListener('click', BackToPatient);
+
+function BackToPatient() {
+    // from data collection/ results back to patient search
+    document.getElementById('patient_search').style.visibility = 'visible';
+    document.getElementById('patient_search').style.height = "100%";
+
+    document.getElementById("data_collection_section").style.visibility = 'hidden';
+    document.getElementById('data_collection_section').style.height = "0%";
+
+    document.getElementById("results_section").style.visibility = 'hidden';
+    document.getElementById("results_section").style.height = "0%";
+
+    document.getElementById("admin_section").style.visibility = 'hidden';
+    document.getElementById("admin_section").style.height = "0%";
+}

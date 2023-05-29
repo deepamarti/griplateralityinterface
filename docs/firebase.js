@@ -272,8 +272,7 @@ if (fireBtn != null) {
 function ShowDataCollection() {
   document.getElementById('patient_search').style.visibility = 'hidden';
   document.getElementById('patient_search').style.height = "0%";
-
-  location.hash = "#data_collection_section";
+  
   document.getElementById('data_collection_section').style.visibility = 'visible';
   document.getElementById('data_collection_section').style.height = "100%";
 
@@ -297,7 +296,6 @@ async function setPatient(id, name) {
     // document.getElementById('adminExportH2').innerHTML = "Export " + name + "'s " + "Data";
   }
   ShowDataCollection();
-  location.hash = "#data_collection_section";
   document.getElementById('data_collection_section').style.visibility = 'visible';
   document.getElementById('dataCollectionH2').innerHTML = "Data Collection for " + name;
   document.getElementById('resultsH2').innerHTML = "Results for " + name;
