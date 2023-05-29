@@ -6,17 +6,10 @@ let trials_complete_right = 0;
 let trials_complete_left = 0;
 
 function Initialize() {
-    document.getElementById('patient_search').style.visibility = 'visible';
-    document.getElementById('patient_search').style.height = "100%";
-
-    document.getElementById("data_collection_section").style.visibility = 'hidden';
-    document.getElementById('data_collection_section').style.height = "0%";
-
-    document.getElementById("results_section").style.visibility = 'hidden';
-    document.getElementById("results_section").style.height = "0%";
-
-    document.getElementById("admin_section").style.visibility = 'hidden';
-    document.getElementById("admin_section").style.height = "0%";
+    document.getElementById('patient_search').style.display = 'block'
+    document.getElementById("data_collection_section").style.display = 'none';
+    document.getElementById("results_section").style.display = 'none';
+    document.getElementById("admin_section").style.display = 'none';
 
     check_BLE_support();
     SwitchTab(onload, "Bluetooth")

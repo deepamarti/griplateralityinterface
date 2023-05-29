@@ -1,4 +1,4 @@
-export function InitializeData() {
+function InitializeData() {
     document.getElementById("ble_submit").disabled = true;
     document.getElementById('ble_submit').style.backgroundColor = "lightgray";
 
@@ -15,7 +15,7 @@ export function InitializeData() {
     //document.getElementById('graph_accept_reject').style.display = 'flex';
 }
 
-export function InitializeResults() {
+function InitializeResults() {
     // hide until theres actually data
     // create graphs with empty datasets
     // legend (to coor code hand and trial)
@@ -29,18 +29,22 @@ if (backBTN != null) {
 
 function BackToPatient() {
     // from data collection/results back to patient search
-    document.getElementById('patient_search').style.visibility = 'visible';
-    document.getElementById('patient_search').style.height = "100%";
-
-    document.getElementById("data_collection_section").style.visibility = 'hidden';
-    document.getElementById('data_collection_section').style.height = "0%";
-
-    document.getElementById("results_section").style.visibility = 'hidden';
-    document.getElementById("results_section").style.height = "0%";
-
-    document.getElementById("admin_section").style.visibility = 'hidden';
-    document.getElementById("admin_section").style.height = "0%";
+    document.getElementById('patient_search').style.display = 'block';
+    document.getElementById("data_collection_section").style.display = 'none';
+    document.getElementById("results_section").style.display = 'none';
+    document.getElementById("admin_section").style.display = 'none';
 }
+
+export function ShowDataCollection() {
+    document.getElementById('patient_search').style.display = 'none';
+    document.getElementById('data_collection_section').style.display = 'block';
+    document.getElementById('results_section').style.display = 'block';
+    document.getElementById("admin_section").style.display = 'none';
+  
+     // initialize data collection section
+     InitializeData();
+     InitializeResults();
+  }
 
 const exportBTN = document.getElementById('show_export_data');
 if (exportBTN != null) {
@@ -48,7 +52,9 @@ if (exportBTN != null) {
 }
 
 function ShowExportData() {
-    alert('make expoet data viisle')
+    alert('make export data visible')
+    document.getElementById("admin_section").style.display = 'grid'
+
 }
 
 const adminBTN = document.getElementById('show_admin_portal');
@@ -57,5 +63,9 @@ if (adminBTN != null) {
 }
 
 function ShowAdminPortal() {
-    alert('show admin portal');
+    document.getElementById('patient_search').style.display ='none';
+    document.getElementById("data_collection_section").style.display ='none';
+    document.getElementById("results_section").style.display ='none';
+
+    document.getElementById("admin_section").style.display = 'grid';
 }

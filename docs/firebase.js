@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-app.js";
 import { getFirestore, collection, getDocs, query, where, addDoc, orderBy, limit, Timestamp} from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/9.1.1/firebase-auth.js";
-import { InitializeData, InitializeResults } from "./ui.js";
+import { ShowDataCollection} from "./ui.js";
 
 //window.addEventListener('load', function() {
 const firebaseConfig = {
@@ -272,21 +272,6 @@ if (fireBtn != null) {
     }
   });
 //}
-}
-
-function ShowDataCollection() {
-  document.getElementById('patient_search').style.visibility = 'hidden';
-  document.getElementById('patient_search').style.height = "0%";
-
-  document.getElementById('data_collection_section').style.visibility = 'visible';
-  document.getElementById('data_collection_section').style.height = "100%";
-
-  document.getElementById('results_section').style.visibility = 'visible';
-  document.getElementById('results_section').style.height = "100%";
-
-   // initialize data collection section
-   InitializeData();
-   InitializeResults();
 }
 
 let global_patient = null;

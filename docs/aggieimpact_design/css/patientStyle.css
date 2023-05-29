@@ -406,6 +406,10 @@ button {
     }
 }
 
+.admin {
+    position: relative;
+}
+
 #adminPortal {
     display: grid;
     place-items: center;
