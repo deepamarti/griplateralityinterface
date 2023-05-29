@@ -1,3 +1,4 @@
+let is_BLE_supported = false;
 let is_BLE_selected = false;
 let is_method_locked = false;
 
@@ -16,13 +17,13 @@ function Initialize() {
 
     document.getElementById("results").style.visibility = 'hidden';
     document.getElementById("results").style.height = "0%";
-    // default to bluetooth measurement
-    SwitchTab(event,'Bluetooth');
+
+    check_BLE_support();
 }
 
 function check_BLE_support() {
     // checks bluetooth capability of browser
-    const lbl_ble_supported = document.querySelector('#ble_supported');
+    let lbl_ble_supported = document.getElementById('ble_supported');
     is_BLE_supported = navigator.bluetooth;
     if (is_BLE_supported) {
         lbl_ble_supported.innerHTML = '<span style="color:green">Bluetooth is Supported on this Browser';

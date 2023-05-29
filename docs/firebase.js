@@ -223,7 +223,7 @@ if (fireBtn != null) {
 function ShowDataCollection() {
   document.getElementById('patient_search').style.visibility = 'hidden';
   document.getElementById('patient_search').style.height = "0%";
-  document.getElementById('data_collection').style.visibility = 'visible';
+  document.getElementById('data_collection_section').style.visibility = 'visible';
 }
 
 let global_patient = null;
