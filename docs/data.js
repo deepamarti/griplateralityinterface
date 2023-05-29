@@ -8,12 +8,14 @@ function Initialize() {
     document.getElementById('patient_search').style.visibility = 'visible';
     document.getElementById('patient_search').style.height = "100%";
 
-
-    document.getElementById('data_collection').style.visibility = 'hidden';
-    document.getElementById('ble_submit').disabled = true;
-    document.getElementById('ble_disconnect').disabled = true;
+    document.getElementById("data_collection_section").style.visibility = 'hidden';
+    document.getElementById("ble_submit").disabled = true;
+    document.getElementById("ble_disconnect").disabled = true;
     document.getElementById("graph_accept_reject").style.visibility = 'hidden';
     document.getElementById("graph_accept_reject").style.height = "0%";
+
+    document.getElementById("results").style.visibility = 'hidden';
+    document.getElementById("results").style.height = "0%";
     // default to bluetooth measurement
     SwitchTab(event,'Bluetooth');
 }

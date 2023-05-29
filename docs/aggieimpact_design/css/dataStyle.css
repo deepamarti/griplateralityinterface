@@ -114,7 +114,6 @@
 #myBar {
     width: 1%;
     height: 30px;
-    background-color: #abd699;
     border-radius: 5px;
     text-align: center;
     line-height: 30px;
@@ -127,6 +126,17 @@
     line-height: 30px;
     color: darkgray;
     position: relative;
+}
+
+.blink_display {
+    animation: blinker 1.5s linear infinite;
+    color: red;
+    font-family: sans-serif;
+}
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
 }
 
 /** graph display **/
