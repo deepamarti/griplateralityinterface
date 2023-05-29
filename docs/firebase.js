@@ -236,6 +236,75 @@ async function setPatient(id, name) {
   document.getElementById('dataCollectionH2').innerHTML = "Data Collection for " + name;
 };
 
+async function getAllDataByCollection(patientUid, collectionName) {
+  const q = query(
+    collection(db, collectionName), 
+    where("uid", "==", patientUid)
+  );
+  const querySnapshot = await getDocs(q);
+  if (querySnapshot.empty) {
+    return {"empty": true, "data": []};
+  }
+  else {
+    var data = []
+    querySnapshot.forEach((doc) => {
+      data.push(doc.data());
+    });
+    return {"empty": false, "data": data};
+  }
+}
+
+const allDataCSVBtn = document.getElementById("allDataCSV");
+if (allDataCSVBtn != null) {
+  allDataCSVBtn.addEventListener('click', async function() {
+    var result = await getAllData();
+    if (result == false) {
+      alert("Sorry! No data found to export.");
+    }
+  });
+}
+
+async function getAllData() {
+  var pats = await getAllPatients();
+  if (pats["empty"] == false) {
+    var ids = [];
+    for (var i = 0; i < pats["profiles"].length; i++) {
+      var emr = pats["profiles"]["emr_code"];
+      var metricData = await getAllDataByCollection(pats["profiles"][i]["uid"], "metric_data");
+      var deviceData = await getAllDataByCollection(pats["profiles"][i]["uid"], "device_data");
+      var optDeviceData = await getAllDataByCollection(pats["profiles"][i]["uid"], "opt_device_data");
+    }
+    formatDataForCSV(null, ["clinician_uid", "uid"], pats["profiles"], "patients.csv");
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function formatDataForCSV(emr, deleteFields, dataList, fileName) {
+  var csvRows = [];
+  for (var i = 0; i < dataList.length; i++) {
+    for (var j = 0; j < deleteFields.length; j++) {
+      delete dataList[i][deleteFields[j]];
+    }
+    if (emr != null) {
+      dataList[i]["emr_code"] = emr;
+    }
+    console.log(dataList[i]);
+    const values = Object.values(dataList[i]).join(',')
+    csvRows.push(values);
+  }
+  csvRows.unshift(Object.keys(dataList[0]));
+  var csvString = csvRows.join("\n");
+  var link = encodeURIComponent(csvString);
+  var a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,'+link;
+  a.download = fileName;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  //document.body.removeChild(a);
+}
 // let dataBtn = document.getElementById("dataBtn");
 
 // if (dataBtn != null) {
