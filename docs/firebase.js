@@ -456,13 +456,9 @@ const mForm = document.getElementById("manual_entry");
   if (mForm != null) {
     mForm.addEventListener('submit', (event) => {
       event.preventDefault();
-
-      // TODO: data validation and error checking needed
-
       let right_trials = Array(3).fill(NaN);
       let left_trials = Array(3).fill(NaN);
       let dateNow = Timestamp.fromDate(new Date());
-
       right_trials[0] = parseFloat(document.getElementById("man_right_t1").value);
       right_trials[1] = parseFloat(document.getElementById("man_right_t2").value);
       right_trials[2] = parseFloat(document.getElementById("man_right_t3").value);
@@ -526,8 +522,6 @@ const mForm = document.getElementById("manual_entry");
         addDeviceData(manual_data);
         addOptDeviceData(manual_opt_data);
       }
-      
-      //AddManualToDatabase(left_avg, right_avg, grip_ratio);
       let grip_ratio = calcGripRatio(global_patient);
     });
   }
