@@ -246,22 +246,37 @@ button {
 #patientTable
 {
     overflow-y:scroll;
+    overflow-x: auto;
     border-collapse:collapse;
-    width:100%;
-    height:300px;
+    width:95%;
+    margin-left: 20px;
+    margin-top: 20px;
+    height:auto;
     display:block;
+    background-color: white;
+    table-layout: fixed;
+    padding: 5px;
 }
 
-#patientTable thead
+#patientTable th
 {
     position: sticky;
     font-size: 14px;
     top:0px;
     text-transform: uppercase;
     font-weight: 400;
-    background-color: #F9FAFB;
     text-align: start;
-    padding: 20px;
+    padding-right: 20px;
+    border:1px;
+}
+
+#patientTable td
+{
+    font-size: 14px;
+    top:0px;
+    font-weight: 400;
+    text-align: start;
+    padding-right: 20px;
     border:1px;
 }
 
