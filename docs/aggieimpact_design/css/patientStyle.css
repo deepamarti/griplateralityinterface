@@ -246,15 +246,17 @@ button {
 #patientTable
 {
     overflow-y:scroll;
+    border-collapse:collapse;
     width:100%;
-    height:5px;
-    table-layout:fixed;
+    height:300px;
+    display:block;
 }
 
 #patientTable thead
 {
     position: sticky;
     font-size: 14px;
+    top:0px;
     text-transform: uppercase;
     font-weight: 400;
     background-color: #F9FAFB;
@@ -263,11 +265,13 @@ button {
     border:1px;
 }
 
-#patientBody td
+#patientBody
 {
     border:1px;
-    padding:.5%;
-    height: 10px;
+    padding:15px;
+    height:300px;
+    overflow-y:scroll;
+    text-align:start;
 }
 
 .add_patient_button {
