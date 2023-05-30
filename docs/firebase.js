@@ -27,6 +27,11 @@ auth.onAuthStateChanged(async (user) => {
       adminUser = await isAdmin(currUser.uid);
       console.log("admin-user: ", adminUser);
       document.getElementById("mainBody").style.display = "inline";
+      var nameHeader = document.getElementById("headerName");
+      if (nameHeader != null) {
+        var text = "Welcome, " + user.displayName + "!";
+        document.getElementById("headerName").innerHTML = text;
+      }
       if (adminUser) {
         document.getElementById("adminNav").style.display = "block";
         document.getElementById("adminPortal").style.display = "block";
@@ -34,11 +39,7 @@ auth.onAuthStateChanged(async (user) => {
         document.getElementById("adminNav").style.display = "none";
         document.getElementById("adminPortal").style.display = "none";
       }
-      var nameHeader = document.getElementById("headerName");
-      if (nameHeader != null) {
-        var text = "Welcome, " + user.displayName + "!";
-        nameHeader.innerHTML = text;
-      }
+      
     }
     else {
       // go back to sign in if null
