@@ -100,7 +100,6 @@ button {
 #interface .searchBar {
     width:calc(100%-250px);
     display:flex;
-    justify-content: center;
     align-items: center;
     padding: 10px;
     border-radius: 4px;
@@ -236,10 +235,12 @@ button {
 
 .board{
     width:95%;
-    margin: 30px 0 30px 30px 10px;
+    margin: 14px;
     background: white;
-    border-radius: 8px;
+    border-radius: 5px;
     border-collapse: collapse;
+    padding: 5px;
+    overflow-x: auto;
 }
 
 #patientTable
@@ -271,19 +272,6 @@ button {
     height:300px;
     overflow-y:scroll;
     text-align:start;
-}
-
-.add_patient_button {
-    width: 95%;
-    margin: 2.5%;
-    font-size: 14px;
-    text-transform: uppercase;
-    text-align: center;
-    align-items: center;
-    position: relative;
-    font-weight: 400;
-    background-color: lightgray;
-    padding: 15px;
 }
 
 .healthStatus h5{
@@ -368,12 +356,7 @@ button {
         padding: 16px 20px;
         margin: 10px 20px 10px 0;
     }
-    
-    .board{
-        width:92%;
-        padding: 0;
-        overflow-x: auto;
-    }
+
 
     table{
         width:100%;
@@ -404,9 +387,6 @@ button {
         margin: 8px 0;
     }
 
-    .board{
-        margin:30px 15px 30px 15px;
-    }
 }
 
 .admin {
