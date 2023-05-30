@@ -449,8 +449,7 @@ export async function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_
     addDeviceData(ble_data);
     addOptDeviceData(ble_opt_data);
   }
-  document.getElementById('results').style.visibility = 'visible';
-  document.getElementById('results').style,height = "100%";
+  document.getElementById('results_section').style.display = 'block';
   PopulateResults(await calcGripRatio(global_patient));
 }
 

@@ -64,8 +64,11 @@ if (accept != null) {
 function EnableTrial() {
     console.log('enable next trial');
     console.log(next);
-    trial_btn[next].disabled = false;
-    next = next + 1;
+    if (next < 6){
+        trial_btn[next].disabled = false;
+        next = next + 1;
+    }
+    
 }
 
 
