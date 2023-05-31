@@ -199,7 +199,7 @@ button {
      margin: 5px;
      padding: 5px;
      cursor: pointer;
-     background-color:#0f98f8;
+     background-color:#4164da;
      color: #fff;
      font-size: 17px;
      border-radius: 5px;
@@ -334,12 +334,53 @@ ul.conat_info li a:hover {
 /** banner section **/
 
 .banner_main {
-     background: url(../images/banner.png);
-     padding: 300px 0px 0px 0px;
-     background-size: auto 78%;
+     width: 100%;
+     background: url(../images/sign_in_banner.png);
+     padding: 0px;
+     background-size: auto 100%;
      background-repeat: no-repeat;
-     min-height: 1150px;
-     background-position: right top;
+     background-position: center top;
+     min-height: 1000px;
+}
+
+.banner_main h1 {
+     color: #000;
+     text-align: left;
+     font-weight: 100px;
+     font-size: xx-large;
+     padding-top: 250px;
+     /* padding-left: 200px; */
+     padding-left: 22%;
+}
+
+.sign_in {
+     width: 100%;
+     text-align: left;
+     /* padding-left: 300px; */
+     padding-left: 30%;
+     padding-top: 50px;
+}
+
+.sign_in label {
+     font-size: large;
+     color: #000;
+     padding: 15px;
+}
+
+.sign_in .input {
+     font-size: large;
+     color:#000;
+     padding: 15px;
+     margin-top: 5px;
+     margin-bottom: 5px;
+}
+
+.sign_in .login {
+     width: 300px;
+     height: 50px;
+     text-align: center;
+     margin-top: 15px;
+     font-size: larger;
 }
 
 .text-bg {

@@ -5,7 +5,7 @@
     <meta charset ="UTF-8">
     <meta http-equiv="X-US-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aggie Impact</title>
+    <title>BRaINlab Grip Symmetry Measurement</title>
 
     <!--StyleSheet and Icon Reference-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css">
@@ -20,83 +20,16 @@
     <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-database.js"></script> 
     <script type="module" src="firebase.js"></script>
+    <script id="FireBaseScript"></script>
 
-    <script id="FireBaseScript">
-        //getPatientDashboard();
-        // ---------------------------------------------Insert Config Here-------------------------------------
-        //Followed this template: https://youtu.be/jOau1X5SKDE
-        // async function SelectAllData(){
-        //     // firebase.database.ref('Patient?').on    Use this if we want live updates instead of refresh
-        //     // firebase.database.ref('Patient?').once('value',
-        //     // function(AllRecords){
-        //     //     AllRecords.forEach(
-        //     //         function(CurrentRecord){
-        //     //             var name = CurrentRecord.val().NameOfPatient;
-        //     //             var age = CurrentRecord.val().AgeOfPatient;
-        //     //             var birthdate = CurrentRecord.val().birthdate;
-        //     //             var healthStatus = CurrentRecord.val().healthStatus; //Stroke, healthy, injured etc
-        //     //             var gripLaterality = CurrentRecord.val().gripLaterality; // Need to look at format for this
-        //     //             AddItemsToTable(name, age, birthdate,healthStatus,gripLaterality);
-        //     //         }
-        //     //     )
-        //     // })
-        //     let profiles = await getAllPatients();
-        //     profiles.array.forEach(element => {
-        //         var name = element["first_name"] + " " + element["last_name"];
-        //         var age = moment(element["date_of_birth"], "YYYY-MM-DD").fromNow();
-        //         var birthdate = element["date_of_birth"];
-        //         var healthStatus = "Healthy";
-        //         if (element["impaired"] == 1) {
-        //             healthStatus = "Stroke";
-        //         }
-        //         else if (element["impaired"] == 2) {
-        //             healthStatus = "Hand injury";
-        //         }
-        //         var gripLaterality = 0;
-        //         AddItemsToTable(name, age, birthdate,healthStatus,gripLaterality);
-        //     });
-        // }
-        // window.onload = SelectAllData;
+    <!--Data Collection Functions-->
+    <script src="https://unpkg.com/@vernier/godirect/dist/godirect.min.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="data.js"></script>
+    
 
-        // function AddItemsToTable(name,age,birthdate,healthStatus,gripLaterality){
-        //     var tbody = document.getElementById('patientTable');
-        //     var trow = document.createElement('tr');
-            
-        //     //Data Elements being passed in from firebase calls
-        //     var td1 = document.createElement('td');
-        //     var td2 = document.createElement('td');
-        //     var td3 = document.createElement('td');
-        //     var td4 = document.createElement('td');
-        //     var td5 = document.createElement('td');
-
-        //     //Predesigned data element to be appeneded to all data tables. TODO assign a link to each and 
-        //     var td6 = document.createElement('td');
-
-        //     td1.innerHTML=name;
-        //     td2.innerHTML=age;
-        //     td3.innerHTML=birthdate;
-        //     td4.innerHTML=healthStatus;
-        //     td5.innerHTML=gripLaterality; 
-            
-        //     td1.className = "Patients";
-        //     td2.className = "Age";
-        //     td3.className = "Birthdate";
-        //     td4.className = "healthStatus";
-        //     td5.className = "laterality";
-        //     td6.className = "AddMeasure";
-
-
-        //     trow.appendChild(td1);
-        //     trow.appendChild(td2);
-        //     trow.appendChild(td3);
-        //     trow.appendChild(td4);
-        //     trow.appendChild(td5);
-
-        //     tbody.appendChild(trow);
-        // }
-
-    </script>
-
+    <script type="module" src="ui.js"></script>
+    <!--patient search functions-->
     <script>
         function filterTable(){
             var input, filter, table, tr, td ,i, txtValue;
@@ -104,446 +37,634 @@
             filter = input.value.toUpperCase();
             table = document.getElementById('patientTable');
             tr = table.getElementsByTagName('tr');
-            for (i=0;i<tr.length;i++)
-            {
-                td = tr[i].getElementsByTagName('td')[0];
-                if (td)
-                {
-                    txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1){
-                        tr[i].style.display="";
-                    }
-                    else{
-                        tr[i].style.display="none";
-                    }
+            for (var i = 1; i < tr.length; i++) {
+                var tds = tr[i].getElementsByTagName("td");
+                var flag = false;
+                for(var j = 0; j < tds.length; j++){
+                    var td = tds[j];
+                    if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        flag = true;
+                    } 
+                }
+                if(flag){
+                    tr[i].style.display = "";
+                }
+                else {
+                    tr[i].style.display = "none";
                 }
             }
         }
     </script>
-
 </head>
 
-<body>
+<body onload="Initialize();">
+<div id="mainBody" style="display:none;">
+    
     <section id="menu">
         <div class="logo">
-            <img src="aggieimpact_design/images/logo.png" alt="">
+            <img src="aggieimpact_design/images/BRAIN_Lab_Icon.png" alt="">
         </div>
-
         <div class="MenuItems">
-            <li>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#FFFFFF" d="M177.9 494.1c-18.7 18.7-49.1 18.7-67.9 0L17.9 401.9c-18.7-18.7-18.7-49.1 0-67.9l50.7-50.7 48 48c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-48-48 41.4-41.4 48 48c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-48-48 41.4-41.4 48 48c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-48-48 41.4-41.4 48 48c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6l-48-48 50.7-50.7c18.7-18.7 49.1-18.7 67.9 0l92.1 92.1c18.7 18.7 18.7 49.1 0 67.9L177.9 494.1z"/></svg>
-                <a href="#">Take a Measurement</a>
-            </li>
-            <li>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#FFFFFF" d="M32 32c17.7 0 32 14.3 32 32V400c0 8.8 7.2 16 16 16H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H80c-44.2 0-80-35.8-80-80V64C0 46.3 14.3 32 32 32zM160 224c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V256c0-17.7 14.3-32 32-32zm128-64V320c0 17.7-14.3 32-32 32s-32-14.3-32-32V160c0-17.7 14.3-32 32-32s32 14.3 32 32zm64 32c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32s-32-14.3-32-32V224c0-17.7 14.3-32 32-32zM480 96V320c0 17.7-14.3 32-32 32s-32-14.3-32-32V96c0-17.7 14.3-32 32-32s32 14.3 32 32z"/></svg>
-                <a href="#">Stats</a>
-            </li>
-            <li>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="#FFFFFF" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                <a href="#">Add a Patient</a>
-            </li>
-            <li>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="#FFFFFF" d="M48 0C21.5 0 0 21.5 0 48V256H144c8.8 0 16 7.2 16 16s-7.2 16-16 16H0v64H144c8.8 0 16 7.2 16 16s-7.2 16-16 16H0v80c0 26.5 21.5 48 48 48H265.9c-6.3-10.2-9.9-22.2-9.9-35.1c0-46.9 25.8-87.8 64-109.2V271.8 48c0-26.5-21.5-48-48-48H48zM152 64h16c8.8 0 16 7.2 16 16v24h24c8.8 0 16 7.2 16 16v16c0 8.8-7.2 16-16 16H184v24c0 8.8-7.2 16-16 16H152c-8.8 0-16-7.2-16-16V152H112c-8.8 0-16-7.2-16-16V120c0-8.8 7.2-16 16-16h24V80c0-8.8 7.2-16 16-16zM512 272a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM288 477.1c0 19.3 15.6 34.9 34.9 34.9H541.1c19.3 0 34.9-15.6 34.9-34.9c0-51.4-41.7-93.1-93.1-93.1H381.1c-51.4 0-93.1 41.7-93.1 93.1z"/></svg>
-                <a href="#">View Patients</a>
-            </li>  
-            <li>
+            <li id="signOut">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#FFFFFF" d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/></svg>
-                <a id="signOut" href="#">Sign Out</a>
-            </li>            
+                <a href="#">Sign Out</a>
+            </li>           
+            </li>
+            <li id="PatientNav">
+                <svg fill="#ffffff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 45.532 45.532" xml:space="preserve" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M22.766,0.001C10.194,0.001,0,10.193,0,22.766s10.193,22.765,22.766,22.765c12.574,0,22.766-10.192,22.766-22.765 S35.34,0.001,22.766,0.001z M22.766,6.808c4.16,0,7.531,3.372,7.531,7.53c0,4.159-3.371,7.53-7.531,7.53 c-4.158,0-7.529-3.371-7.529-7.53C15.237,10.18,18.608,6.808,22.766,6.808z M22.761,39.579c-4.149,0-7.949-1.511-10.88-4.012 c-0.714-0.609-1.126-1.502-1.126-2.439c0-4.217,3.413-7.592,7.631-7.592h8.762c4.219,0,7.619,3.375,7.619,7.592 c0,0.938-0.41,1.829-1.125,2.438C30.712,38.068,26.911,39.579,22.761,39.579z"></path> </g> </g></svg>
+                <a id="back_to_patient">Patients</a>
+            </li>  
+            <li id="exportNav" style="display:none;">
+                <svg width="256px" height="256px" viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff" stroke-width="0.648"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.192"></g><g id="SVGRepo_iconCarrier"> <path d="M12.44 14.75H3.75C3.34 14.75 3 14.41 3 14C3 13.59 3.34 13.25 3.75 13.25H12.44L10.72 11.53C10.43 11.24 10.43 10.76 10.72 10.47C11.01 10.18 11.49 10.18 11.78 10.47L14.78 13.47C14.85 13.54 14.9 13.62 14.94 13.71C15.02 13.89 15.02 14.1 14.94 14.28C14.9 14.37 14.85 14.45 14.78 14.52L11.78 17.52C11.63 17.67 11.44 17.74 11.25 17.74C11.06 17.74 10.87 17.67 10.72 17.52C10.43 17.23 10.43 16.75 10.72 16.46L12.44 14.74V14.75ZM21 9.5V18C21 19.52 19.77 20.75 18.25 20.75H10.75C9.23 20.75 8 19.52 8 18V17C8 16.59 8.34 16.25 8.75 16.25C9.16 16.25 9.5 16.59 9.5 17V18C9.5 18.69 10.06 19.25 10.75 19.25H18.25C18.94 19.25 19.5 18.69 19.5 18V10.25H14.75C14.34 10.25 14 9.91 14 9.5V4.75H10.75C10.06 4.75 9.5 5.31 9.5 6V11C9.5 11.41 9.16 11.75 8.75 11.75C8.34 11.75 8 11.41 8 11V6C8 4.48 9.23 3.25 10.75 3.25H14.75C14.95 3.25 15.14 3.33 15.28 3.47L20.78 8.97C20.92 9.11 21 9.3 21 9.5ZM15.5 8.75H18.44L15.5 5.81V8.75Z" fill="#ffffff"></path> </g></svg>
+                <a id="show_export_data" href="#adminExport">Export Data</a>
+            </li>     
+            <li id="adminNav" style="display:none;">
+                <svg fill="#ffffff" height="200px" width="200px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 474.565 474.565" xml:space="preserve" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M255.204,102.3c-0.606-11.321-12.176-9.395-23.465-9.395C240.078,95.126,247.967,98.216,255.204,102.3z"></path> <path d="M134.524,73.928c-43.825,0-63.997,55.471-28.963,83.37c11.943-31.89,35.718-54.788,66.886-63.826 C163.921,81.685,150.146,73.928,134.524,73.928z"></path> <path d="M43.987,148.617c1.786,5.731,4.1,11.229,6.849,16.438L36.44,179.459c-3.866,3.866-3.866,10.141,0,14.015l25.375,25.383 c1.848,1.848,4.38,2.888,7.019,2.888c2.61,0,5.125-1.04,7.005-2.888l14.38-14.404c2.158,1.142,4.55,1.842,6.785,2.827 c0-0.164-0.016-0.334-0.016-0.498c0-11.771,1.352-22.875,3.759-33.302c-17.362-11.174-28.947-30.57-28.947-52.715 c0-34.592,28.139-62.739,62.723-62.739c23.418,0,43.637,13.037,54.43,32.084c11.523-1.429,22.347-1.429,35.376,1.033 c-1.676-5.07-3.648-10.032-6.118-14.683l14.396-14.411c1.878-1.856,2.918-4.38,2.918-7.004c0-2.625-1.04-5.148-2.918-7.004 l-25.361-25.367c-1.94-1.941-4.472-2.904-7.003-2.904c-2.532,0-5.063,0.963-6.989,2.904l-14.442,14.411 c-5.217-2.764-10.699-5.078-16.444-6.825V9.9c0-5.466-4.411-9.9-9.893-9.9h-35.888c-5.451,0-9.909,4.434-9.909,9.9v20.359 c-5.73,1.747-11.213,4.061-16.446,6.825L75.839,22.689c-1.942-1.941-4.473-2.904-7.005-2.904c-2.531,0-5.077,0.963-7.003,2.896 L36.44,48.048c-1.848,1.864-2.888,4.379-2.888,7.012c0,2.632,1.04,5.148,2.888,7.004l14.396,14.403 c-2.75,5.218-5.063,10.708-6.817,16.438H23.675c-5.482,0-9.909,4.441-9.909,9.915v35.889c0,5.458,4.427,9.908,9.909,9.908H43.987z"></path> <path d="M354.871,340.654c15.872-8.705,26.773-25.367,26.773-44.703c0-28.217-22.967-51.168-51.184-51.168 c-9.923,0-19.118,2.966-26.975,7.873c-4.705,18.728-12.113,36.642-21.803,52.202C309.152,310.022,334.357,322.531,354.871,340.654z "></path> <path d="M460.782,276.588c0-5.909-4.799-10.693-10.685-10.693H428.14c-1.896-6.189-4.411-12.121-7.393-17.75l15.544-15.544 c2.02-2.004,3.137-4.721,3.137-7.555c0-2.835-1.118-5.553-3.137-7.563l-27.363-27.371c-2.08-2.09-4.829-3.138-7.561-3.138 c-2.734,0-5.467,1.048-7.547,3.138l-15.576,15.552c-5.623-2.982-11.539-5.481-17.751-7.369v-21.958 c0-5.901-4.768-10.685-10.669-10.685H311.11c-2.594,0-4.877,1.04-6.739,2.578c3.26,11.895,5.046,24.793,5.046,38.552 c0,8.735-0.682,17.604-1.956,26.423c7.205-2.656,14.876-4.324,22.999-4.324c36.99,0,67.086,30.089,67.086,67.07 c0,23.637-12.345,44.353-30.872,56.303c13.48,14.784,24.195,32.324,31.168,51.976c1.148,0.396,2.344,0.684,3.54,0.684 c2.733,0,5.467-1.04,7.563-3.13l27.379-27.371c2.004-2.004,3.106-4.721,3.106-7.555s-1.102-5.551-3.106-7.563l-15.576-15.552 c2.982-5.621,5.497-11.555,7.393-17.75h21.957c2.826,0,5.575-1.118,7.563-3.138c2.004-1.996,3.138-4.72,3.138-7.555 L460.782,276.588z"></path> <path d="M376.038,413.906c-16.602-48.848-60.471-82.445-111.113-87.018c-16.958,17.958-37.954,29.351-61.731,29.351 c-23.759,0-44.771-11.392-61.713-29.351c-50.672,4.573-94.543,38.17-111.145,87.026l-9.177,27.013 c-2.625,7.773-1.368,16.338,3.416,23.007c4.783,6.671,12.486,10.631,20.685,10.631h315.853c8.215,0,15.918-3.96,20.702-10.631 c4.767-6.669,6.041-15.234,3.4-23.007L376.038,413.906z"></path> <path d="M120.842,206.782c0,60.589,36.883,125.603,82.352,125.603c45.487,0,82.368-65.014,82.368-125.603 C285.563,81.188,120.842,80.939,120.842,206.782z"></path> </g> </g></svg>
+                <a id="show_admin_portal" href="#adminPortal">Admin Portal</a>
+            </li>   
+                      
         </div>
     </section>
 
     <section id="interface">
         <div class ="navBar">
-            <div class="n1">
-                <div>
-                    <svg id="menu-btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>
-                </div>
-            </div>
             <div class="Profile">
+                <p id="headerName" style="margin-right: 15px; color: white;">Welcome!</p>
                 <img src="aggieimpact_design/images/avatar.jpg" alt="">
             </div>
         </div>
-        <h3 class="i-name">
-            Dashboard
-        </h3>     
-           
-        
-        <div class="stats">
-            <div class="valueBox">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"/></svg>
-                <div>
-                    <h3>
-                        200
-                    </h3>
-                    <span>
-                        Patients
-                    </span>
-                </div>
+        <div id="patient_search">
+            <div class="searchBar">
+                <img src="./aggieimpact_design/images/magnifying-glass-solid.svg" alt="#" id="firebaseBtn" 
+                        style="width: 30px; padding: 5px; border-radius: 10px;"></img>
+                <input type="search" id="searchingFor" placeholder="Patient Lookup" maxlength="20" onkeyup="filterTable()">
             </div>
-        </div>    
-        
-        <div class="searchBar">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#000000" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
-                    <input type="search" id="searchingFor" placeholder="Patient Lookup" maxlength="20" onkeyup="filterTable()">
-        </div>    
-        <div class="syncButton">
-            <button class="firebase_button" id="firebaseBtn" type="button">Sync</button>
-        </div>
-        
-        
-        <div class="board">
-            <table width="100%">
-                <thead>
-                    <tr>
-                        <td>
-                           Patient Name
-                        </td>
-                        <td>
-                            Birthdate
-                        </td>
-                        <td>
-                            Patient Status
-                        </td>
-                        <td>
-                            Choose Patient
-                        </td>
-                    </tr>
-                </thead>
-                <tbody id = "patientTable">
-                    <!-- <tr>
-                        <td class="Patients">
-                            <h5>Jane Doe</h5>
-                        </td>
-                        <td class="Age">
-                            <h5> 25</h5>
-                        </td>
-                        <td  class="Birthdate">
-                            <h5>04/04/04</h5>
-                        </td>
-                        <td class="healthStatus">
-                            <h5 class="Healthy">Healthy</h5>
-                        </td>
-                        <td class="laterality">
-                            <h5>30 - 28</h5>
-                        </td>
-                        <td class="AddMeasure">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                            <a href="#">Add Measurement</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="Patients">     
-                            <div class="Patient Description">
-                                <h5>John Doe</h5>
-                            </div>
-                        </td>
-                        <td class="Age">
-                            <h5> 25</h5>
-                        </td>
-                        <td  class="Birthdate">
-                            <h5>04/04/04</h5>
-                        </td>
-                        <td class="healthStatus">
-                            <h5 class="Injured">Injured</h5>
-                        </td>
-                        <td class="laterality">
-                            <h5>42 - 26</h5>
-                        </td>
-                        <td class="AddMeasure">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                            <a href="#">Add Measurement</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="Patients">
-                            
-                            <div class="Patient Description">
-                                <h5>Gordon Blue</h5>
-                            </div>
-                        </td>
-                        <td class="Age">
-                            <h5> 25</h5>
-                        </td>
-                        <td  class="Birthdate">
-                            <h5>04/04/04</h5>
-                        </td>
-                        <td class="healthStatus">
-                            <h5 class="stroke">Stroke</h5>
-                        </td>
-                        <td class="laterality">
-                            <h5>55 - 23</h5>
-                        </td>
-                        <td class="AddMeasure">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                            <a href="#">Add Measurement</a>
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td class="Patients">
-                           
-                            <div class="Patient Description">
-                                <h5>Jane Doe</h5>
-                            </div>
-                        </td>
-                        <td class="Age">
-                            <h5> 25</h5>
-                        </td>
-                        <td  class="Birthdate">
-                            <h5>04/04/04</h5>
-                        </td>
-                        <td class="healthStatus">
-                            <h5 class="healthy">Healthy</h5>
-                        </td>
-                        <td class="laterality">
-                            <h5>30 - 28</h5>
-                        </td>
-                        <td class="AddMeasure">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                            <a href="#">Add Measurement</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="Patients">
-                            
-                            <div class="Patient Description">
-                                <h5>John Doe</h5>
-                            </div>
-                        </td>
-                        <td class="Age">
-                            <h5> 25</h5>
-                        </td>
-                        <td  class="Birthdate">
-                            <h5>04/04/04</h5>
-                        </td>
-                        <td class="healthStatus">
-                            <h5 class="Injured">Injured</h5>
-                        </td>
-                        <td class="laterality">
-                            <h5>42 - 26</h5>
-                        </td>
-                        <td class="AddMeasure">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                            <a href="#">Add Measurement</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="Patients">
-                            <div class="Patient Description">
-                                <h5>Gordon Blue</h5>
-                            </div>
-                        </td>
-                        <td class="Age">
-                            <h5> 25</h5>
-                        </td>
-                        <td  class="Birthdate">
-                            <h5>04/04/04</h5>
-                        </td>
-                        <td class="healthStatus">
-                            <h5 class="stroke">Stroke</h5>
-                        </td>
-                        <td class="laterality">
-                            <h5>55 - 23</h5>
-                        </td>
-                        <td class="AddMeasure">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                            <a href="#">Add Measurement</a>
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td class="Patients">
-                            
-                            <div class="Patient Description">
-                                <h5>Jane Doe</h5>
-                            </div>
-                        </td>
-                        <td class="Age">
-                            <h5> 25</h5>
-                        </td>
-                        <td  class="Birthdate">
-                            <h5>04/04/04</h5>
-                        </td>
-                        <td class="healthStatus">
-                            <h5 class="healthy">Healthy</h5>
-                        </td>
-                        <td class="laterality">
-                            <h5>30 - 28</h5>
-                        </td>
-                        <td class="AddMeasure">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                            <a href="#">Add Measurement</a>
-                        </td>
-
-                    <tr>
-                        <td class="Patients">
-                            
-                            <div class="Patient Description">
-                                <h5>John Doe</h5>
-                            </div>
-                        </td>
-                        <td class="Age">
-                            <h5> 25</h5>
-                        </td>
-                        <td  class="Birthdate">
-                            <h5>04/04/04</h5>
-                        </td>
-                        <td class="healthStatus">
-                            <h5 class="Injured">Injured</h5>
-                        </td>
-                        <td class="laterality">
-                            <h5>42 - 26</h5>
-                        </td>
-                        <td class="AddMeasure">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                            <a href="#">Add Measurement</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="Patients">
-                            
-                            <div class="Patient Description">
-                                <h5>Gordon Blue</h5>
-                            </div>
-                        </td>
-                        <td class="Age">
-                            <h5> 25</h5>
-                        </td>
-                        <td  class="Birthdate">
-                            <h5>04/04/04</h5>
-                        </td>
-                        <td class="healthStatus">
-                            <h5 class="stroke">Stroke</h5>
-                        </td>
-                        <td class="laterality">
-                            <h5>55 - 23</h5>
-                        </td>
-                        <td class="AddMeasure">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                            <a href="#">Add Measurement</a>
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td class="Patients">
-                            <div class="Patient Description">
-                                <h5>Jane Doe</h5>
-                            </div>
-                        </td>
-                        <td class="Age">
-                            <h5> 25</h5>
-                        </td>
-                        <td  class="Birthdate">
-                            <h5>04/04/04</h5>
-                        </td>
-                        <td class="healthStatus">
-                            <h5 class="healthy">Healthy</h5>
-                        </td>
-                        <td class="laterality">
-                            <h5>30 - 28</h5>
-                        </td>
-                        <td class="AddMeasure">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                            <a href="#">Add Measurement</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="Patients">
-                            >
-                            <div class="Patient Description">
-                                <h5>John Doe</h5>
-                            </div>
-                        </td>
-                        <td class="Age">
-                            <h5> 25</h5>
-                        </td>
-                        <td  class="Birthdate">
-                            <h5>04/04/04</h5>
-                        </td>
-                        <td class="healthStatus">
-                            <h5 class="Injured">Injured</h5>
-                        </td>
-                        <td class="laterality">
-                            <h5>42 - 26</h5>
-                        </td>
-                        <td class="AddMeasure">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                            <a href="#">Add Measurement</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="Patients">
-                            
-                            <div class="Patient Description">
-                                <h5>Gordon Blue</h5>
-                            </div>
-                        </td>
-                        <td class="Age">
-                            <h5> 25</h5>
-                        </td>
-                        <td  class="Birthdate">
-                            <h5>04/04/04</h5>
-                        </td>
-                        <td class="healthStatus">
-                            <h5 class="stroke">Stroke</h5>
-                        </td>
-                        <td class="laterality">
-                            <h5>55 - 23</h5>
-                        </td>
-                        <td class="AddMeasure">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                            <a href="#">Add Measurement</a>
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td class="Patients">
-                            
-                            <div class="Patient Description">
-                                <h5>Jane Doe</h5>
-                            </div>
-                        </td>
-                        <td class="Age">
-                            <h5> 25</h5>
-                        </td>
-                        <td  class="Birthdate">
-                            <h5>04/04/04</h5>
-                        </td>
-                        <td class="healthStatus">
-                            <h5 class="healthy">Healthy</h5>
-                        </td>
-                        <td class="laterality">
-                            <h5>30 - 28</h5>
-                        </td>
-                        <td class="AddMeasure">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                            <a href="#">Add Measurement</a>
-                        </td>
-                    </tr> -->
-
-                </tbody>
+                
+            <table id="patientTable">
+                <tr>
+                    <th> Choose Patient </td>
+                    <th> Patient Name </td>
+                    <th> Birth Date </td>
+                    <th> Patient Status </td>
+                </tr>
+                <tbody id="patientBody"></tbody>
             </table>
         </div>
-        <div id="patient">
-            <h2>Data Collection</h2>
-            <button id="dataBtn" type="button">save data</button>
+       
+
+        <div class="data_collection" id="data_collection_section">
+            <div class="col-md-12">
+                <h2 id="dataCollectionH2">Data Collection</h2> 
+            </div>
+            
+            <div class="tab">
+                <button onClick="SwitchTab(event,'Manual');">Manual Entry</button>
+                <button onClick="SwitchTab(event,'Bluetooth');">Bluetooth</button>
+            </div>
+
+            <div id="Manual" class="tabcontent">
+                <form id="manual_entry">
+                    <div class="form_entry_row">
+                        <div class="form_entry_column">
+                            <div class="col-md-12">
+                                <h3>Right Hand Measurements</h3>
+                             </div>
+                             <div class="col-md-12">
+                                <label>Trial 1: </label>
+                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_right_t1" required>
+                             </div>
+                             <div class="col-md-12">
+                                <label>Trial 2: </label>
+                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_right_t2" required>
+                             </div>
+                             <div class="col-md-12">
+                                <label>Trial 3: </label>
+                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_right_t3" required>
+                             </div>
+                        </div>
+                        <div class="form_entry_column">
+                            <div class="col-md-12">
+                                <h3>Left Hand Measurements</h3>
+                             </div>
+                             <div class="col-md-12">
+                                <label>Trial 1: </label>
+                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_left_t1" required>
+                             </div>
+                             <div class="col-md-12">
+                                <label>Trial 2: </label>
+                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_left_t2" required>
+                             </div>
+                             <div class="col-md-12">
+                                <label>Trial 3: </label>
+                                <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_left_t3" required>
+                             </div>
+                        </div>
+                    </div>
+                    <input id="man_submit" class="manual_entry_form" type="submit" value="Submit">
+                </form>
+            </div>
+            <div id="Bluetooth" class="tabcontent">
+                <div id="ble_collection" class="ble_collection">
+                    <div class="col-md-12">
+                        <img src="./aggieimpact_design/images/bluetooth.png" alt="#" id="ble_status" 
+                        style="width: 30px; padding: 5px; border-radius: 10px; background-color: #ffe26a;"></img>
+                        <button id="ble_connect"> Connect Device </button>
+                        <button id="ble_disconnect"> Disconnect </button>
+                    </div>
+                    <div class="form_entry_row">
+                        <div class="form_entry_column">
+                            <div class="col-md-12">
+                                <h3>Right Hand Measurements</h3>
+                             </div>
+                             <div class="col-md-12">
+                                <button class="trial_button" id ="ble_right_t1">Trial 1</button>
+                             </div>
+                             <div class="col-md-12">
+                                <button class="trial_button" id ="ble_right_t2"> Trial 2</button>
+                             </div>
+                             <div class="col-md-12">
+                                <button class="trial_button" id ="ble_right_t3"> Trial 3</button>
+                             </div>
+                        </div>
+                        <div class="form_entry_column">
+                            <div class="col-md-12">
+                                <h3>Left Hand Measurements</h3>
+                             </div>
+                             <div class="col-md-12">
+                                <button class="trial_button" id ="ble_left_t1"> Trial 1</button>
+                             </div>
+                             <div class="col-md-12">
+                                <button class="trial_button" id ="ble_left_t2"> Trial 2</button>
+                             </div>
+                             <div class="col-md-12">
+                                <button class="trial_button" id ="ble_left_t3"> Trial 3</button>
+                             </div>
+                        </div>
+                        <div class="form_entry_column">
+                            <div class="col-md-12">
+                                <button id ="ble_submit" style="width:100%"> Submit</button>
+                             </div>
+                        </div>
+                    </div>
+                    <div id="myProgress">
+                        <p class="blink_display" id="blinking_text" style="height: 0;"></p>
+                        <div id="myBar" style="height:45px"></div>
+                      </div>
+                    <div id="graph_accept_reject">
+                        <div class="graph_entry_column" style="width:25%;">
+                            <div class="col-md-12">
+                                <table class="opt_table" id="opt_table" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <td> Time </td>
+                                            <td> Force </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="opt_sample_table"></tbody>
+                                </table>
+                                <div class="col-md-12">
+                                    <button class="accept_button" id ="accept_button" onclick="Accept()"> <img src="./aggieimpact_design/images/check.png" alt="#" id="ble_status" 
+                                        style="width: 30px; padding: 5px; border-radius: 10px; background-color: #abd699;"></img></button>
+                                    <button class="reject_button" id ="reject_button" onclick="Reject()"> <img src="./aggieimpact_design/images/cross.png" alt="#" id="ble_status" 
+                                        style="width: 30px; padding: 5px; border-radius: 10px; background-color: #ea8a81;"></img></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="graph_entry_column" style="width:75%;">
+                            <canvas id="ble_graph_sample" style="width:100%;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <div class="results" id="results_section">
+            <h2 id="resultsH2">Results</h2> 
+            <div class="results_row">
+                <div class="results_column">
+                    <div style="height: 5%; background-color: #4164da; padding: 5px; text-align: center; border-radius: 15px;"> Grip Ratio</div>
+                    <p class="circle_display" id="grip_ratio_txt">grip ratio</p>
+                    <p style="position: relative;">Grip Ratio</p>
+                    <div class="results_column">
+                        <p class="circle_display" id="right_avg_text"> right avg</p>
+                    </div>
+                    <div class="results_column">
+                        <p class="circle_display" id="left_avg_text">left avg</pr>
+                    </div>
+                    
+                </div>
+                <div class="results_column">
+                    <div style="height: 5%; background-color: #4164da; padding: 5px; text-align: center; border-radius: 15px;"> Right Hand Results</div>
+                    <canvas id="right_graph_results" style="width:100%;"></canvas>
+                    <div style="height: 5%; background-color: #4164da; padding: 5px; text-align: center; border-radius: 15px;"> Left Hand Results</div>
+                    <canvas id="left_graph_results" style="width:100%;"></canvas>
+                </div>
+            </div>
+            
+            
+        </div>
+
+        <!-- <div id="adminExport" style="display:none;">
+            <h2 id="adminExportH2">Export Data</h2>
+            <button>Get CSV</button>
+        </div> -->
+
+        <div id="admin_section" class="admin" style="display:none;">
+            <h2>Export All Patient Data</h2>
+            <button class="csvBTN" id="allDataCSV">Download CSV</button>
+            <br>
+            <h2>Register New Clinicians</h2>
+            <form class="admim_form" id="signUpForm">
+                <h3>Create Account</h3>
+                <ul>
+                    <li>
+                        <label for="name"><b>First Name</b></label>
+                        <input class="inputSU" type="text" placeholder="Enter First Name" id="nameSignUp" required>
+                        <p id="bad_name_up_error" style="color: red;"></p>
+                    </li>
+                    <li>
+                        <label for="email"><b>Email</b></label>
+                        <input class="inputSU" type="text" placeholder="Enter Email" id="emailSignUp" required>
+                        <p id="bad_email_up_error" style="color: red;"></p>
+                    </li>
+                    <li>
+                        <label for="password"><b>Password</b></label>
+                        <input class="inputSU" type="password" placeholder="Enter Password" id="passwordSignUp" required>
+                        <p id="bad_password1_up_error" style="color: red;"></p>
+                    </li>
+                    <li>
+                        <label for="password"><b>Confirm Password</b></label>
+                        <input class="inputSU" type="password" placeholder="Confirm Password" id="passwordConfirm" required>
+                        <p id="bad_password2_up_error" style="color: red;"></p>
+                    </li>
+                    <li>
+                        <label for="admin">Admin User</label>
+                        <div class="radioBtns">
+                            <label class="radio">
+                                <input type="radio" name="Admin user" value="1" id="adminBtn">
+                                Yes
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="Admin user" value="0" id="adminBtnNo">
+                                No
+                            </label>
+                        </div>
+                    </li>
+                    <li class="liBtn">
+                        <button class="btnSU" id="submitSignUp" type="submit">Register</button>
+                    </li>
+                </ul>                
+            </form>
+        </div>
+        
     </section>
 
+    <!--ble functions-->
     <script>
-        $('#menu-btn').click(function(){
-            $('#menu').toggleClass("active")
-        })
+        const btn_connect = document.getElementById('ble_connect');
+        const btn_disconnect = document.getElementById("ble_disconnect");
+        const btn_collect_0 = document.getElementById('ble_right_t1');
+        const btn_collect_1 = document.getElementById('ble_right_t2');
+        const btn_collect_2 = document.getElementById('ble_right_t3');
+        const btn_collect_3 = document.getElementById('ble_left_t1');
+        const btn_collect_4 = document.getElementById('ble_left_t2');
+        const btn_collect_5 = document.getElementById('ble_left_t3');
+        const ble_status = document.getElementById('ble_status');
+
+        const graph = document.getElementById("ble_graph_sample");
+
+        // declare all global variables
+        let gdxDevice = "";
+        let current_index = null;
+        let sample_data = Array(6);
+        let opt_sample_data = Array(6);
+        let opt_sample_time = Array(6);
+        let right_num_samples = 0;
+        let left_num_samples = 0;
+
+        let done_sampling = false;
+        let count = 0;
+        const ConnectDevice = async() => {
+            try {
+                const bleDevice = await navigator.bluetooth.requestDevice({
+                    filters: [{ namePrefix: 'GDX' }],
+                    optionalServices: ['d91714ef-28b9-4f91-ba16-f0d9a604f112']
+                });
+                gdxDevice = await godirect.createDevice(bleDevice,  {open: true, startMeasurements: false});
+                ble_status.style.backgroundColor = "#abd699";
+                console.log(`Connected to: ${gdxDevice.name}`);
+                graph_interval = setInterval(updateValue, 100);
+                disable_button('ble_connect');
+                lock_method_selection();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        btn_connect.addEventListener('click', ConnectDevice);
+
+        function DisconnectDevice() {
+            try {
+                if (gdxDevice != null) {
+                    gdxDevice.close();
+                    console.log(`Disconnected from: ${gdxDevice.name}`);
+                    clearInterval(graph_interval);
+                }
+                gdxDevice = "";
+                ble_status.style.backgroundColor = "#ffe26a";
+                enable_button('ble_connect');
+                disable_button('ble_disconnect');
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        btn_disconnect.addEventListener('click', DisconnectDevice);
+
+        function Collect(evt) {
+            current_index = evt.currentTarget.index;
+            ProgressBar();
+            setTimeout(CollectData, 3000);
+        }
+
+        function CollectData() {
+            console.log(current_index);
+            
+            // set up sensor
+            const sensor = gdxDevice.getSensor(1);
+            if (sensor) {
+                sensor.setEnabled(true);
+            }
+            done_sampling = false;
+            sensor.values = [];
+                    
+            // clear data arrays
+            sample_data[current_index] = [];
+            opt_sample_data[current_index] = [];
+            opt_sample_graph_data[current_index] = Array(51).fill(NaN); 
+            
+            gdxDevice.start(100);
+            sensor.on('value-changed', (sensor) => {
+                // samples for 5 seconds
+                if (sensor.values.length > 50){
+                    done_sampling = true;
+                    gdxDevice.stop();
+                    sample_data[current_index] = sensor.values;
+                    for (let j=0; j<51; j++) {
+                        sample_data[current_index][j] = Math.round(sample_data[current_index][j]*100) / 100;
+                    }
+                    enable_button('ble_disconnect');
+                    ShowGraphs();
+                }
+                // log the sensor name, new value and units.
+                console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
+                // add data points to the data array
+                //sample_data[current_index].push(sensor.value);
+            }); 
+        }
+        btn_collect_0.addEventListener('click', Collect);
+        btn_collect_0.index = 0;
+        btn_collect_1.addEventListener('click', Collect);
+        btn_collect_1.index = 1;
+        btn_collect_2.addEventListener('click', Collect);
+        btn_collect_2.index = 2;
+        btn_collect_3.addEventListener('click', Collect);
+        btn_collect_3.index = 3;
+        btn_collect_4.addEventListener('click', Collect);
+        btn_collect_4.index = 4;
+        btn_collect_5.addEventListener('click', Collect);
+        btn_collect_5.index = 5;
+
     </script>
 
+    <!--graphing functions-->
+    <script>
+        let graph_interval = null;
+        const time = Array.from(
+            { length: 51 },
+            (value, index) => Math.round(index * 0.1 *10)/10);
+        let opt_sample_graph_data = Array(6);       // scale opt_sample_data so it can be graphed at the correct time indexes
+        let chart = new Chart.Line("ble_graph_sample", {
+        data: {
+            labels: time,
+            datasets: [{
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "#75c9b7",
+                borderColor: "#75c9b7",
+                borderWidth: 1,
+                order: 1,
+                data: []
+            }, {
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "#ea8a81",
+                borderColor: "#ea8a81",
+                borderWidth: 1,
+                order: 0,
+                data: []
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+            yAxes: [{ticks: {min: -1, max:600}}],
+            },
+            tooltips: {enabled: false}
+        }
+        });
+
+        // TODO: progress bar (for sampling)
+        async function ProgressBar() {
+            if (count == 0) {
+                count = 1;
+                document.getElementById("graph_accept_reject").style.display = 'none';
+                document.getElementById("myProgress").style.visibility = 'visible';
+                document.getElementById("myProgress").style.height = "100%";
+                var elem = document.getElementById("myBar");
+                var width = 1;
+                var id = setInterval(frame, 10);
+                function frame() {
+                    if (width <= 100) {
+                        // ready = yellow
+                        document.getElementById('blinking_text').style.animationPlayState = 'running';
+                        document.getElementById('blinking_text').innerHTML = "READY";
+                        document.getElementById('myBar').style.backgroundColor = "#ffe26a";
+                    } else if (width > 100 && width <=200) {
+                        // set
+                        document.getElementById('blinking_text').innerHTML = "SET";
+                    } else if (width > 200 && width <=300) {
+                        // go
+                        document.getElementById('blinking_text').innerHTML = "GO";
+                    } else if (width > 300 && width <=800) {
+                        // collecting = green
+                        document.getElementById('blinking_text').style.animationPlayState = 'paused';
+                        document.getElementById('myBar').style.backgroundColor = "#abd699";
+                    }else {
+                        // done
+                        document.getElementById("myProgress").style.visibility = 'hidden';
+                        document.getElementById("myProgress").style.height = "0%";
+                        document.getElementById("graph_accept_reject").style.display = 'flex';
+                        clearInterval(id);
+                        count = 0;
+                    }
+                    width++;
+                    elem.style.width = (width*.125) + "%";
+                }
+            }
+        }
+
+        function updateValue() {
+            if (done_sampling == true) {
+                opt_sample_time[current_index]= FindOptSample(sample_data[current_index]);
+                for (let i=0;i<5;i++){
+                    opt_sample_graph_data[current_index][opt_sample_time[current_index][i]*10] = sample_data[current_index][opt_sample_time[current_index][i]*10];
+                    opt_sample_data[current_index][i] = Math.round((sample_data[current_index][opt_sample_time[current_index][i]*10]) * 100) / 100;
+                    AddToOptTable(opt_sample_time[current_index][i], opt_sample_data[current_index][i]);
+                }
+                // disable everything except for the accept reject buttons
+                //WaitForAcceptReject();
+                //
+                console.log(opt_sample_data[current_index]);
+                console.log(opt_sample_time[current_index]);
+                done_sampling=false;
+
+                // do accept reject here, and increment counters
+                // disable buttons in accept reject listeners
+                
+            }
+            chart.data.datasets[0].data = sample_data[current_index];
+            chart.data.datasets[1].data = opt_sample_graph_data[current_index];
+            chart.update();
+        }
+        
+    </script>
+
+    <!--accept/reject-->
+    <script>
+        function Accept() {
+            AcceptTrial(current_index);
+        }
+
+        function Reject() {
+            ClearOptTable();
+            sample_data[current_index] = [];
+            opt_sample_data[current_index] = [];
+            opt_sample_time[current_index] = [];
+            opt_data = [];
+            updateValue();
+        }
+    </script>
+
+    <!--firebase function-->
+    <script type="module">
+    let ble_grip_ratio = null;
+    let man_grip_ratio = null;
+    import {AddBLEToDatabase} from "./firebase.js";
+
+        let dBtn = document.getElementById("ble_submit");
+        dBtn.addEventListener('click', StoreBLEData);
+        function StoreBLEData() {
+            console.log(sample_data);
+            console.log(opt_sample_data);
+            console.log(opt_sample_time);
+            AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time);
+            disable_button("ble_submit");
+            updateResults();
+        }
+    </script>
+
+    <!--graphing results-->
+    <script>
+        let right_chart = new Chart("right_graph_results", {
+            type: 'line',
+            data: {
+                labels:time,
+                datasets: [{
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "#75c9b7",
+                    borderColor: "#75c9b7",
+                    borderWidth: 1,
+                    order: 0,
+                    data: []
+                }, {
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "#75c9b7",
+                    borderColor: "#75c9b7",
+                    borderWidth: 1,
+                    order: 0,
+                    data: []
+                }, {
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "#75c9b7",
+                    borderColor: "#75c9b7",
+                    borderWidth: 1,
+                    order: 0,
+                    data: []
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                yAxes: [{ticks: {min: -1, max:600}}],
+                }
+            }
+        });
+
+        let left_chart = new Chart("left_graph_results", {
+            type: 'line',
+            data: {
+                labels:time,
+                datasets: [{
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "#75c9b7",
+                    borderColor: "#75c9b7",
+                    borderWidth: 1,
+                    order: 0,
+                    data: []
+                }, {
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "#75c9b7",
+                    borderColor: "#75c9b7",
+                    borderWidth: 1,
+                    order: 0,
+                    data: []
+                }, {
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "#75c9b7",
+                    borderColor: "#75c9b7",
+                    borderWidth: 1,
+                    order: 0,
+                    data: []
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                yAxes: [{ticks: {min: -1, max:600}}],
+                }
+            }
+        });
+
+        function updateResults() {
+            right_chart.data.datasets[0].data = sample_data[0];
+            right_chart.data.datasets[1].data = sample_data[1];
+            right_chart.data.datasets[2].data = sample_data[2];
+
+            left_chart.data.datasets[0].data = sample_data[3];
+            left_chart.data.datasets[1].data = sample_data[4];
+            left_chart.data.datasets[2].data = sample_data[5];
+            right_chart.update();
+            left_chart.update();
+
+        }
+    </script>
+    
+</div>
 </body>
 
 </html>

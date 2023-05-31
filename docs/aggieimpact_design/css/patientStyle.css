@@ -13,8 +13,8 @@ body{
 }
 
 #menu{
-    background: #4164da;
-    width: 300px;
+    background: linear-gradient(to bottom, #4164da, #11bbb9);
+    width: 250px;
     height: 100%;
     position: fixed;
     top:0;
@@ -54,8 +54,8 @@ body{
 }
 
 #menu .MenuItems li svg{
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     margin: 0 10px 0 25px;
 }
 
@@ -72,28 +72,36 @@ body{
 
 #interface {
     width: calc(100% - 300px);
-    margin-left: 300px;
+    margin-left: 250px;
     position:relative;
 } 
+
+button { 
+    border: none;
+    border-radius: 5%;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    background-color: lightgray;
+    /* display: inline-block; */
+    font-size: 14px;
+}
 
 #interface .navBar {
     display:flex;
     align-items: center;
     justify-content: space-between;
-    background: white;
-    padding:15px 30px;
-    border-bottom: 3px solid #4164da;
-    position: fixed;
-    width: calc(100% - 300px);
+    background: linear-gradient(to right, #4164da, #11bbb9);
+    padding:15px 15px;
+    position: sticky;
+    width: calc(100% - 250px);
 }
 
 #interface .searchBar {
-    width:calc(100%-300px);
+    width:calc(100%-250px);
     display:flex;
-    justify-content: center;
     align-items: center;
-    padding: 15px 20px;
-    border: 3px solid #4164da;
+    padding: 10px;
     border-radius: 4px;
 }
 
@@ -111,15 +119,18 @@ body{
     margin-right: 14px;
 }
 
+
 #interface .navBar .Profile{
     display:flex;
     justify-content: flex-start;
-    align-items: center;
+    align-items: right;
+    margin-left: auto; 
+    margin-right: 0;
 }
 
 #interface .navBar .Profile img {
-    width:40px;
-    height:40px;
+    width:30px;
+    height:30px;
     object-fit: cover;
     border-radius: 50%;
 }
@@ -197,143 +208,86 @@ body{
 
 .syncButton{
     align-items: center;
-    display:flex;
+    display: flex;
     justify-content: center;
     padding-top: 20px;
+    width: 100%;
 }
 
 .syncButton button{
-    width: 120px;
-    height: 25px;
+    width: 100%;
+    text-align: left;
+    font-size: 25px;
+    color: darkgray;
+    border: darkgray;
+    border-radius: 8px;
+    padding: .5%;
     justify-content: center;
     display: flex;
     flex-wrap: wrap;
 }
 
+.syncButton svg{
+    width: 25px;
+    height: 25px;
+    margin-right: 14px;
+}
+
 .board{
     width:95%;
-    margin: 30px 0 30px 30px;
-    overflow: auto;
+    margin: 14px;
     background: white;
-    border-radius: 8px;
-}
-
-.board img{
-    width:45px;
-    height:45px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-right: 15px;
-}
-
-.board h5{
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.board p {
-    font-weight: 400;
-    font-size: 13px;
-    color: #787d8d;
-}
-
-.board .Patients{
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    text-align: start;
-}
-
-.graphDisplay {
-    overflow: hidden;
-    border: 1px solid #4164da;
-    background-color: #ccc;
-    display:flex;
-}
-
-/* Style the tab */
-.tab {
-    overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #4164da;
-    display:flex;
-    
-}
-  
-/* Style the buttons that are used to open the tab content */
-.tab button {
-    background-color: #4164da;
-    float: left;
-    border: 1px solid black;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 0;
-    text-align: center;
-    color: black;
-    font-size: large;
-    font-weight: 500 px;
-    transition: 0.3s ease;
-}
-  
-/* Change background color of buttons on hover */
-.tab button:hover {
-    background-color: #5f7ee6;
-}
-  
-  /* Create an active/current tablink class */
-.tab button.active {
-    background-color: #ccc;
-}
-
-.tab button.inactive{
-    background-color: #4164da;
-}
-  
-  /* Style the tab content */
-.tabcontent {
-    display: none;
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-top: none;
-    justify-content: center;
-    align-items: center;
-}
-
-.manual_entry_form {
-    display:flex;
-    width:10%;
-    justify-content: center;
-    align-items: center;
-    border-radius: 2px;
-}
-
-
-table{
+    border-radius: 5px;
     border-collapse: collapse;
+    padding: 5px;
+    overflow-x: auto;
 }
 
-tr{
-    border-bottom: 1px solid #eef0f3;
+#patientTable
+{
+    overflow-y:scroll;
+    overflow-x: auto;
+    border-collapse:collapse;
+    width:95%;
+    margin-left: 20px;
+    margin-top: 20px;
+    height:auto;
+    display:block;
+    background-color: white;
+    table-layout: fixed;
+    padding: 5px;
 }
 
-thead td {
+#patientTable th
+{
+    position: sticky;
     font-size: 14px;
+    top:0px;
     text-transform: uppercase;
     font-weight: 400;
-    background-color: #F9FAFB;
     text-align: start;
-    padding: 15px;
+    padding-right: 20px;
+    border:1px;
 }
 
-tbody tr td{
-    padding: 10px 15px;
+#patientTable td
+{
+    font-size: 14px;
+    top:0px;
+    font-weight: 400;
     text-align: start;
+    padding-right: 20px;
+    border:1px;
 }
 
+#patientBody
+{
+    border:1px;
+    padding:15px;
+    height:300px;
+    overflow-y:scroll;
+    text-align:start;
+}
 
 .healthStatus h5{
     background-color: #d7fada;
@@ -381,9 +335,9 @@ tbody tr td{
 
 @media (max-width: 769px) {
     #menu {
-        width: 270px;
+        width: 200px;
         position:fixed;
-        left:-270px;
+        left:-200px;
         transition: 0.3s ease;
     }
 
@@ -417,12 +371,7 @@ tbody tr td{
         padding: 16px 20px;
         margin: 10px 20px 10px 0;
     }
-    
-    .board{
-        width:92%;
-        padding: 0;
-        overflow-x: auto;
-    }
+
 
     table{
         width:100%;
@@ -453,7 +402,109 @@ tbody tr td{
         margin: 8px 0;
     }
 
-    .board{
-        margin:30px 15px 30px 15px;
-    }
+}
+
+.admin {
+    position: relative;
+}
+
+#adminPortal {
+    display: grid;
+    place-items: center;
+    padding: 2em;
+}
+
+#adminPortal h2 {
+    margin-bottom: 10px;
+}
+
+#adminExport {
+    display: grid;
+    place-items: center;
+    padding: 2em;
+}
+
+#adminExport h2 {
+    margin-bottom: 10px;
+}
+
+#signUpForm {
+    margin: 0 auto;
+    width: 400px;
+    /* Form outline */
+    padding: 1em;
+    border: 1px solid #ccc;
+    border-radius: 1em;
+    background-color: white;
+}
+
+ul {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+}
+  
+#signUpForm li + li {
+margin-top: 1em;
+}
+  
+label {
+    /* Uniform size & alignment */
+    display: inline-block;
+    width: 150px;
+    text-align: left;
+} 
+
+.radio {
+    display: inline-block;
+    width: 80px;
+    text-align: left;
+}
+
+  
+.btnSU {
+    /* This extra margin represent roughly the same space as the space
+       between the labels and their text fields */
+    /* margin-left: 1em; */
+    margin: 0 10em;
+    background-color: #4164da; 
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    justify-content: center;
+}
+
+.inputSU {
+  /* To make sure that all text fields have the same font settings
+     By default, textareas have a monospace font */
+  font: 1em sans-serif;
+
+  /* Uniform text field size */
+  /* width: 200px;
+  box-sizing: border-box; */
+
+  /* Match form field borders */
+  /* border: 1px solid #999; */
+
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0px;
+  /* display: inline-block; */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.radioBtns {
+    display: inline;
+}
+
+#signUpForm h3 {
+    margin-bottom: 20px;
+}
+
+#mainBody {
+    width: 100%;
 }

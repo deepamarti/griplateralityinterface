@@ -1,8 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-app.js";
 import { getFirestore, collection, getDocs, query, where, addDoc, orderBy, limit, Timestamp} from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/9.1.1/firebase-auth.js";
+import { ShowDataCollection} from "./ui.js";
 
-window.addEventListener('load', function() {
+//window.addEventListener('load', function() {
 const firebaseConfig = {
   apiKey: "AIzaSyCbHB7UiryIBD6GO6qu1egD6nsQ4pnOx8Y",
   authDomain: "aggiempact.firebaseapp.com",
@@ -13,23 +14,61 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const secondaryApp = initializeApp(firebaseConfig, "Secondary");
 const auth = getAuth(app);
 const db = getFirestore(app);
 var currUser; //= auth.currentUser;
-
-auth.onAuthStateChanged((user) => {
+var adminUser = false;
+document.getElementById("mainBody").style.display = "none";
+auth.onAuthStateChanged(async (user) => {
+  setTimeout(async () => {
+    console.log("Delayed for 1 second.");
+    if (user) {
+      adminUser = await isAdmin(currUser.uid);
+      console.log("admin-user: ", adminUser);
+      document.getElementById("mainBody").style.display = "inline";
+      var nameHeader = document.getElementById("headerName");
+      if (nameHeader != null) {
+        var text = "Welcome, " + user.displayName + "!";
+        document.getElementById("headerName").innerHTML = text;
+      }
+      if (adminUser) {
+        document.getElementById("adminNav").style.display = "block";
+        document.getElementById("adminPortal").style.display = "block";
+      } else {
+        document.getElementById("adminNav").style.display = "none";
+        document.getElementById("adminPortal").style.display = "none";
+      }
+      
+    }
+    else {
+      // go back to sign in if null
+      document.getElementById("mainBody").style.display = "block";
+      var path_str = window.location.href;
+      //var path = path_str.split("//");
+      console.log(path_str);
+      if (path_str.includes("index.html") == false) { // does include /index.html
+        if (path_str.includes(".html") == true) { // does include .html for another file
+          console.log("in here: ", path_str);
+          window.location.href = "./index.html";
+        }
+      } 
+    }
+  }, 1000);
   if (user) {
     currUser = user;
     console.log("auth state changed");
     console.log(user);
-    console.log("curr", currUser);
-    localStorage.setItem("uid", currUser.uid);
+    console.log("user: ", currUser);
+    //localStorage.setItem("uid", currUser.uid);
   } else {
     // User is signed out
     // ...
     // direct to sign in page
     // window.location.href = "./index.html";
+    console.log("user: ", user);
     console.log("go to next page");
+    //window.location.href = "./index.html";
   }
 });
 
@@ -42,65 +81,88 @@ const signUp = document.getElementById('signUpForm');
 const emailSU = document.getElementById('emailSignUp');
 const passwordSU = document.getElementById('passwordSignUp');
 const confirmPassword = document.getElementById('passwordConfirm');
+const nameSU = document.getElementById('nameSignUp');
+const adminBtn = document.getElementById('adminBtn');
 
 var email, password;
+
+function validateEmail() {
+  email = emailInput.value;
+  console.log(email);
+
+  // email can be no longer than 64 characters
+  if (email.length > 64) {
+    document.getElementById("bad_email_error").innerHTML = "You entered an email address that is too long";
+    emailInput.value = "";
+    return false;
+  }
+
+  // email must be user@domain.extensiion
+  var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  if (re.test(email)) {
+    document.getElementById("bad_email_error").innerHTML = "";
+    return true;
+  } else {
+    document.getElementById("bad_email_error").innerHTML = "Please enter a valid email address";
+    emailInput.value = "";
+    return false;
+  }
+}
+
+function validatePassword() {
+  password = passwordInput.value;
+
+  // password can be no longer than 256 characters
+  if (password.length > 256) {
+    console.log("password too long");
+    document.getElementById("bad_password_error").innerHTML = "You entered a password that is too long";
+    passwordInput.value = "";
+    return false;
+  }
+
+  // password can't have special characters
+  var re = /^[A-Za-z0-9 ]+$/;
+  if (re.test(password)) {
+    console.log("valid password");
+    document.getElementById("bad_password_error").innerHTML = "";
+    return true;
+  } else {
+    console.log("invalid password");
+    document.getElementById("bad_password_error").innerHTML = "Please enter a valid password";
+    passwordInput.value = "";
+    return false;
+  }
+  
+}
 
 if (form != null) {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    email = emailInput.value;
-    console.log(email);
-    password = passwordInput.value;
-    console.log(password);
-  
-    signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log("Success! Welcome back!");
-        //window.location.href = "./page2.html";
-        // window.location.href = "./data_collection.html";
-        window.location.href = "./patient.html";
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log("Error occurred. Try again.");
-        console.log(errorCode);
-        console.log(errorMessage);
-      });
-  });
-}
 
-var emailUp, passwordUp, conPassUp;
-if (signUp != null) {
-  // add in sign up rules => error occurs is password is 1 letter
-  signUp.addEventListener('submit', (event) => {
-    event.preventDefault();
-    emailUp = emailSU.value;
-    passwordUp = passwordSU.value;
-    conPassUp = confirmPassword.value;
-    console.log(emailUp);
-    console.log(passwordUp);
-    console.log(conPassUp);
-    if (passwordUp != conPassUp) {
-      alert("Passwords do not match!");
+    // data validation for email
+    if (validateEmail() && validatePassword()) {
+      signInWithEmailAndPassword(auth, email, password)
+        .then(async (userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log("Success! Welcome back!");
+          window.location.href = "./patient.html";
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log("Error occurred. Try again.");
+          console.log(errorCode);
+          console.log(errorMessage);
+
+          document.getElementById("bad_sign_in").innerHTML = "Account does not exist";
+          emailInput.value = "";
+          passwordInput.value = "";
+
+        });
     }
-    else {
-      createUserWithEmailAndPassword(auth, emailUp, passwordUp)
-        .then((userCredential) => {
-        // Signed in 
-        window.location.href = "./patient.html";
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-        console.log(errorCode);
-        console.log(errorMessage);
-        window.alert("Error occurred. Try again.");
-      });
-    }
+  
+    
   });
 }
 
@@ -137,6 +199,7 @@ if (fireBtn != null) {
 //function getPatientDashboard() {
 
   fireBtn.addEventListener('click', async function(){
+    document.getElementById("firebaseBtn").disabled = true;
     let result = await getAllPatients();
     console.log(result);
     if (result["empty"] == false) {
@@ -174,11 +237,17 @@ if (fireBtn != null) {
         //var td5 = document.createElement('td');
 
         //Predesigned data element to be appeneded to all data tables. TODO assign a link to each and 
-        var btn = document.createElement("button");
-        btn.innerHTML = "Select";
-        btn.value = patID;
+        // var btn = document.createElement("button");
+        // btn.innerHTML = "Select";
+        // btn.value = patID;
+        var btn = document.createElement("input");
+        btn.setAttribute("type", "radio");
+        btn.setAttribute("name", "Select");
+        btn.setAttribute("value", patID);
         btn.addEventListener("click", function() {
-          set_patient(btn.value); // btn.value = patient id
+          //btn.style.backgroundColor = "blue";
+          setPatient(btn.value, name); // btn.value = patient id
+          //btn.disable = true;
         });
 
         td1.innerHTML=name;
@@ -193,13 +262,13 @@ if (fireBtn != null) {
         td4.className = "healthStatus";
         //td5.className = "laterality";
         //td6.className = "AddMeasure";
-
+        trow.appendChild(btn);
         trow.appendChild(td1);
         //trow.appendChild(td2);
         trow.appendChild(td3);
         trow.appendChild(td4);
         //trow.appendChild(td5);
-        trow.appendChild(btn);
+        
         tbody.appendChild(trow);
     }
   });
@@ -208,24 +277,268 @@ if (fireBtn != null) {
 
 let global_patient = null;
 
-function set_patient(id) {
+async function setPatient(id, name) {
   global_patient = id;
   console.log(id);
+  var maybeAdmin = await isAdmin(currUser.uid);
+  if (maybeAdmin) {
+    // document.getElementById("adminExport").style.display = "block";
+    // document.getElementById("exportNav").style.display = "block";
+    // document.getElementById('adminExportH2').innerHTML = "Export " + name + "'s " + "Data";
+  }
+  ShowDataCollection();
+  document.getElementById('data_collection_section').style.visibility = 'visible';
+  document.getElementById('dataCollectionH2').innerHTML = "Data Collection for " + name;
+  document.getElementById('resultsH2').innerHTML = "Results for " + name;
+
 };
 
-let dataBtn = document.getElementById("dataBtn");
+async function getAllDataByCollection(emr, patientUid, collectionName, fields) {
+  const q = query(
+    collection(db, collectionName), 
+    where("uid", "==", patientUid)
+  );
+  const querySnapshot = await getDocs(q);
+  if (querySnapshot.empty) {
+    return {"empty": true, "data": []};
+  }
+  else {
+    var data = []
+    querySnapshot.forEach((doc) => {
+      var obj = doc.data();
+      var new_obj = {};
+      new_obj["emr_code"] = emr;
+      for (var i = 0; i < fields.length; i++) {
+        if (Array.isArray(obj[fields[i]]) == true) {
+          obj[fields[i]] = obj[fields[i]].join(' ');
+        }
+        new_obj[fields[i]] = obj[fields[i]];
+      }
+      new_obj["date"] = new_obj["date"].toDate().toDateString();
+      data.push(new_obj);
+    });
+    return {"empty": false, "data": data};
+  }
+}
 
-if (dataBtn != null) {
-  let dateNow = Timestamp.fromDate(new Date());
-  dataBtn.addEventListener('click', async function  () {
-    console.log(global_patient);
-    let data = {"uid": global_patient, "date": dateNow, "measurements": [], "times": [], "keep": 1, "hand": 0, maxRange: [0, 0], manualEntry: 0};
-    // dateNow = Timestamp.fromDate(new Date());  need timestamp for firebase format
-    // hand => 0 = right, 1 = left
-    // manualEntry => 0 = bluetooth, 1 = manual
-    //await addDeviceData(data);
+const allDataCSVBtn = document.getElementById("allDataCSV");
+if (allDataCSVBtn != null) {
+  allDataCSVBtn.addEventListener('click', async function() {
+    var result = await getAllData();
+    if (result == false) {
+      alert("Sorry! No data found to export.");
+    }
   });
 }
+
+async function getAllData() {
+  var pats = await getAllPatients();
+  if (pats["empty"] == false) {
+    var metric = [];
+    var raw = [];
+    var opt = [];
+    for (var i = 0; i < pats["profiles"].length; i++) {
+      var emr = pats["profiles"][i]["emr_code"];
+      var uid = pats["profiles"][i]["uid"];
+      var metricData = await getAllDataByCollection(emr, uid, "metric_data", ["date", "grip_ratio", "left_avg", "right_avg"]);
+      metric = metric.concat(metricData["data"]);
+      var deviceData = await getAllDataByCollection(emr, uid, "device_data", ["date", "hand", "manual_entry", "maxRange", "measurements", "times"]);
+      raw = raw.concat(deviceData["data"]);
+      var optDeviceData = await getAllDataByCollection(emr, uid, "opt_device_data", ["date", "hand", "manual_entry", "measurements", "times"]);
+      opt = opt.concat(optDeviceData["data"]);
+    }
+    let today = new Date().toISOString().slice(0, 10);
+    formatDataForCSV(["clinician_uid", "uid"], pats["profiles"], "patients("+today+").csv");
+    formatDataForCSV([], metric, "grip_ratio("+today+").csv");
+    formatDataForCSV([], raw, "raw_measurements("+today+").csv");
+    formatDataForCSV([], opt, "optimal_sample_measurements("+today+").csv");
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function formatDataForCSV(deleteF, dataList, fileName) {
+  var csvRows = [];
+  for (var i = 0; i < dataList.length; i++) {
+    for (var j = 0; j < deleteF.length; j++) {
+      delete dataList[i][deleteF[j]];
+    }
+    const values = Object.values(dataList[i]).join(',');
+    console.log(values);
+    csvRows.push(values);
+  }
+  csvRows.unshift(Object.keys(dataList[0]));
+  var csvString = csvRows.join("\n");
+  var link = encodeURIComponent(csvString);
+  var a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,'+link;
+  a.download = fileName;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+// let dataBtn = document.getElementById("dataBtn");
+
+// if (dataBtn != null) {
+//   let dateNow = Timestamp.fromDate(new Date());
+//   dataBtn.addEventListener('click', async function  () {
+//     console.log(global_patient);
+//     let data = {"uid": global_patient, "date": dateNow, "measurements": [], "times": [], "keep": 1, "hand": 0, maxRange: [0, 0], manualEntry: 0};
+//     // dateNow = Timestamp.fromDate(new Date());  need timestamp for firebase format
+//     // hand => 0 = right, 1 = left
+//     // manualEntry => 0 = bluetooth, 1 = manual
+//     //await addDeviceData(data);
+//   });
+// }
+
+export async function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time) {
+  console.log(sample_data);
+  console.log(opt_sample_data);
+  console.log(opt_sample_time);
+  let dateNow = Timestamp.fromDate(new Date());
+  const time = Array.from(
+    { length: 51 },
+    (value, index) => Math.round(index * 0.1 *10)/10);
+  let ble_data = null;
+  let ble_opt_data = null;
+  for (let i=0;i<6;i++) {
+    if (i<3) {
+      // right hand
+      ble_data = {
+        "uid": global_patient, 
+        "date": dateNow, 
+        "measurements": sample_data[i], 
+        "times": time, 
+        "keep_trial": 1, 
+        "hand": 0, 
+        maxRange: [opt_sample_time[i][0], opt_sample_time[i][4]], 
+        "manual_entry": 0
+      };
+      ble_opt_data = {
+        "uid": global_patient, 
+        "date": dateNow,
+        "measurements": opt_sample_data[i], 
+        "times": opt_sample_time[i],
+        "keep_trial": 1, 
+        "hand": 0,
+        "manual_entry": 0
+      };
+    } else {
+      // left hand
+      ble_data = {
+        "uid": global_patient, 
+        "date": dateNow, 
+        "measurements": sample_data[i], 
+        "times": time, 
+        "keep_trial": 1, 
+        "hand": 1, 
+        maxRange: [opt_sample_time[i][0], opt_sample_time[i][4]], 
+        "manual_entry": 0
+      };
+      ble_opt_data = {
+        "uid": global_patient, 
+        "date": dateNow,
+        "measurements": opt_sample_data[i], 
+        "times": opt_sample_time[i],
+        "keep_trial": 1, 
+        "hand": 1,
+        "manual_entry": 0
+      };
+    }
+    addDeviceData(ble_data);
+    addOptDeviceData(ble_opt_data);
+  }
+  document.getElementById('results_section').style.display = 'block';
+  PopulateResults(await calcGripRatio(global_patient));
+}
+
+const mForm = document.getElementById("manual_entry");
+  if (mForm != null) {
+    mForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      let right_trials = Array(3).fill(NaN);
+      let left_trials = Array(3).fill(NaN);
+      let dateNow = Timestamp.fromDate(new Date());
+      right_trials[0] = parseFloat(document.getElementById("man_right_t1").value);
+      right_trials[1] = parseFloat(document.getElementById("man_right_t2").value);
+      right_trials[2] = parseFloat(document.getElementById("man_right_t3").value);
+      left_trials[0] = parseFloat(document.getElementById("man_left_t1").value);
+      left_trials[1] = parseFloat(document.getElementById("man_left_t2").value);
+      left_trials[2] = parseFloat(document.getElementById("man_left_t3").value);
+      
+      for (let i=0; i<3; i++) {
+        right_trials[i] = Math.round(right_trials[i] * 100) / 100;
+        left_trials[i] = Math.round(left_trials[i] * 100) / 100;
+      }
+      
+      console.log(right_trials);
+      console.log(left_trials);
+
+      for (let i=0; i<3; i++) {
+        // right hand = 0
+        let manual_data = {
+          "uid": global_patient, 
+          "date": dateNow, 
+          "measurements": [right_trials[i]], 
+          "times": 0, 
+          "keep_trial": 1, 
+          "hand": 0, 
+          maxRange: [0, 0], 
+          "manual_entry": 1
+        }
+        let manual_opt_data = {
+          "uid": global_patient, 
+          "date": dateNow,
+          "measurements": [right_trials[i]], 
+          "times": 0,
+          "keep_trial": 1, 
+          "hand": 0,
+          "manual_entry": 1
+        }
+        addDeviceData(manual_data);
+        addOptDeviceData(manual_opt_data);
+      }
+      for (let i=0; i<3; i++) {
+        // left hand = 1
+        let manual_data = {
+          "uid": global_patient, 
+          "date": dateNow, 
+          "measurements": [left_trials[i]], 
+          "times": 0, 
+          "keep_trial": 1, 
+          "hand": 1, 
+          maxRange: [0, 0], 
+          "manual_entry": 1
+        }
+        let manual_opt_data = {
+          "uid": global_patient, 
+          "date": dateNow,
+          "measurements": [left_trials[i]], 
+          "times": 0,
+          "keep_trial": 1, 
+          "hand": 1,
+          "manual_entry": 1
+        }
+        addDeviceData(manual_data);
+        addOptDeviceData(manual_opt_data);
+      }
+      PopulateResults(await calcGripRatio(global_patient));
+    });
+  }
+
+  function PopulateResults(grip_ratio) {
+    console.log(grip_ratio);
+    console.log(grip_ratio['ratio']);
+    let ratio = document.getElementById("grip_ratio_txt");
+    let right = document.getElementById("right_avg_text");
+    let left = document.getElementById("left_avg_text");
+
+    ratio.innerHTML = "Grip Ratio: \n" + grip_ratio['ratio'];
+    right.innerHTML = "Right Avg: \n" + grip_ratio['avgRH'];
+    left.innerHTML = "Left Avg: \n" + grip_ratio['avgLH'];
+  }
 
 // function testFire() {
 //   console.log("in test firebase");
@@ -254,16 +567,13 @@ if (dataBtn != null) {
 //   });
 
 // Update name of user
-function updateName(name) {
-  console.log(currUser);
-  if (currUser) {
-    updateProfile(currUser, {
+function updateName(user, name) {
+  if (user) {
+    updateProfile(user, {
       displayName: name
     });
-    print(currUser);
   }
 }
-
 class Patient {
   constructor (uid, firstName, lastName, dateOfBirth, dominantHand, gender, impaired, preStrokeDominance, strokeSide, authClinicianUid) {
     this.uid = uid;
@@ -279,8 +589,9 @@ class Patient {
   }
 }
 
-function Clinician(uid) {
+function Clinician(uid, admin) {
   this.uid = uid;
+  this.admin = admin;
 }
 
 function OptDeviceData(uid, date, measurements, times, keep, hand, manualEntry) {
@@ -328,7 +639,13 @@ async function getAllPatients() {
   else {
     var profiles = [];
     querySnapshot.forEach((doc) => {
-      profiles.push(doc.data());
+      var obj = doc.data();
+      var new_obj = {};
+      var obj_k = ["emr_code", "first_name", "last_name", "date_of_birth", "dominant_hand", "dominant_hand_pre_stroke", "gender", "height", "weight", "impaired", "stroke_side", "uid", "clinician_uid"];
+      for (var i = 0; i < obj_k.length; i++) {
+        new_obj[obj_k[i]] = obj[obj_k[i]];
+      }
+      profiles.push(new_obj);
     });
     return {"empty": false, "profiles": profiles};
   }
@@ -423,6 +740,169 @@ async function getDeviceData(patientUid, typeEntry) {
   }
 }
 
+async function createClinician(uid, admin) {
+  let clinician = {
+    "uid": uid,
+    "admin": admin
+  };
+  await addClinician(clinician);
+}
+
+// Add clinician to db
+async function addClinician(clinicianData) {
+  const docRef = await addDoc(collection(db, "clinicians"), clinicianData);
+  console.log(docRef.id);
+}
+
+async function isAdmin(uid) {
+  const q = query(
+    collection(db, "clinicians"), 
+    where("uid", "==", uid),
+    where("admin", "==", 1)
+  );
+  const querySnapshot = await getDocs(q);
+  if (querySnapshot.empty) {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
+var emailUp, passwordUp, conPassUp, adminSelected, name;
+
+function validateUpEmail() {
+  emailUp = emailSU.value;
+  console.log(emailUp);
+
+  // email can be no longer than 64 characters
+  if (emailUp.length > 64) {
+    document.getElementById("bad_email_up_error").innerHTML = "You entered an email address that is too long";
+    emailSU.value = "";
+    return false;
+  }
+
+  // email must be user@domain.extensiion
+  var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  if (re.test(email)) {
+    document.getElementById("bad_email_up_error").innerHTML = "";
+    return true;
+  } else {
+    document.getElementById("bad_email_up_error").innerHTML = "Please enter a valid email address";
+    emailSU.value = "";
+    return false;
+  }
+}
+
+function validateNameUp() {
+  name = nameSU.value;
+
+  console.log(name);
+  // name can't be longer than 25 characters
+  if (name.length > 25) {
+    document.getElementById("bad_name_up_error").innerHTML = "You entered a name that is too long";
+  }
+
+  // no special characters or numbers
+  var re = /^[A-Za-z ]+$/;
+  if (re.test(name)) {
+    document.getElementById("bad_name_up_error").innerHTML = "";
+    return true;
+  } else {
+    document.getElementById("bad_name_up_error").innerHTML = "Please enter a valid name";
+    passwordSU.value = "";
+    return false;
+  }
+
+}
+
+function validateUpPassword1() {
+  password1Up = passwordSU.value;
+
+  // password can be no longer than 256 characters
+  if (password1Up.length > 256) {
+    console.log("password too long");
+    document.getElementById("bad_password1_up_error").innerHTML = "You entered a password that is too long";
+    passwordSU.value = "";
+    return false;
+  }
+
+  // password can't have special characters
+  var re = /^[A-Za-z0-9 ]+$/;
+  if (re.test(password1Up)) {
+    console.log("valid password");
+    document.getElementById("bad_password1_up_error").innerHTML = "";
+    return true;
+  } else {
+    console.log("invalid password");
+    document.getElementById("bad_password1_up_error").innerHTML = "Please enter a valid password";
+    passwordSU.value = "";
+    return false;
+  }
+}
+
+function validateUpPassword2() {
+  password2Up = confirmPassword.value;
+
+  // password can be no longer than 256 characters
+  if (password2Up.length > 256) {
+    console.log("password too long");
+    document.getElementById("bad_password2_up_error").innerHTML = "You entered a password that is too long";
+    confirmPassword.value = "";
+    return false;
+  }
+
+  // password can't have special characters
+  var re = /^[A-Za-z0-9 ]+$/;
+  if (re.test(password2Up)) {
+    console.log("valid password");
+    document.getElementById("bad_password2_up_error").innerHTML = "";
+    return true;
+  } else {
+    console.log("invalid password");
+    document.getElementById("bad_password2_up_error").innerHTML = "Please enter a valid password";
+    confirmPassword.value = "";
+    return false;
+  }
+}
+
+if (signUp != null) {
+  // add in sign up rules => error occurs is password is 1 letter
+  signUp.addEventListener('submit', (event) => {
+    event.preventDefault();
+    adminSelected = adminBtn.checked ? 1 : 0;
+    console.log(emailUp);
+    console.log(passwordUp);
+    console.log(conPassUp);
+    if (validateNameUp() && validateUpEmail() && validateUpPassword1() && validateUpPassword2()) {
+      if (passwordUp != conPassUp) {
+        alert("Passwords do not match!");
+      }
+      else {
+        const authSec = getAuth(secondaryApp);
+        createUserWithEmailAndPassword(authSec, emailUp, passwordUp)
+          .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          updateName(user, name);
+          createClinician(user.uid, adminSelected);
+          authSec.signOut();
+          signUp.reset();
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // ..
+          console.log(errorCode);
+          console.log(errorMessage);
+          window.alert("Error occurred. Try again.");
+        });
+      }
+    }
+    
+  });
+}
+
 // Add patient to db
 async function addPatient(patientData) {
   const docRef = await addDoc(collection(db, "patient_profiles"), patientData);
@@ -494,9 +974,11 @@ async function calcAvgTrials(patientUid, typeEntry) {
     querySnapshot.forEach((doc) => {
       let data = doc.data();
       if (data["hand"] == 0) { // right
+        console.log(data['measurements']);
         let sumRH = data["measurements"].reduce((a, b) => a + b, 0);
         avgRH += parseFloat((sumRH / data["measurements"].length).toFixed(2));
       } else { // left
+        console.log(data['measurements']);
         let sumLH = data["measurements"].reduce((a, b) => a + b, 0);
         avgLH += parseFloat((sumLH / data["measurements"].length).toFixed(2));
       }
@@ -648,7 +1130,7 @@ async function calcStrokeGripRatio(patientInfo) {
     await addMetric(metric);
 
     return {
-      "ratio": gripRatio,
+      "grip_ratio": gripRatio,
       "avgRH": avgs["data"]["avgRH"],
       "avgLH": avgs["data"]["avgLH"],
       "hand": domHand,
@@ -711,9 +1193,6 @@ async function calcGripRatio(patientUid) {
 }
 
 // Register new user
-async 
-
-// Register new user
 //const signupButton = document.getElementById("sign-up");
 //const main = document.getElementById("main");
 //const createacct = document.getElementById("create-acct")
@@ -774,4 +1253,4 @@ async
 //       main.style.display = "block";
 //       createacct.style.display = "none";
 //   });
-});
+//});

@@ -1,6 +1,237 @@
 /* stylesheet for data collection page*/
+.data_collection {
+    width: 95%;
+    margin-left: 20px;
+    position: relative;
+    overflow: hidden;
+    padding-top: 20px;
+}
 
-/* makeshift search button */
-.firebase_button {
+.data_collection h2 {
+    text-align: left;
+    font-size: xx-large;
     width: 100%;
+}
+
+/* Style the tab */
+.tab {
+    width: 100%;
+    overflow: auto;
+    border: 1px solid #ccc;
+    background-color: #4164da;
+    display:flex;
+    border-radius: 8px;
+    
+}
+  
+/* Style the buttons that are used to open the tab content */
+.tab button {
+    width: 100%;
+    background-color: #4164da;
+    float: left;
+    border: 1px solid white;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    text-align: center;
+    color: white;
+    font-size: large;
+    font-weight: 500 px;
+    transition: 0.3s ease;
+}
+
+  
+/* Change background color of buttons on hover */
+.tab button:hover {
+    width: 100%;
+    background-color: #5f7ee6;
+}
+  
+  /* Create an active/current tablink class */
+  /*
+.tab button.active {
+    background-color: #ccc;
+}
+
+.tab button.inactive{
+    background-color: #4164da;
+}
+*/
+  
+  /* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.manual_entry_form {
+    display:flex;
+    width:30%;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+}
+
+/** form entry columns **/
+.form_entry_column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+}
+  
+/* Clear floats after the columns */
+.form_entry_row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.trial_button {
+    border: 0;
+    margin: 5px;
+    width: 60%;
+    cursor: pointer;
+    background-color:#4164da;
+    color: white;
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+#myProgress {
+    width: 100%;
+    background-color: lightgray;
+    border-radius: 5px;
+    text-align: center;
+}
+
+#myBar {
+    width: 1%;
+    height: 30px;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    color: darkgray;
+}
+
+.progress_bar_text {
+    width: 100%;
+    text-align: center;
+    line-height: 30px;
+    color: darkgray;
+    position: relative;
+}
+
+.blink_display {
+    animation: blinker 1s linear infinite;
+    color: #4164da;
+    /*background-color: #E5E7EB;*/
+    font-family: sans-serif;
+    font-size: xx-large;
+}
+@keyframes blinker {
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/** graph display **/
+.graph_entry_column {
+    float: left;
+    padding: 10px;
+}
+  
+/* Clear floats after the columns */
+.graph_entry_row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.accept_button {
+    border: 0;
+    margin: 5px;
+    padding: 5px;
+    width: auto;
+    cursor: pointer;
+    background-color: transparent;
+    color: #fff;
+    font-size: 10px;
+    border-radius: 5px;
+}
+
+.reject_button {
+    border: 0;
+    margin: 5px;
+    padding: 5px;
+    width: auto;
+    cursor: pointer;
+    background-color:transparent;
+    color: #fff;
+    font-size: 10px;
+    border-radius: 5px;
+}
+
+.opt_table {
+    font-size: small;
+}
+
+.results {
+    width: 95%;
+    margin-left: 20px;
+    position: relative;
+    overflow: hidden;
+    padding-top: 20px;
+}
+
+.results h2 {
+    text-align: left;
+    font-size: xx-large;
+    width: 100%;
+}
+
+.results_row::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.results_column {
+    float: left;
+    width: 45%;
+    padding: 10px;
+}
+
+.circle_display {
+    border-radius: 50%;
+    border: 5px solid #4164da;
+    background: transparent;
+    text-align: center;
+    
+    width: 75%;
+    aspect-ratio: 1 / 1;
+    padding: 5%;
+    margin: 5%;
+}
+
+.admin {
+    width: 95%;
+    margin-left: 20px;
+    position: relative;
+    overflow: hidden;
+    padding-top: 20px;
+}
+
+.csvBTN {
+    background-color: #4164da; 
+    color: white;
+    text-align: center;
+    border-radius: 5px;
 }
