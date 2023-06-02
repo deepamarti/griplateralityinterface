@@ -14,6 +14,7 @@ body{
 
 .banner_main h1{
     vertical-align:middle;
+    text-align: center;
 }
 
 #menu{
@@ -511,4 +512,6 @@ label {
 
 #mainBody {
     width: 100%;
+    text-align: center;
+    position: relative;
 }
