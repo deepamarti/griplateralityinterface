@@ -533,9 +533,9 @@ const mForm = document.getElementById("manual_entry");
     let right = document.getElementById("right_avg_text");
     let left = document.getElementById("left_avg_text");
 
-    ratio.innerHTML = "Grip Ratio: \n" + grip_ratio['ratio'];
-    right.innerHTML = "Right Avg: \n" + grip_ratio['avgRH'];
-    left.innerHTML = "Left Avg: \n" + grip_ratio['avgLH'];
+    ratio.innerHTML = "<br />Grip Ratio: <br /><br /><br />" + grip_ratio['ratio'];
+    right.innerHTML = "<br />Right Avg: <br /><br /><br />" + grip_ratio['avgRH'];
+    left.innerHTML = "<br />Left Avg: <br /><br /><br />" + grip_ratio['avgLH'];
   }
 
 // function testFire() {

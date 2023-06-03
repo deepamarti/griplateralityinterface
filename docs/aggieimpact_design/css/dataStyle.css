@@ -203,19 +203,27 @@
     clear: both;
 }
 
+.results_circle_column {
+    float: left;
+    width: 33%;
+    padding: 10px;
+}
+
 .results_column {
     float: left;
-    width: 45%;
+    width: 50%;
     padding: 10px;
 }
 
 .circle_display {
     border-radius: 50%;
-    border: 5px solid #4164da;
+    border: 15px solid #4164da;
     background: transparent;
     text-align: center;
-    
+    vertical-align: middle;
     width: 75%;
+    height: 75%;
+    line-height: 75%;
     aspect-ratio: 1 / 1;
     padding: 5%;
     margin: 5%;

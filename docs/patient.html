@@ -130,15 +130,15 @@
                                 <h3>Right Hand Measurements</h3>
                              </div>
                              <div class="col-md-12">
-                                <label>Trial 1: </label>
+                                <label class="manual_entry_form"> Trial 1: </label>
                                 <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_right_t1" required>
                              </div>
                              <div class="col-md-12">
-                                <label>Trial 2: </label>
+                                <label class="manual_entry_form">Trial 2: </label>
                                 <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_right_t2" required>
                              </div>
                              <div class="col-md-12">
-                                <label>Trial 3: </label>
+                                <label class="manual_entry_form">Trial 3: </label>
                                 <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_right_t3" required>
                              </div>
                         </div>
@@ -147,15 +147,15 @@
                                 <h3>Left Hand Measurements</h3>
                              </div>
                              <div class="col-md-12">
-                                <label>Trial 1: </label>
+                                <label class="manual_entry_form">Trial 1: </label>
                                 <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_left_t1" required>
                              </div>
                              <div class="col-md-12">
-                                <label>Trial 2: </label>
+                                <label class="manual_entry_form">Trial 2: </label>
                                 <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_left_t2" required>
                              </div>
                              <div class="col-md-12">
-                                <label>Trial 3: </label>
+                                <label class="manual_entry_form">Trial 3: </label>
                                 <input type="number" min="0" step=".01" class="manual_entry_form" type="text" id="man_left_t3" required>
                              </div>
                         </div>
@@ -241,21 +241,23 @@
         <div class="results" id="results_section">
             <h2 id="resultsH2">Results</h2> 
             <div class="results_row">
-                <div class="results_column">
                     <div style="height: 5%; background-color: #4164da; padding: 5px; text-align: center; border-radius: 15px;"> Grip Ratio</div>
-                    <p class="circle_display" id="grip_ratio_txt">grip ratio</p>
-                    <p style="position: relative;">Grip Ratio</p>
-                    <div class="results_column">
-                        <p class="circle_display" id="right_avg_text"> right avg</p>
+                    <div class="results_circle_column">
+                        <div class="circle_display" id="grip_ratio_txt"><br />grip ratio</div>
                     </div>
-                    <div class="results_column">
-                        <p class="circle_display" id="left_avg_text">left avg</pr>
+                    <div class="results_circle_column">
+                        <div class="circle_display" id="right_avg_text"><br />right avg</div>
                     </div>
-                    
-                </div>
+                    <div class="results_circle_column">
+                        <div class="circle_display" id="left_avg_text"><br />left avg</div>
+                    </div>
+            </div>
+            <div class="results_row">
                 <div class="results_column">
                     <div style="height: 5%; background-color: #4164da; padding: 5px; text-align: center; border-radius: 15px;"> Right Hand Results</div>
                     <canvas id="right_graph_results" style="width:100%;"></canvas>
+                </div>
+                <div class="results_column">
                     <div style="height: 5%; background-color: #4164da; padding: 5px; text-align: center; border-radius: 15px;"> Left Hand Results</div>
                     <canvas id="left_graph_results" style="width:100%;"></canvas>
                 </div>
