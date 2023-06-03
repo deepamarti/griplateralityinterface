@@ -222,7 +222,10 @@ function WaitForAcceptReject() {
     // enable accept reject buttons
 }
 
-document.getElementById('accept_button').addEventListener('click', AcceptTrial);
+const accept_btn = document.getElementById('accept_button')
+if (accept_btn != null) {
+    accept_btn.addEventListener('click', AcceptTrial);
+}
 
 function AcceptTrial(index) {
     let hand = "";
