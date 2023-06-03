@@ -486,14 +486,14 @@
                     if (width <= 100) {
                         // ready = yellow
                         document.getElementById('blinking_text').style.animationPlayState = 'running';
-                        document.getElementById('blinking_text').innerHTML = "READY";
+                        document.getElementById('blinking_text').innerHTML = "3";
                         document.getElementById('myBar').style.backgroundColor = "#ffe26a";
                     } else if (width > 100 && width <=200) {
                         // set
-                        document.getElementById('blinking_text').innerHTML = "SET";
+                        document.getElementById('blinking_text').innerHTML = "2";
                     } else if (width > 200 && width <=300) {
                         // go
-                        document.getElementById('blinking_text').innerHTML = "GO";
+                        document.getElementById('blinking_text').innerHTML = "1";
                     } else if (width > 300 && width <=800) {
                         // collecting = green
                         document.getElementById('blinking_text').style.animationPlayState = 'paused';

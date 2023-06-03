@@ -131,7 +131,7 @@
 
 .blink_display {
     animation: blinker 1s linear infinite;
-    color: #4164da;
+    color: black;
     /*background-color: #E5E7EB;*/
     font-family: sans-serif;
     font-size: xx-large;
