@@ -34,10 +34,8 @@ auth.onAuthStateChanged(async (user) => {
       }
       if (adminUser) {
         document.getElementById("adminNav").style.display = "block";
-        document.getElementById("adminPortal").style.display = "block";
       } else {
         document.getElementById("adminNav").style.display = "none";
-        document.getElementById("adminPortal").style.display = "none";
       }
       
     }

@@ -465,9 +465,6 @@
         },
         options: {
             legend: {display: false},
-            scales: {
-            yAxes: [{ticks: {min: -1, max:600}}],
-            },
             tooltips: {enabled: false}
         }
         });
@@ -580,6 +577,7 @@
             data: {
                 labels:time,
                 datasets: [{
+                    label: "Trial 1",
                     fill: false,
                     lineTension: 0,
                     backgroundColor: "#75c9b7",
@@ -588,28 +586,24 @@
                     order: 0,
                     data: []
                 }, {
+                    label: "Trial 2",
                     fill: false,
                     lineTension: 0,
-                    backgroundColor: "#75c9b7",
-                    borderColor: "#75c9b7",
+                    backgroundColor: "#4D7AF1",
+                    borderColor: "#4D7AF1",
                     borderWidth: 1,
                     order: 0,
                     data: []
                 }, {
+                    label: "Trial 3",
                     fill: false,
                     lineTension: 0,
-                    backgroundColor: "#75c9b7",
-                    borderColor: "#75c9b7",
+                    backgroundColor: "#AE7FF4",
+                    borderColor: "#AE7FF4",
                     borderWidth: 1,
                     order: 0,
                     data: []
                 }]
-            },
-            options: {
-                legend: {display: false},
-                scales: {
-                yAxes: [{ticks: {min: -1, max:600}}],
-                }
             }
         });
 
@@ -618,6 +612,7 @@
             data: {
                 labels:time,
                 datasets: [{
+                    label: "Trial 1",
                     fill: false,
                     lineTension: 0,
                     backgroundColor: "#75c9b7",
@@ -626,28 +621,24 @@
                     order: 0,
                     data: []
                 }, {
+                    label: "Trial 2",
                     fill: false,
                     lineTension: 0,
-                    backgroundColor: "#75c9b7",
-                    borderColor: "#75c9b7",
+                    backgroundColor: "#4D7AF1",
+                    borderColor: "#4D7AF1",
                     borderWidth: 1,
                     order: 0,
                     data: []
                 }, {
+                    label: "Trial 3",
                     fill: false,
                     lineTension: 0,
-                    backgroundColor: "#75c9b7",
-                    borderColor: "#75c9b7",
+                    backgroundColor: "#AE7FF4",
+                    borderColor: "#AE7FF4",
                     borderWidth: 1,
                     order: 0,
                     data: []
                 }]
-            },
-            options: {
-                legend: {display: false},
-                scales: {
-                yAxes: [{ticks: {min: -1, max:600}}],
-                }
             }
         });
 
@@ -655,6 +646,7 @@
             right_chart.data.datasets[0].data = sample_data[0];
             right_chart.data.datasets[1].data = sample_data[1];
             right_chart.data.datasets[2].data = sample_data[2];
+
 
             left_chart.data.datasets[0].data = sample_data[3];
             left_chart.data.datasets[1].data = sample_data[4];
