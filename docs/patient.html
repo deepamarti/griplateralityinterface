@@ -118,7 +118,8 @@
             </div>
             
             <div class="tab">
-                <button onClick="SwitchTab(event,'Manual');">Manual Entry</button>
+                <!--explicitly disconnects bluetooth when switching-->
+                <button onClick="SwitchTab(event,'Manual'); DisconnectDevice();">Manual Entry</button>
                 <button onClick="SwitchTab(event,'Bluetooth');">Bluetooth</button>
             </div>
 
