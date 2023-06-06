@@ -528,12 +528,12 @@ const mForm = document.getElementById("manual_entry");
 
   function PopulateResults(grip_ratio) {
     console.log(grip_ratio);
-    console.log(grip_ratio['ratio']);
+    console.log(grip_ratio['grip_ratio']);
     let ratio = document.getElementById("grip_ratio_txt");
     let right = document.getElementById("right_avg_text");
     let left = document.getElementById("left_avg_text");
 
-    ratio.innerHTML = "<br />Grip Ratio: <br /><br /><br />" + grip_ratio['ratio'];
+    ratio.innerHTML = "<br />Grip Ratio: <br /><br /><br />" + grip_ratio['grip_ratio'];
     right.innerHTML = "<br />Right Avg: <br /><br /><br />" + grip_ratio['avgRH'];
     left.innerHTML = "<br />Left Avg: <br /><br /><br />" + grip_ratio['avgLH'];
   }

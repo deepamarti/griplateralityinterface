@@ -256,10 +256,12 @@
                 <div class="results_column">
                     <div style="height: 5%; background-color: #4164da; padding: 5px; text-align: center; border-radius: 15px;"> Right Hand Results</div>
                     <canvas id="right_graph_results" style="width:100%;"></canvas>
+                    <canvas id="right_bar_results" style="width:100%;"></canvas>
                 </div>
                 <div class="results_column">
                     <div style="height: 5%; background-color: #4164da; padding: 5px; text-align: center; border-radius: 15px;"> Left Hand Results</div>
                     <canvas id="left_graph_results" style="width:100%;"></canvas>
+                    <canvas id="left_bar_results" style="width:100%;"></canvas>
                 </div>
             </div>
             
@@ -467,7 +469,14 @@
         },
         options: {
             legend: {display: false},
-            tooltips: {enabled: false}
+            tooltips: {enabled: false},
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
         }
         });
 
@@ -574,6 +583,8 @@
 
     <!--graphing results-->
     <script>
+    document.getElementById("manual_entry").addEventListener('submit', updateResults);
+
         let right_chart = new Chart("right_graph_results", {
             type: 'line',
             data: {
@@ -606,6 +617,15 @@
                     order: 0,
                     data: []
                 }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
             }
         });
 
@@ -641,6 +661,57 @@
                     order: 0,
                     data: []
                 }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        let right_bar = new Chart("right_bar_results", {
+            type: 'bar',
+            data: {
+                labels: ["Trial 1", "Trial 1", "Trial 3"],
+                datasets: [{
+                    fill: true,
+                    backgroundColor: ["#75c9b7", "#4D7AF1", "#AE7FF4"],
+                    data: [NaN, NaN, NaN]
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        let left_bar = new Chart("left_bar_results", {
+            type: 'bar',
+            data: {
+                labels: ["Trial 1", "Trial 1", "Trial 3"],
+                datasets: [{
+                    fill: true,
+                    backgroundColor: ["#75c9b7", "#4D7AF1", "#AE7FF4"],
+                    data: [NaN, NaN, NaN]
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
             }
         });
 
@@ -653,9 +724,19 @@
             left_chart.data.datasets[0].data = sample_data[3];
             left_chart.data.datasets[1].data = sample_data[4];
             left_chart.data.datasets[2].data = sample_data[5];
+
+            right_bar.data.datasets[0].data[0] = parseFloat(document.getElementById("man_right_t1").value).toFixed(2);
+            right_bar.data.datasets[0].data[1] = parseFloat(document.getElementById("man_right_t2").value).toFixed(2);
+            right_bar.data.datasets[0].data[2] = parseFloat(document.getElementById("man_right_t3").value).toFixed(2);
+
+            left_bar.data.datasets[0].data[0] = parseFloat(document.getElementById("man_left_t1").value).toFixed(2);
+            left_bar.data.datasets[0].data[1] = parseFloat(document.getElementById("man_left_t2").value).toFixed(2);
+            left_bar.data.datasets[0].data[2] = parseFloat(document.getElementById("man_left_t3").value).toFixed(2);
+            
             right_chart.update();
             left_chart.update();
-
+            right_bar.update();
+            left_bar.update();
         }
     </script>
     
