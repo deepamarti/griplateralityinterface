@@ -451,7 +451,7 @@ export async function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_
     addOptDeviceData(ble_opt_data);
   }
   document.getElementById('results_section').style.display = 'block';
-  PopulateResults(await calcGripRatio(global_patient));
+  PopulateResults(await calcGripRatio(global_patient, 0));
 }
 
 const mForm = document.getElementById("manual_entry");
@@ -524,7 +524,7 @@ const mForm = document.getElementById("manual_entry");
         addDeviceData(manual_data);
         addOptDeviceData(manual_opt_data);
       }
-      PopulateResults(await calcGripRatio(global_patient));
+      PopulateResults(await calcGripRatio(global_patient, 1));
     });
   }
 
@@ -1144,7 +1144,7 @@ async function calcStrokeGripRatio(patientInfo) {
 }
 
 // Calculate grip ratio
-async function calcGripRatio(patientUid) {
+async function calcGripRatio(patientUid, entryType) {
   var gripRatio = 0.0;
   let patient = await getPatient(patientUid);
   let patientInfo = patient["patient"];
@@ -1154,7 +1154,7 @@ async function calcGripRatio(patientUid) {
   }
   else {
     let domHand = (patientInfo["dominant_hand"] == 0) ? "Right" : "Left";
-    let avgs = await calcAvgTrials(patientUid, 1); // 1 = manual entry 
+    let avgs = await calcAvgTrials(patientUid, entryType); // 1 = manual entry 
     if (avgs["empty"] == false) {
       let normData = getNormativeData(patientInfo["date_of_birth"], patientInfo["gender"]);
       let nonDomNorm = 0.0;
