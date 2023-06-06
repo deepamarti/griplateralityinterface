@@ -472,11 +472,8 @@
             legend: {display: false},
             tooltips: {enabled: false},
             scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
+                y: {grace: '15%'},
+                yAxes: [{ticks: {beginAtZero: true}}]
             }
         }
         });
@@ -530,16 +527,9 @@
                     opt_sample_data[current_index][i] = Math.round((sample_data[current_index][opt_sample_time[current_index][i]*10]) * 100) / 100;
                     AddToOptTable(opt_sample_time[current_index][i], opt_sample_data[current_index][i]);
                 }
-                // disable everything except for the accept reject buttons
-                //WaitForAcceptReject();
-                //
                 console.log(opt_sample_data[current_index]);
                 console.log(opt_sample_time[current_index]);
-                done_sampling=false;
-
-                // do accept reject here, and increment counters
-                // disable buttons in accept reject listeners
-                
+                done_sampling=false;       
             }
             chart.data.datasets[0].data = sample_data[current_index];
             chart.data.datasets[1].data = opt_sample_graph_data[current_index];
@@ -621,11 +611,8 @@
             },
             options: {
                 scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
+                    y: {grace: '5%'},
+                    yAxes: [{ticks: {beginAtZero: true}}]
                 }
             }
         });
@@ -665,11 +652,8 @@
             },
             options: {
                 scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
+                    y: {grace: '5%'},
+                    yAxes: [{ticks: {beginAtZero: true}}]
                 }
             }
         });
@@ -686,18 +670,10 @@
             },
             options: {
                 scales: {
-                    y: {
-                        grace: '5%'
-                    },
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
+                    y: {grace: '5%'},
+                    yAxes: [{ticks: {beginAtZero: true}}]
                 },
-                legend: {
-                    display: false
-                }
+                legend: {display: false}
             }
         });
 
@@ -713,15 +689,10 @@
             },
             options: {
                 scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
+                    y: {grace: '5%'},
+                    yAxes: [{ticks: {beginAtZero: true}}]
                 },
-                legend: {
-                    display: false
-                }
+                legend: {display: false}
             }
         });
 
