@@ -471,8 +471,8 @@ const mForm = document.getElementById("manual_entry");
         left_trials[i] = Math.round(left_trials[i] * 100) / 100;
       }
       
-      console.log(right_trials);
-      console.log(left_trials);
+      //console.log(right_trials);
+      //console.log(left_trials);
 
       for (let i=0; i<3; i++) {
         // right hand = 0
@@ -528,7 +528,6 @@ const mForm = document.getElementById("manual_entry");
 
   function PopulateResults(grip_ratio) {
     console.log(grip_ratio);
-    console.log(grip_ratio['grip_ratio']);
     let ratio = document.getElementById("grip_ratio_txt");
     let right = document.getElementById("right_avg_text");
     let left = document.getElementById("left_avg_text");
