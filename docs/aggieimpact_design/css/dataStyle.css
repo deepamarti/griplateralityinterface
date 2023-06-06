@@ -244,3 +244,12 @@
     text-align: center;
     border-radius: 5px;
 }
+
+.result_label {
+    height: 5%; 
+    background-color: #4164da; 
+    color: white; 
+    padding: 5px; 
+    text-align: center; 
+    border-radius: 15px;
+}
