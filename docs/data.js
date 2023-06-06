@@ -268,6 +268,11 @@ function AcceptTrial(index) {
     let button_name = "ble_" + hand + "_t" + num;
     ClearOptTable();
     disable_trial_button(button_name);
+    // hide graphs again
+    document.getElementById("graph_accept_reject").style.display = 'none';
+    document.getElementById("myProgress").style.visibility = 'visible';
+    document.getElementById("myProgress").style.height = "100%";
+    document.getElementById("myBar").style.width = 1;
     if (trials_complete_left + trials_complete_right == 6) {
         document.getElementById('ble_submit').disabled = false;
     }
