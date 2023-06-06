@@ -363,6 +363,7 @@
                 console.log(`Connected to: ${gdxDevice.name}`);
                 graph_interval = setInterval(updateValue, 100);
                 disable_button('ble_connect');
+                enable_button('ble_disconnect');
                 lock_method_selection();
             } catch (err) {
                 console.error(err);
@@ -379,8 +380,8 @@
                 }
                 gdxDevice = "";
                 ble_status.style.backgroundColor = "#ffe26a";
-                enable_button('ble_connect');
                 disable_button('ble_disconnect');
+                enable_button('ble_connect');
             } catch (err) {
                 console.error(err);
             }
@@ -388,6 +389,8 @@
         btn_disconnect.addEventListener('click', DisconnectDevice);
 
         function Collect(evt) {
+            // can't disconnect during trial
+            disable_button('ble_disconnect');
             current_index = evt.currentTarget.index;
             ProgressBar();
             setTimeout(CollectData, 3000);
@@ -419,6 +422,7 @@
                     for (let j=0; j<51; j++) {
                         sample_data[current_index][j] = Math.round(sample_data[current_index][j]*100) / 100;
                     }
+                    // enables disconnect after collection is finished
                     enable_button('ble_disconnect');
                 }
                 // log the sensor name, new value and units.
