@@ -391,6 +391,7 @@
         function Collect(evt) {
             // can't disconnect during trial
             disable_button('ble_disconnect');
+            evt.currentTarget.disabled = true;
             current_index = evt.currentTarget.index;
             ProgressBar();
             setTimeout(CollectData, 3000);
@@ -552,6 +553,14 @@
 
     <!--accept/reject-->
     <script>
+        const trial_btn = [
+            'ble_right_t1', 
+            'ble_right_t2',
+            'ble_right_t3', 
+            'ble_left_t1', 
+            'ble_left_t2', 
+            'ble_left_t3'];
+
         function Accept() {
             AcceptTrial(current_index);
         }
@@ -561,8 +570,17 @@
             sample_data[current_index] = [];
             opt_sample_data[current_index] = [];
             opt_sample_time[current_index] = [];
-            opt_data = [];
+            opt_sample_graph_data[current_index] = [];
             updateValue();
+
+            // reenable the trial button
+            enable_trial_button(trial_btn[current_index]);
+            // hide graphs again
+            document.getElementById("graph_accept_reject").style.display = 'none';
+            document.getElementById("myProgress").style.visibility = 'visible';
+            document.getElementById("myProgress").style.height = "100%";
+            document.getElementById("myBar").style.width = 1;
+            document.getElementById('myBar').style.backgroundColor = "#ea8a81";
         }
     </script>
 
