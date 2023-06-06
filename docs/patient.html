@@ -398,39 +398,43 @@
         }
 
         function CollectData() {
-            console.log(current_index);
-            
-            // set up sensor
-            const sensor = gdxDevice.getSensor(1);
-            if (sensor) {
-                sensor.setEnabled(true);
-            }
-            done_sampling = false;
-            sensor.values = [];
-                    
-            // clear data arrays
-            sample_data[current_index] = [];
-            opt_sample_data[current_index] = [];
-            opt_sample_graph_data[current_index] = Array(51).fill(NaN); 
-            
-            gdxDevice.start(100);
-            sensor.on('value-changed', (sensor) => {
-                // samples for 5 seconds
-                if (sensor.values.length > 50){
-                    done_sampling = true;
-                    gdxDevice.stop();
-                    sample_data[current_index] = sensor.values;
-                    for (let j=0; j<51; j++) {
-                        sample_data[current_index][j] = Math.round(sample_data[current_index][j]*100) / 100;
-                    }
-                    // enables disconnect after collection is finished
-                    enable_button('ble_disconnect');
+            try {
+                // set up sensor
+                const sensor = gdxDevice.getSensor(1);
+                if (sensor) {
+                    sensor.setEnabled(true);
                 }
-                // log the sensor name, new value and units.
-                console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
-                // add data points to the data array
-                //sample_data[current_index].push(sensor.value);
-            }); 
+                done_sampling = false;
+                sensor.values = [];
+                        
+                // clear data arrays
+                sample_data[current_index] = [];
+                opt_sample_data[current_index] = [];
+                opt_sample_graph_data[current_index] = Array(51).fill(NaN); 
+                
+                gdxDevice.start(100);
+                sensor.on('value-changed', (sensor) => {
+                    // samples for 5 seconds
+                    if (sensor.values.length > 50){
+                        done_sampling = true;
+                        gdxDevice.stop();
+                        sample_data[current_index] = sensor.values;
+                        for (let j=0; j<51; j++) {
+                            sample_data[current_index][j] = Math.round(sample_data[current_index][j]*100) / 100;
+                        }
+                        // enables disconnect after collection is finished
+                        enable_button('ble_disconnect');
+                    }
+                    // log the sensor name, new value and units.
+                    console.log(`Sensor: ${sensor.name} value: ${sensor.value} units: ${sensor.unit}`);
+                    // add data points to the data array
+                });  
+            } catch (err) {
+                console.log(err);
+                // if something failed, reject the trial (so that the user can retake it)
+                Reject();
+            }
+            
         }
         btn_collect_0.addEventListener('click', Collect);
         btn_collect_0.index = 0;
