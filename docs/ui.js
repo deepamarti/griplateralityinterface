@@ -72,8 +72,8 @@ if (accept != null) {
 }
 
 function EnableTrial() {
-    console.log('enable next trial');
-    console.log(next);
+    //console.log('enable next trial');
+    //console.log(next);
     if (next < 6){
         trial_btn[next].disabled = false;
         next = next + 1;
@@ -87,7 +87,7 @@ if (exportBTN != null) {
 }
 
 function ShowExportData() {
-    alert('make export data visible')
+    //console.log('make export data visible')
     document.getElementById("admin_section").style.display = 'grid'
 
 }
