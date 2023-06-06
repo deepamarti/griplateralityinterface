@@ -91,7 +91,9 @@ function SwitchTab(evt, TabName) {
 
         // Show the current tab, and add an "active" class to the button that opened the tab
         document.getElementById(TabName).style.display = "block";
-        evt.currentTarget.className += " active";
+        if (evt.currentTarget != null) {
+           evt.currentTarget.className += " active"; 
+        }
         is_method_locked = false;
     } else {
         if (TabName =='Manual' && is_BLE_selected) {
