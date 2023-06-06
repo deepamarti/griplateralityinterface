@@ -21,13 +21,6 @@ function InitializeData() {
     //document.getElementById('graph_accept_reject').style.display = 'flex';
 }
 
-function InitializeResults() {
-    // hide until theres actually data
-    // create graphs with empty datasets
-    // legend (to coor code hand and trial)
-    // loading for grip ratio
-}
-
 const backBTN = document.getElementById("back_to_patient");
 if (backBTN != null) {
     backBTN.addEventListener('click', BackToPatient);
@@ -44,13 +37,32 @@ function BackToPatient() {
 export function ShowDataCollection() {
     document.getElementById('patient_search').style.display = 'none';
     document.getElementById('data_collection_section').style.display = 'block';
-    document.getElementById('results_section').style.display = 'block';
+    document.getElementById('results_section').style.display = 'none';
     document.getElementById("admin_section").style.display = 'none';
   
-     // initialize data collection section
-     InitializeData();
-     InitializeResults();
-  }
+    // initialize data collection section
+    InitializeData();
+}
+
+export function ShowResults(is_ble) {
+    document.getElementById('patient_search').style.display = 'none';
+    document.getElementById('data_collection_section').style.display = 'block';
+    document.getElementById('results_section').style.display = 'block';
+    document.getElementById("admin_section").style.display = 'none';
+
+    location.href = '#results_section';
+    if (is_ble) {
+        document.getElementById('right_graph_results').style.display = 'block';
+        document.getElementById('left_graph_results').style.display = 'block';
+        document.getElementById('right_bar_results').style.display = 'none';
+        document.getElementById('left_bar_results').style.display = 'none';
+    } else {
+        document.getElementById('right_graph_results').style.display = 'none';
+        document.getElementById('left_graph_results').style.display = 'none';
+        document.getElementById('right_bar_results').style.display = 'block';
+        document.getElementById('left_bar_results').style.display = 'block';
+    }
+} 
 
 const btn_connect = document.getElementById('ble_connect');
 const accept = document.getElementById('accept_button');
@@ -70,7 +82,6 @@ function EnableTrial() {
     }
     
 }
-
 
 const exportBTN = document.getElementById('show_export_data');
 if (exportBTN != null) {

@@ -242,11 +242,6 @@ function ClearOptTable() {
     tbody.innerHTML = '';
 }
 
-function WaitForAcceptReject() {
-    // disable all trial buttons
-    // enable accept reject buttons
-}
-
 const accept_btn = document.getElementById('accept_button')
 if (accept_btn != null) {
     accept_btn.addEventListener('click', AcceptTrial);

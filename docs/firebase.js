@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-app.js";
 import { getFirestore, collection, getDocs, query, where, addDoc, orderBy, limit, Timestamp} from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/9.1.1/firebase-auth.js";
-import { ShowDataCollection} from "./ui.js";
+import { ShowDataCollection, ShowResults} from "./ui.js";
 
 //window.addEventListener('load', function() {
 const firebaseConfig = {
@@ -285,10 +285,8 @@ async function setPatient(id, name) {
     // document.getElementById('adminExportH2').innerHTML = "Export " + name + "'s " + "Data";
   }
   ShowDataCollection();
-  document.getElementById('data_collection_section').style.visibility = 'visible';
   document.getElementById('dataCollectionH2').innerHTML = "Data Collection for " + name;
   document.getElementById('resultsH2').innerHTML = "Results for " + name;
-
 };
 
 async function getAllDataByCollection(emr, patientUid, collectionName, fields) {
@@ -449,6 +447,7 @@ export async function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_
     addOptDeviceData(ble_opt_data);
   }
   document.getElementById('results_section').style.display = 'block';
+  ShowResults(true);
   PopulateResults(await calcGripRatio(global_patient));
 }
 
@@ -522,6 +521,7 @@ const mForm = document.getElementById("manual_entry");
         addDeviceData(manual_data);
         addOptDeviceData(manual_opt_data);
       }
+      ShowResults(false);
       PopulateResults(await calcGripRatio(global_patient));
     });
   }
