@@ -129,6 +129,10 @@ function lock_method_selection(){
     is_method_locked = true;
 }
 
+function unlock_method_selection(){
+    is_method_locked = false;
+}
+
 function ResetBLE(){
     document.getElementById(id="ble_status").style.backgroundColor = "#ffe26a";
     document.getElementById('ble_submit').disabled = true;

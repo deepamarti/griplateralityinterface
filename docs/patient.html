@@ -569,12 +569,18 @@
             AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_time);
             disable_button("ble_submit");
             updateResults();
+            unlock_method_selection();
         }
     </script>
 
     <!--graphing results-->
     <script>
-    document.getElementById("manual_entry").addEventListener('submit', updateResults);
+    document.getElementById("manual_entry").addEventListener('submit', StoreManData);
+
+    function StoreManData() {
+        updateResults();
+        unlock_method_selection();
+    }
 
         let right_chart = new Chart("right_graph_results", {
             type: 'line',
