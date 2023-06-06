@@ -277,7 +277,7 @@ button {
 #patientTable td
 {
     font-size: 14px;
-    top:0px;
+    top:5px;
     font-weight: 400;
     text-align: start;
     padding-right: 20px;
@@ -286,11 +286,9 @@ button {
 
 #patientBody
 {
-    border:1px;
-    padding:15px;
-    height:300px;
     overflow-y:scroll;
     text-align:start;
+    font-size: medium;
 }
 
 .healthStatus h5{
