@@ -458,17 +458,13 @@ const mForm = document.getElementById("manual_entry");
       let right_trials = Array(3).fill(NaN);
       let left_trials = Array(3).fill(NaN);
       let dateNow = Timestamp.fromDate(new Date());
-      right_trials[0] = parseFloat(document.getElementById("man_right_t1").value);
-      right_trials[1] = parseFloat(document.getElementById("man_right_t2").value);
-      right_trials[2] = parseFloat(document.getElementById("man_right_t3").value);
-      left_trials[0] = parseFloat(document.getElementById("man_left_t1").value);
-      left_trials[1] = parseFloat(document.getElementById("man_left_t2").value);
-      left_trials[2] = parseFloat(document.getElementById("man_left_t3").value);
-      
-      for (let i=0; i<3; i++) {
-        right_trials[i] = Math.round(right_trials[i] * 100) / 100;
-        left_trials[i] = Math.round(left_trials[i] * 100) / 100;
-      }
+
+      right_trials[0] = parseFloat(document.getElementById("man_right_t1").value).toFixed(2);
+      right_trials[1] = parseFloat(document.getElementById("man_right_t2").value).toFixed(2);
+      right_trials[2] = parseFloat(document.getElementById("man_right_t3").value).toFixed(2);
+      left_trials[0] = parseFloat(document.getElementById("man_left_t1").value).toFixed(2);
+      left_trials[1] = parseFloat(document.getElementById("man_left_t2").value).toFixed(2);
+      left_trials[2] = parseFloat(document.getElementById("man_left_t3").value).toFixed(2);
       
       //console.log(right_trials);
       //console.log(left_trials);
