@@ -334,13 +334,12 @@ ul.conat_info li a:hover {
 /** banner section **/
 
 .banner_main {
-     width: 100%;
+     height: 100%;
      background: url(../images/sign_in_banner.png);
      padding: 0px;
      background-size: auto 100%;
      background-repeat: no-repeat;
      background-position: center top;
-     min-height: 1000px;
 }
 
 .banner_main h1 {
