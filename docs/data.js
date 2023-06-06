@@ -25,8 +25,27 @@ function check_BLE_support() {
         document.getElementById(id="ble_status").style.backgroundColor = "lightgray";
         if (confirm(msg_text)) {
             SwitchTab(onload, 'Manual');
+            
         }
+        return false;
+    } else {
+        return true;
     }
+}
+
+// prompt user to confirm switching tabs if the manual entry form is not empty
+function check_man_form_empty() {
+    if ((document.getElementById("man_right_t1").value.length != 0) || 
+        (document.getElementById("man_right_t2").value.length != 0) ||
+        (document.getElementById("man_right_t3").value.length != 0) ||
+        (document.getElementById("man_left_t1").value.length != 0) ||
+        (document.getElementById("man_left_t2").value.length != 0) ||
+        (document.getElementById("man_left_t3").value.length != 0)) {
+        return false;
+    } else {
+       return true; 
+    }
+    
 }
 
 // switch between ble and man tabs
@@ -34,15 +53,22 @@ function SwitchTab(evt, TabName) {
     // Declare all variables
     var i, tabcontent, tablinks;
     
+    // if method is not locked (user has not connected to device yet, etc.)
     if (!is_method_locked){
-       if (TabName == 'Bluetooth') {
-            is_BLE_selected = true;
+        if (TabName == 'Bluetooth' && check_BLE_support()) {
+            if (!check_man_form_empty()) {
+                let msg_text = "You are about to switch from manual to bluetooth entry. Do you want to proceed?";
+                if (confirm(msg_text)) {
+                    is_BLE_selected = true;
+                    ResetBLE();
+                    ResetManual();
+                }
+            }
         } else if (TabName == 'Manual') {
-            is_BLE_selected = false
+            is_BLE_selected = false;
+            ResetBLE();
+            ResetManual();
         } 
-        //reset everything
-        ResetBLE();
-        ResetManual();
 
         // Get all elements with class="tabcontent" and hide them
         tabcontent = document.getElementsByClassName("tabcontent");
@@ -59,15 +85,11 @@ function SwitchTab(evt, TabName) {
         // Show the current tab, and add an "active" class to the button that opened the tab
         document.getElementById(TabName).style.display = "block";
         evt.currentTarget.className += " active";
+        is_method_locked = false;
     } else {
-        if ((TabName =='Manual' && is_BLE_selected) || (TabName =='Bluetooth' && !is_BLE_selected)) {
-            // confirm if user wants to switch collection method
-            let msg_text = "";
-            if (TabName == 'Manual') {
-                msg_text = "You are about to switch from bluetooth to manual entry. Do you want to proceed?"
-            } else {
-                msg_text = "You are about to switch from manual to bluetooth entry. Do you want to proceed?"
-            }
+        if (TabName =='Manual' && is_BLE_selected) {
+            // confirm if user wants to switch collection method from ble to manual
+            let msg_text = "You are about to switch from bluetooth to manual entry. Do you want to proceed?";
             if (confirm(msg_text)) {
                 //reset everything
                 ResetBLE();
@@ -92,7 +114,7 @@ function SwitchTab(evt, TabName) {
                 if (TabName == 'Bluetooth') {
                     is_BLE_selected = true;
                 } else if (TabName == 'Manual') {
-                    is_BLE_selected = false
+                    is_BLE_selected = false;
                 } 
                 is_method_locked = false;
             }
