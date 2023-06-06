@@ -452,7 +452,7 @@ export async function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_
   }
   document.getElementById('results_section').style.display = 'block';
   ShowResults(true);
-  PopulateResults(await calcGripRatio(global_patient));
+  PopulateResults(await calcGripRatio(global_patient, 0));
 }
 
 const mForm = document.getElementById("manual_entry");
@@ -522,7 +522,7 @@ const mForm = document.getElementById("manual_entry");
         addOptDeviceData(manual_opt_data);
       }
       ShowResults(false);
-      PopulateResults(await calcGripRatio(global_patient));
+      PopulateResults(await calcGripRatio(global_patient, 1));
     });
   }
 
@@ -1089,14 +1089,14 @@ function getNormativeData(dob, gender) {
 }
 
 // Calculate grip ratio for stroke patient
-async function calcStrokeGripRatio(patientInfo) {
+async function calcStrokeGripRatio(patientInfo, typeEntry) {
   var gripRatio = 0.0;
 
   let domHand = (patientInfo["dominant_hand"] == 0) ? "Right" : "Left";
   let normData = getNormativeData(patientInfo["date_of_birth"], patientInfo["gender"]);
   let preStrokeLaterality = (patientInfo["dominant_hand_pre_stroke"] == 0) ? "Right" : "Left";
   let pareticSide = (patientInfo["stroke_side"] == 0) ? "Right" : "Left";
-  let avgs = await calcAvgTrials(patientInfo["uid"], 1); // 1 = manual entry
+  let avgs = await calcAvgTrials(patientInfo["uid"], typeEntry); // 1 = manual entry
 
   if (avgs["empty"] == false) {
     let nonPareticNorm = 0.0;
@@ -1141,17 +1141,17 @@ async function calcStrokeGripRatio(patientInfo) {
 }
 
 // Calculate grip ratio
-async function calcGripRatio(patientUid) {
+async function calcGripRatio(patientUid, typeEntry) {
   var gripRatio = 0.0;
   let patient = await getPatient(patientUid);
   let patientInfo = patient["patient"];
 
   if (patientInfo["impaired"] == 1) {
-    return await calcStrokeGripRatio(patientInfo);
+    return await calcStrokeGripRatio(patientInfo, typeEntry);
   }
   else {
     let domHand = (patientInfo["dominant_hand"] == 0) ? "Right" : "Left";
-    let avgs = await calcAvgTrials(patientUid, 1); // 1 = manual entry 
+    let avgs = await calcAvgTrials(patientUid, typeEntry); // 1 = manual entry 
     if (avgs["empty"] == false) {
       let normData = getNormativeData(patientInfo["date_of_birth"], patientInfo["gender"]);
       let nonDomNorm = 0.0;
