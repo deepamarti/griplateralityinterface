@@ -259,19 +259,19 @@ button {
     display:block;
     background-color: white;
     table-layout: fixed;
-    padding: 5px;
+    padding: 15px;
 }
 
 #patientTable th
 {
+    column-width: auto;
     position: sticky;
-    font-size: 14px;
-    top:0px;
+    font-size: medium;
+    top: 0px;
     text-transform: uppercase;
     font-weight: 400;
     text-align: start;
-    padding-right: 20px;
-    border:1px;
+    padding-right: 80px;
 }
 
 #patientTable td
