@@ -75,6 +75,7 @@
 .manual_entry_form {
     display:flex;
     width:30%;
+    margin: auto;
     justify-content: center;
     align-items: center;
     border-radius: 2px;
