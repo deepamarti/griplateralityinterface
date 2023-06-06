@@ -18,7 +18,6 @@ function InitializeData() {
     }
 
     document.getElementById('graph_accept_reject').style.display = 'none';
-    //document.getElementById('graph_accept_reject').style.display = 'flex';
 }
 
 const backBTN = document.getElementById("back_to_patient");
@@ -40,7 +39,6 @@ export function ShowDataCollection() {
     document.getElementById('results_section').style.display = 'none';
     document.getElementById("admin_section").style.display = 'none';
   
-    // initialize data collection section
     InitializeData();
 }
 
@@ -103,6 +101,5 @@ function ShowAdminPortal() {
     document.getElementById('patient_search').style.display ='none';
     document.getElementById("data_collection_section").style.display ='none';
     document.getElementById("results_section").style.display ='none';
-
     document.getElementById("admin_section").style.display = 'grid';
 }
