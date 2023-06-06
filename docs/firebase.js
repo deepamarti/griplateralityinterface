@@ -192,12 +192,12 @@ const fireBtn = document.getElementById("firebaseBtn");
 
 let patients = []
 
-
 if (fireBtn != null) {
 //function getPatientDashboard() {
 
   fireBtn.addEventListener('click', async function(){
-    document.getElementById("firebaseBtn").disabled = true;
+    // cleat patient table
+    ClearPatientTable();
     let result = await getAllPatients();
     console.log(result);
     if (result["empty"] == false) {
@@ -221,6 +221,10 @@ if (fireBtn != null) {
         var gripLaterality = 0;
         AddItemsToTable(name, birthdate,healthStatus, patID);
       }
+    }
+    function ClearPatientTable() {
+      var tbody = document.getElementById('patientBody');
+      tbody.innerHTML = '';
     }
     
     function AddItemsToTable(name,birthdate,healthStatus, patID){
