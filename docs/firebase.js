@@ -403,6 +403,10 @@ export async function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_
     (value, index) => Math.round(index * 0.1 *10)/10);
   let ble_data = null;
   let ble_opt_data = null;
+
+  var sumRH = 0;
+  var sumLH = 0;
+  
   for (let i=0;i<6;i++) {
     if (i<3) {
       // right hand
@@ -425,6 +429,7 @@ export async function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_
         "hand": 0,
         "manual_entry": 0
       };
+      sumRH += parseFloat(((opt_sample_data[i].reduce((a, b) => a + b, 0)) / opt_sample_data.length).toFixed(2));
     } else {
       // left hand
       ble_data = {
@@ -446,13 +451,16 @@ export async function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_
         "hand": 1,
         "manual_entry": 0
       };
+      sumLH += parseFloat(((opt_sample_data[i].reduce((a, b) => a + b, 0)) / opt_sample_data.length).toFixed(2));
     }
     addDeviceData(ble_data);
     addOptDeviceData(ble_opt_data);
   }
-  document.getElementById('results_section').style.display = 'block';
+  var avgRH = parseFloat((sumRH / 3).toFixed(2));
+  var avgLH = parseFloat((sumLH / 3).toFixed(2));
+  document.getElementById('results_section').style.display = 'block';firebase.js
   ShowResults(true);
-  PopulateResults(await calcGripRatio(global_patient, 0));
+  PopulateResults(await calcGripRatio(global_patient, avgRH, avgLH));
 }
 
 const mForm = document.getElementById("manual_entry");
@@ -470,15 +478,18 @@ const mForm = document.getElementById("manual_entry");
       left_trials[1] = parseFloat(document.getElementById("man_left_t2").value).toFixed(2);
       left_trials[2] = parseFloat(document.getElementById("man_left_t3").value).toFixed(2);
       
+      var sumRH = 0;
+      var sumLH = 0;
       //console.log(right_trials);
       //console.log(left_trials);
 
       for (let i=0; i<3; i++) {
         // right hand = 0
+        var valueRH = parseFloat(right_trials[i]);
         let manual_data = {
           "uid": global_patient, 
           "date": dateNow, 
-          "measurements": [right_trials[i]], 
+          "measurements": [valueRH], 
           "times": 0, 
           "keep_trial": 1, 
           "hand": 0, 
@@ -488,21 +499,25 @@ const mForm = document.getElementById("manual_entry");
         let manual_opt_data = {
           "uid": global_patient, 
           "date": dateNow,
-          "measurements": [right_trials[i]], 
+          "measurements": [valueRH], 
           "times": 0,
           "keep_trial": 1, 
           "hand": 0,
           "manual_entry": 1
         }
+        console.log(typeof(valueRH), valueRH);
+        sumRH += valueRH;
+        console.log(sumRH);
         addDeviceData(manual_data);
         addOptDeviceData(manual_opt_data);
       }
       for (let i=0; i<3; i++) {
         // left hand = 1
+        var valueLH = parseFloat(left_trials[i]);
         let manual_data = {
           "uid": global_patient, 
           "date": dateNow, 
-          "measurements": [left_trials[i]], 
+          "measurements": [valueLH], 
           "times": 0, 
           "keep_trial": 1, 
           "hand": 1, 
@@ -512,17 +527,21 @@ const mForm = document.getElementById("manual_entry");
         let manual_opt_data = {
           "uid": global_patient, 
           "date": dateNow,
-          "measurements": [left_trials[i]], 
+          "measurements": [valueLH], 
           "times": 0,
           "keep_trial": 1, 
           "hand": 1,
           "manual_entry": 1
         }
+        sumLH += valueLH;
         addDeviceData(manual_data);
         addOptDeviceData(manual_opt_data);
       }
+      var avgRH = parseFloat((sumRH/3).toFixed(2));
+      console.log("avgRH before calcGrip", avgRH);
+      var avgLH = parseFloat((sumLH/3).toFixed(2));
       ShowResults(false);
-      PopulateResults(await calcGripRatio(global_patient, 1));
+      PopulateResults(await calcGripRatio(global_patient, avgRH, avgLH));
     });
   }
 
@@ -1089,104 +1108,141 @@ function getNormativeData(dob, gender) {
 }
 
 // Calculate grip ratio for stroke patient
-async function calcStrokeGripRatio(patientInfo, typeEntry) {
+async function calcStrokeGripRatio(patientInfo, avgRH, avgLH) {
   var gripRatio = 0.0;
 
   let domHand = (patientInfo["dominant_hand"] == 0) ? "Right" : "Left";
   let normData = getNormativeData(patientInfo["date_of_birth"], patientInfo["gender"]);
   let preStrokeLaterality = (patientInfo["dominant_hand_pre_stroke"] == 0) ? "Right" : "Left";
   let pareticSide = (patientInfo["stroke_side"] == 0) ? "Right" : "Left";
-  let avgs = await calcAvgTrials(patientInfo["uid"], typeEntry); // 1 = manual entry
+  //let avgs = await calcAvgTrials(patientInfo["uid"], typeEntry); // 1 = manual entry
 
-  if (avgs["empty"] == false) {
-    let nonPareticNorm = 0.0;
-    let pareticNorm = 0.0;
+  //if (avgs["empty"] == false) {
+  let nonPareticNorm = 0.0;
+  let pareticNorm = 0.0;
 
-    if (pareticSide == "Left" && preStrokeLaterality == "Right") {
-      nonPareticNorm = avgs["data"]["avgRH"] / normData["nonDom"];
-      pareticNorm = avgs["data"]["avgLH"] / normData["nonDom"];
-    } else if (pareticSide == "Left" && preStrokeLaterality == "Left") {
-      pareticNorm = avgs["data"]["avgLH"] / normData["dom"];
-      nonPareticNorm = avgs["data"]["avgRH"] / normData["dom"];
-    } else if (pareticSide == "Right" && preStrokeLaterality == "Right") {
-      pareticNorm = avgs["data"]["avgRH"] / normData["dom"];
-      nonPareticNorm = avgs["data"]["avgLH"] / normData["dom"];
-    } else if (pareticSide == "Right" && preStrokeLaterality == "Left") {
-      pareticNorm = avgs["data"]["avgRH"] / normData["nonDom"];
-      nonPareticNorm = avgs["data"]["avgLH"] / normData["nonDom"];
-    }
-
-    gripRatio = parseFloat(((nonPareticNorm - pareticNorm) / (nonPareticNorm + pareticNorm)).toFixed(2));
-    let metric = {
-      "uid": patientInfo["uid"],
-      "date": Timestamp.now(),
-      "grip_ratio": gripRatio,
-      "right_avg": avgs["data"]["avgRH"],
-      "left_avg": avgs["data"]["avgLH"]
-    };
-    await addMetric(metric);
-
-    return {
-      "grip_ratio": gripRatio,
-      "avgRH": avgs["data"]["avgRH"],
-      "avgLH": avgs["data"]["avgLH"],
-      "hand": domHand,
-      "empty": false
-    }
-  } else {
-    return {
-      "empty": true
-    };
+  if (pareticSide == "Left" && preStrokeLaterality == "Right") {
+    // nonPareticNorm = avgs["data"]["avgRH"] / normData["nonDom"];
+    // pareticNorm = avgs["data"]["avgLH"] / normData["nonDom"];
+    nonPareticNorm = avgRH / normData["nonDom"];
+    pareticNorm = avgLH / normData["nonDom"];
+  } else if (pareticSide == "Left" && preStrokeLaterality == "Left") {
+    // pareticNorm = avgs["data"]["avgLH"] / normData["dom"];
+    // nonPareticNorm = avgs["data"]["avgRH"] / normData["dom"];
+    pareticNorm = avgLH / normData["dom"];
+    nonPareticNorm = avgRH / normData["dom"];
+  } else if (pareticSide == "Right" && preStrokeLaterality == "Right") {
+    // pareticNorm = avgs["data"]["avgRH"] / normData["dom"];
+    // nonPareticNorm = avgs["data"]["avgLH"] / normData["dom"];
+    pareticNorm = avgRH / normData["dom"];
+    nonPareticNorm = avgLH / normData["dom"];
+  } else if (pareticSide == "Right" && preStrokeLaterality == "Left") {
+    // pareticNorm = avgs["data"]["avgRH"] / normData["nonDom"];
+    // nonPareticNorm = avgs["data"]["avgLH"] / normData["nonDom"];
+    pareticNorm = avgRH / normData["nonDom"];
+    nonPareticNorm = avgLH / normData["nonDom"];
   }
+
+  gripRatio = parseFloat(((nonPareticNorm - pareticNorm) / (nonPareticNorm + pareticNorm)).toFixed(2));
+  let metric = {
+    "uid": patientInfo["uid"],
+    "date": Timestamp.now(),
+    "grip_ratio": gripRatio,
+    "right_avg": avgRH,
+    "left_avg": avgLH
+  };
+  await addMetric(metric);
+
+  return {
+    "grip_ratio": gripRatio,
+    "avgRH": avgRH,
+    "avgLH": avgLH,
+    "hand": domHand,
+    "empty": false
+  }
+  // } else {
+  //   return {
+  //     "empty": true
+  //   };
+  // }
 }
 
 // Calculate grip ratio
-async function calcGripRatio(patientUid, typeEntry) {
+async function calcGripRatio(patientUid, avgRH, avgLH) {
   var gripRatio = 0.0;
   let patient = await getPatient(patientUid);
   let patientInfo = patient["patient"];
 
   if (patientInfo["impaired"] == 1) {
-    return await calcStrokeGripRatio(patientInfo, typeEntry);
+    return await calcStrokeGripRatio(patientInfo, avgRH, avgLH);
   }
   else {
     let domHand = (patientInfo["dominant_hand"] == 0) ? "Right" : "Left";
-    let avgs = await calcAvgTrials(patientUid, typeEntry); // 1 = manual entry 
-    if (avgs["empty"] == false) {
-      let normData = getNormativeData(patientInfo["date_of_birth"], patientInfo["gender"]);
-      let nonDomNorm = 0.0;
-      let domNorm = 0.0;
-      if (domHand == "Left") {
-        nonDomNorm = avgs["data"]["avgRH"] / normData["nonDom"];
-        domNorm = avgs["data"]["avgLH"] / normData["dom"];
-      } else {
-        domNorm = avgs["data"]["avgRH"] / normData["dom"];
-        nonDomNorm = avgs["data"]["avgLH"] / normData["nonDom"];
-      }
-
-      gripRatio = parseFloat(((domNorm - nonDomNorm) / (domNorm + nonDomNorm)).toFixed(2));
-      let metric = {
-        "uid": patientUid,
-        "date": Timestamp.now(),
-        "grip_ratio": gripRatio,
-        "right_avg": avgs["data"]["avgRH"],
-        "left_avg": avgs["data"]["avgLH"]
-      };
-      await addMetric(metric);
-
-      return {
-        "ratio": gripRatio,
-        "avgRH": avgs["data"]["avgRH"],
-        "avgLH": avgs["data"]["avgLH"],
-        "hand": domHand,
-        "empty": false
-      }
+    let normData = getNormativeData(patientInfo["date_of_birth"], patientInfo["gender"]);
+    let nonDomNorm = 0.0;
+    let domNorm = 0.0;
+    if (domHand == "Left") {
+      nonDomNorm = avgRH / normData["nonDom"];
+      domNorm = avgLH / normData["dom"];
     } else {
-      return {
-        "empty": true
-      };
+      domNorm = avgRH / normData["dom"];
+      nonDomNorm = avgLH / normData["nonDom"];
+    }
+
+    gripRatio = parseFloat(((domNorm - nonDomNorm) / (domNorm + nonDomNorm)).toFixed(2));
+    let metric = {
+      "uid": patientUid,
+      "date": Timestamp.now(),
+      "grip_ratio": gripRatio,
+      "right_avg": avgRH,
+      "left_avg": avgLH
+    };
+    await addMetric(metric);
+
+    return {
+      "ratio": gripRatio,
+      "avgRH": avgRH,
+      "avgLH": avgLH,
+      "hand": domHand,
+      "empty": false
     }
   }
+    // let avgs = await calcAvgTrials(patientUid, typeEntry); // 1 = manual entry 
+    // if (avgs["empty"] == false) {
+    //   let normData = getNormativeData(patientInfo["date_of_birth"], patientInfo["gender"]);
+    //   let nonDomNorm = 0.0;
+    //   let domNorm = 0.0;
+    //   if (domHand == "Left") {
+    //     nonDomNorm = avgs["data"]["avgRH"] / normData["nonDom"];
+    //     domNorm = avgs["data"]["avgLH"] / normData["dom"];
+    //   } else {
+    //     domNorm = avgs["data"]["avgRH"] / normData["dom"];
+    //     nonDomNorm = avgs["data"]["avgLH"] / normData["nonDom"];
+    //   }
+
+    //   gripRatio = parseFloat(((domNorm - nonDomNorm) / (domNorm + nonDomNorm)).toFixed(2));
+    //   let metric = {
+    //     "uid": patientUid,
+    //     "date": Timestamp.now(),
+    //     "grip_ratio": gripRatio,
+    //     "right_avg": avgs["data"]["avgRH"],
+    //     "left_avg": avgs["data"]["avgLH"]
+    //   };
+    //   await addMetric(metric);
+
+    //   return {
+    //     "ratio": gripRatio,
+    //     "avgRH": avgs["data"]["avgRH"],
+    //     "avgLH": avgs["data"]["avgLH"],
+    //     "hand": domHand,
+    //     "empty": false
+    //   }
+    // } else {
+    //   return {
+    //     "empty": true
+    //   };
+    // }
+  //}
 }
 
 // Register new user
