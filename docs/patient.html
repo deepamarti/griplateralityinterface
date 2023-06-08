@@ -326,7 +326,18 @@
         function ClearData() {
             // add alert here "you are discarding any data - do you want to continue"
             ResetBLE();
+            if (gdxDevice != "") {
+               DisconnectDevice(); 
+            }
             ResetManual();
+        }
+
+        // switch tab resets all data but doesn't disconnect
+        function SwitchtoManual() {
+            // explicitly disconnect device, if connected
+            DisconnectDevice();
+            SwitchTab(event,'Manual');
+
         }
 
         // listeners on the retakes buttons (make these)
@@ -464,13 +475,6 @@
         btn_collect_4.index = 4;
         btn_collect_5.addEventListener('click', Collect);
         btn_collect_5.index = 5;
-
-        function SwitchtoManual() {
-            // explicitly disconnect device, if connected
-            DisconnectDevice();
-            SwitchTab(event,'Manual');
-
-        }
     </script>
 
     <!--graphing functions-->
