@@ -320,6 +320,25 @@
         </div>
         
     </section>
+    <!--navigation functions-->
+    <script>
+        document.getElementById("back_to_patient").addEventListener('click', ClearData);
+        function ClearData() {
+            // add alert here "you are discarding any data - do you want to continue"
+            ResetBLE();
+            ResetManual();
+        }
+
+        // listeners on the retakes buttons (make these)
+        function RetakeTrial(is_ble) {
+            if (is_ble) {
+                ResetBLE();
+                ConnectDevice();
+            } else {
+                ResetManual();
+            }
+        }
+    </script>
 
     <!--ble functions-->
     <script>
