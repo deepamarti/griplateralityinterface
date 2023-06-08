@@ -142,7 +142,8 @@ function ResetBLE(){
     document.getElementById('ble_disconnect').disabled = true;
 
     // clear all arrays
-
+    trials_complete_right = 0;
+    trials_complete_left = 0;
 
     // reenable all trials
     for (let i=1;i<=3;i++) {

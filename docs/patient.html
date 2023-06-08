@@ -203,6 +203,7 @@
                     </div>
                     <div class="form_entry_row">
                         <button id ="ble_submit" style="width:70%; margin: 20px auto;"> Submit</button>
+                        <button id ="ble_retake" style="width:70%; margin: 20px auto;"> Take Another Measurement</button>
                     </div>
                     <div id="myProgress">
                         <p class="blink_display" id="blinking_text" style="height: 0;"></p>
@@ -332,7 +333,7 @@
             ResetManual();
         }
 
-        // switch tab resets all data but doesn't disconnect
+        // switch tab explicitly disconnects device
         function SwitchtoManual() {
             // explicitly disconnect device, if connected
             DisconnectDevice();
@@ -344,7 +345,7 @@
         function RetakeTrial(is_ble) {
             if (is_ble) {
                 ResetBLE();
-                ConnectDevice();
+                // reset BLE doesn't disconnect
             } else {
                 ResetManual();
             }
@@ -624,6 +625,7 @@
             disable_button("ble_submit");
             updateResults();
             unlock_method_selection();
+            document.getElementById('ble_retake').disabled = false;
         }
     </script>
 

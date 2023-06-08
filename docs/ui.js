@@ -10,7 +10,10 @@ const trial_btn = [
 function InitializeData() {
     document.getElementById("ble_submit").disabled = true;
     document.getElementById('ble_submit').style.backgroundColor = "lightgray";
-
+    
+    document.getElementById("ble_retake").disabled = true;
+    document.getElementById('ble_retake').style.backgroundColor = "lightgray";
+    
     document.getElementById("ble_disconnect").disabled = true;
     
     for (let i=0; i<6; i++) {
@@ -77,6 +80,8 @@ function EnableTrial() {
     if (next < 6){
         trial_btn[next].disabled = false;
         next = next + 1;
+    } else {
+        next = 0;
     }
     
 }
