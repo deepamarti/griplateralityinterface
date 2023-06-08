@@ -11,8 +11,9 @@ function Initialize() {
     document.getElementById("results_section").style.display = 'none';
     document.getElementById("admin_section").style.display = 'none';
 
+    SwitchTab(onload, "Bluetooth");
     check_BLE_support();
-    SwitchTab(onload, "Bluetooth")
+    
 }
 
 function check_BLE_support() {
