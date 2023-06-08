@@ -162,6 +162,7 @@
                     </div>
                     <input id="man_submit" class="manual_entry_form" style="width:70%; margin: 20px auto;" type="submit" value="Submit">
                 </form>
+                <button id ="man_retake" style="width:70%; margin: 0px auto 20px;" onclick="RetakeTrial(0)"> Take Another Measurement</button>
             </div>
             <div id="Bluetooth" class="tabcontent">
                 <div id="ble_collection" class="ble_collection">
@@ -203,7 +204,7 @@
                     </div>
                     <div class="form_entry_row">
                         <button id ="ble_submit" style="width:70%; margin: 20px auto;"> Submit</button>
-                        <button id ="ble_retake" style="width:70%; margin: 20px auto;"> Take Another Measurement</button>
+                        <button id ="ble_retake" style="width:70%; margin: 0px auto 20px;" onclick="RetakeTrial(1)"> Take Another Measurement</button>
                     </div>
                     <div id="myProgress">
                         <p class="blink_display" id="blinking_text" style="height: 0;"></p>
@@ -345,10 +346,15 @@
         function RetakeTrial(is_ble) {
             if (is_ble) {
                 ResetBLE();
-                // reset BLE doesn't disconnect
+                DisconnectDevice()
+
+                document.getElementById("myBar").style.width = "0%";
+                document.getElementById('myBar').style.backgroundColor = "#ffe26a";
             } else {
                 ResetManual();
             }
+
+            document.getElementById('results_section').style.display = 'none';
         }
     </script>
 
@@ -636,6 +642,7 @@
     function StoreManData() {
         updateResults();
         unlock_method_selection();
+        document.getElementById('man_retake').disabled = false;
     }
 
         let right_chart = new Chart("right_graph_results", {

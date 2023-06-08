@@ -458,7 +458,7 @@ export async function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_
   }
   var avgRH = parseFloat((sumRH / 3).toFixed(2));
   var avgLH = parseFloat((sumLH / 3).toFixed(2));
-  document.getElementById('results_section').style.display = 'block';firebase.js
+  document.getElementById('results_section').style.display = 'block';
   ShowResults(true);
   PopulateResults(await calcGripRatio(global_patient, avgRH, avgLH));
 }

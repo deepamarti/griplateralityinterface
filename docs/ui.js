@@ -13,6 +13,9 @@ function InitializeData() {
     
     document.getElementById("ble_retake").disabled = true;
     document.getElementById('ble_retake').style.backgroundColor = "lightgray";
+
+    document.getElementById("man_retake").disabled = true;
+    document.getElementById('man_retake').style.backgroundColor = "lightgray";
     
     document.getElementById("ble_disconnect").disabled = true;
     
