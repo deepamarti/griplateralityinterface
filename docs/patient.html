@@ -119,7 +119,7 @@
             <div class="tab">
                 <!-- TODO: explicitly disconnects bluetooth when switching-->
                 <button onClick="SwitchtoManual()">Manual Entry</button>
-                <button onClick="SwitchTab(event,'Bluetooth');">Bluetooth</button>
+                <button onClick="SwitchtoBLE()">Bluetooth</button>
             </div>
 
             <div id="Manual" class="tabcontent">
@@ -340,6 +340,12 @@
             DisconnectDevice();
             SwitchTab(event,'Manual');
 
+        }
+
+        function SwitchtoBLE() {
+            if (navigator.bluetooth) {
+               SwitchTab(event,'Bluetooth'); 
+            }
         }
 
         // listeners on the retakes buttons (make these)
