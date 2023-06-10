@@ -429,7 +429,7 @@ export async function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_
         "hand": 0,
         "manual_entry": 0
       };
-      sumRH += parseFloat(((opt_sample_data[i].reduce((a, b) => a + b, 0)) / opt_sample_data.length).toFixed(2));
+      sumRH += parseFloat(((opt_sample_data[i].reduce((a, b) => a + b, 0)) / opt_sample_data[i].length).toFixed(2));
     } else {
       // left hand
       ble_data = {
@@ -451,7 +451,7 @@ export async function AddBLEToDatabase(sample_data, opt_sample_data, opt_sample_
         "hand": 1,
         "manual_entry": 0
       };
-      sumLH += parseFloat(((opt_sample_data[i].reduce((a, b) => a + b, 0)) / opt_sample_data.length).toFixed(2));
+      sumLH += parseFloat(((opt_sample_data[i].reduce((a, b) => a + b, 0)) / opt_sample_data[i].length).toFixed(2));
     }
     addDeviceData(ble_data);
     addOptDeviceData(ble_opt_data);
