@@ -583,9 +583,9 @@ const mForm = document.getElementById("manual_entry");
 //   });
 
 // Update name of user
-function updateName(user, name) {
+async function updateName(user, name) {
   if (user) {
-    updateProfile(user, {
+    await updateProfile(user, {
       displayName: name
     });
   }
@@ -800,7 +800,7 @@ function validateUpEmail() {
 
   // email must be user@domain.extensiion
   var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  if (re.test(email)) {
+  if (re.test(emailUp)) {
     document.getElementById("bad_email_up_error").innerHTML = "";
     return true;
   } else {
@@ -833,10 +833,10 @@ function validateNameUp() {
 }
 
 function validateUpPassword1() {
-  password1Up = passwordSU.value;
+  passwordUp = passwordSU.value;
 
   // password can be no longer than 256 characters
-  if (password1Up.length > 256) {
+  if (passwordUp.length > 256) {
     console.log("password too long");
     document.getElementById("bad_password1_up_error").innerHTML = "You entered a password that is too long";
     passwordSU.value = "";
@@ -845,7 +845,7 @@ function validateUpPassword1() {
 
   // password can't have special characters
   var re = /^[A-Za-z0-9 ]+$/;
-  if (re.test(password1Up)) {
+  if (re.test(passwordUp)) {
     console.log("valid password");
     document.getElementById("bad_password1_up_error").innerHTML = "";
     return true;
@@ -858,10 +858,10 @@ function validateUpPassword1() {
 }
 
 function validateUpPassword2() {
-  password2Up = confirmPassword.value;
+  conPassUp = confirmPassword.value;
 
   // password can be no longer than 256 characters
-  if (password2Up.length > 256) {
+  if (conPassUp.length > 256) {
     console.log("password too long");
     document.getElementById("bad_password2_up_error").innerHTML = "You entered a password that is too long";
     confirmPassword.value = "";
@@ -870,7 +870,7 @@ function validateUpPassword2() {
 
   // password can't have special characters
   var re = /^[A-Za-z0-9 ]+$/;
-  if (re.test(password2Up)) {
+  if (re.test(conPassUp)) {
     console.log("valid password");
     document.getElementById("bad_password2_up_error").innerHTML = "";
     return true;
@@ -884,7 +884,7 @@ function validateUpPassword2() {
 
 if (signUp != null) {
   // add in sign up rules => error occurs is password is 1 letter
-  signUp.addEventListener('submit', (event) => {
+  signUp.addEventListener('submit', async (event) => {
     event.preventDefault();
     adminSelected = adminBtn.checked ? 1 : 0;
     console.log(emailUp);
@@ -896,23 +896,45 @@ if (signUp != null) {
       }
       else {
         const authSec = getAuth(secondaryApp);
-        createUserWithEmailAndPassword(authSec, emailUp, passwordUp)
-          .then((userCredential) => {
-          // Signed in 
-          const user = userCredential.user;
-          updateName(user, name);
-          createClinician(user.uid, adminSelected);
-          authSec.signOut();
-          signUp.reset();
-        })
+        console.log("email", emailUp);
+        console.log("password", passwordUp);
+        const userCredentials = await createUserWithEmailAndPassword(authSec, emailUp, passwordUp)
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          // ..
+          console.log(error);
           console.log(errorCode);
           console.log(errorMessage);
           window.alert("Error occurred. Try again.");
         });
+        if (userCredentials != null) {
+          const user = userCredentials.user;
+          console.log(user);
+          updateName(user, name);
+          createClinician(user.uid, adminSelected);
+          authSec.signOut();
+          signUp.reset();
+        }
+        
+        //await user.updateProfile({ displayName: fullName });
+        // createUserWithEmailAndPassword(authSec, emailUp, passwordUp)
+        //   .then(async (userCredential)  => {
+        //   // Signed in 
+        //   const user = userCredential.user;
+        //   console.log(user);
+        //   updateName(user, name);
+        //   createClinician(user.uid, adminSelected);
+        //   authSec.signOut();
+        //   signUp.reset();
+        // })
+        // .catch((error) => {
+        //   const errorCode = error.code;
+        //   const errorMessage = error.message;
+        //   // ..
+        //   console.log(errorCode);
+        //   console.log(errorMessage);
+        //   window.alert("Error occurred. Try again.");
+        // });
       }
     }
     
