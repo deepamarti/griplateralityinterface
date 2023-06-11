@@ -26,7 +26,7 @@ function InitializeData() {
     document.getElementById('graph_accept_reject').style.display = 'none';
 }
 
-const backBTN = document.getElementById("back_to_patient");
+const backBTN = document.getElementById("PatientNav");
 if (backBTN != null) {
     backBTN.addEventListener('click', BackToPatient);
 }
@@ -89,18 +89,7 @@ function EnableTrial() {
     
 }
 
-const exportBTN = document.getElementById('show_export_data');
-if (exportBTN != null) {
-    exportBTN.addEventListener('click', ShowExportData);
-}
-
-function ShowExportData() {
-    //console.log('make export data visible')
-    document.getElementById("admin_section").style.display = 'grid'
-
-}
-
-const adminBTN = document.getElementById('show_admin_portal');
+const adminBTN = document.getElementById('adminNav');
 if (adminBTN != null) {
     adminBTN.addEventListener('click', ShowAdminPortal);
 }
