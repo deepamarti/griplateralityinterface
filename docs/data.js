@@ -138,7 +138,7 @@ function unlock_method_selection(){
 }
 
 function ResetBLE(){
-    document.getElementById(id="ble_status").style.backgroundColor = "#ffe26a";
+    document.getElementById("ble_status").style.backgroundColor = "#ffe26a";
     document.getElementById('ble_submit').disabled = true;
     document.getElementById('ble_connect').disabled = false;
     document.getElementById('ble_disconnect').disabled = true;
@@ -159,6 +159,7 @@ function ResetBLE(){
 }
 
 function ResetManual(){
+    document.getElementById('man_submit').disabled = false;
     let hand = "";
     let num = 0;
     for (let i=0;i<6;i++) {

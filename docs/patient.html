@@ -322,13 +322,21 @@
     </section>
     <!--navigation functions-->
     <script>
-        document.getElementById("back_to_patient").addEventListener('click', ClearData);
+        // checks if manual entry form is empty
+        function checkIsFormEmpty() {
+
+        }
+
+        document.getElementById("PatientNav").addEventListener('click', ClearData);
         function ClearData() {
             // add alert here "you are discarding any data - do you want to continue"
-            ResetBLE();
             if (gdxDevice != "") {
+                // warning: you are clearing unfinished bluetooth data
                DisconnectDevice(); 
+            } else if (checkIsFormEmpty()) {
+                // warning: you are clearing unfinished manual data
             }
+            ResetBLE();
             ResetManual();
         }
 
@@ -351,7 +359,6 @@
             if (is_ble) {
                 ResetBLE();
                 DisconnectDevice()
-
                 document.getElementById("myBar").style.width = "0%";
                 document.getElementById('myBar').style.backgroundColor = "#ffe26a";
             } else {
@@ -637,18 +644,18 @@
             unlock_method_selection();
             document.getElementById('ble_retake').disabled = false;
         }
+        document.getElementById("manual_entry").addEventListener('submit', StoreManData);
+
+        function StoreManData() {
+            disable_button('man_submit');
+            updateResults();
+            unlock_method_selection();
+            document.getElementById('man_retake').disabled = false;
+        }
     </script>
 
     <!--graphing results-->
     <script>
-    document.getElementById("manual_entry").addEventListener('submit', StoreManData);
-
-    function StoreManData() {
-        updateResults();
-        unlock_method_selection();
-        document.getElementById('man_retake').disabled = false;
-    }
-
         let right_chart = new Chart("right_graph_results", {
             type: 'line',
             data: {
