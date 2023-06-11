@@ -142,7 +142,7 @@ function ResetBLE(){
     document.getElementById('ble_submit').disabled = true;
     document.getElementById('ble_connect').disabled = false;
     document.getElementById('ble_disconnect').disabled = true;
-
+    document.getElementById("ble_retake").disabled = true;
     // clear all arrays
     trials_complete_right = 0;
     trials_complete_left = 0;
@@ -160,6 +160,7 @@ function ResetBLE(){
 
 function ResetManual(){
     document.getElementById('man_submit').disabled = false;
+    document.getElementById("man_retake").disabled = true;
     let hand = "";
     let num = 0;
     for (let i=0;i<6;i++) {
