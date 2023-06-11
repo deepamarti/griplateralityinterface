@@ -324,6 +324,9 @@ async function getAllDataByCollection(emr, patientUid, collectionName, fields) {
 const allDataCSVBtn = document.getElementById("allDataCSV");
 if (allDataCSVBtn != null) {
   allDataCSVBtn.addEventListener('click', async function() {
+    // download only works once
+    allDataCSVBtn.disabled = true;
+    allDataCSVBtn.style.backgroundColor = 'darkgray';
     var result = await getAllData();
     if (result == false) {
       alert("Sorry! No data found to export.");
