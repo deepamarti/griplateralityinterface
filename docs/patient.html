@@ -177,15 +177,15 @@
                              </div>
                              <div class="col-md-12">
                                 <label class="manual_entry_form">Trial 1: </label>
-                                <input type="number" min="0" max="1000" step=".01" class="manual_entry_form" type="text" id="man_left_t1" required>
+                                <input type="number" min="0.01" max="1000" step=".01" class="manual_entry_form" type="text" id="man_left_t1" required>
                              </div>
                              <div class="col-md-12">
                                 <label class="manual_entry_form">Trial 2: </label>
-                                <input type="number" min="0" max="1000" step=".01" class="manual_entry_form" type="text" id="man_left_t2" required>
+                                <input type="number" min="0.01" max="1000" step=".01" class="manual_entry_form" type="text" id="man_left_t2" required>
                              </div>
                              <div class="col-md-12">
                                 <label class="manual_entry_form">Trial 3: </label>
-                                <input type="number" min="0" max="1000" step=".01" class="manual_entry_form" type="text" id="man_left_t3" required>
+                                <input type="number" min="0.01" max="1000" step=".01" class="manual_entry_form" type="text" id="man_left_t3" required>
                              </div>
                         </div>
                         <div class="form_entry_column">
@@ -194,15 +194,15 @@
                              </div>
                              <div class="col-md-12">
                                 <label class="manual_entry_form"> Trial 1: </label>
-                                <input type="number" min="0" max="1000" step=".01" class="manual_entry_form" type="text" id="man_right_t1" required>
+                                <input type="number" min="0.01" max="1000" step=".01" class="manual_entry_form" type="text" id="man_right_t1" required>
                              </div>
                              <div class="col-md-12">
                                 <label class="manual_entry_form">Trial 2: </label>
-                                <input type="number" min="0" max="1000" step=".01" class="manual_entry_form" type="text" id="man_right_t2" required>
+                                <input type="number" min="0.01" max="1000" step=".01" class="manual_entry_form" type="text" id="man_right_t2" required>
                              </div>
                              <div class="col-md-12">
                                 <label class="manual_entry_form">Trial 3: </label>
-                                <input type="number" min="0" max="1000" step=".01" class="manual_entry_form" type="text" id="man_right_t3" required>
+                                <input type="number" min="0.01" max="1000" step=".01" class="manual_entry_form" type="text" id="man_right_t3" required>
                              </div>
                         </div>
                         
@@ -761,8 +761,9 @@
                     }
                     enable_trial_button(right_trial_btn[++right_trial_cnt]); 
                 }
-                
             }
+            console.log(left_trial_cnt);
+            console.log(right_trial_cnt);
         }
 
         function Reject() {
