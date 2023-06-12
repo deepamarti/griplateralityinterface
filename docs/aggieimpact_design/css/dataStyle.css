@@ -184,6 +184,14 @@
     font-size: small;
 }
 
+#ble_status, #ble_connect, #ble_disconnect {
+    vertical-align: middle;
+}
+
+.undo_button, .trial_button {
+    vertical-align: middle;
+}
+
 .results {
     width: 95%;
     margin-left: 20px;
