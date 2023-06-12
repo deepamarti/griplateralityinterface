@@ -43,6 +43,7 @@ body {
      font-family: 'Poppins', sans-serif;
      line-height: 1.80857;
      font-weight: normal;
+     overflow: hidden;
 }
 
 a {
@@ -336,9 +337,6 @@ ul.conat_info li a:hover {
 .banner_main {
      height: 100%;
      padding: 0px;
-     background-size: 100% 100%;
-     background-repeat: no-repeat;
-     background-position: center center;
      min-height: 800px;
 }
 
@@ -347,17 +345,14 @@ ul.conat_info li a:hover {
      text-align: left;
      font-weight: 100px;
      font-size: xx-large;
-     padding-top: 250px;
-     /* padding-left: 200px; */
-     padding-left: 22%;
+     padding: 100px 20% 0px;
+
 }
 
 .sign_in {
      width: 100%;
      text-align: left;
-     /* padding-left: 300px; */
-     padding-left: 30%;
-     padding-top: 50px;
+     padding: 50px 20%;
 }
 
 .sign_in label {
@@ -1173,4 +1168,13 @@ ul.location_icon li a:hover {
 
 
 /** end footer **/
+
+.background-img{
+     background:url('../images/brainlab_text.png');
+     width:100%;
+     height: 100px;
+     position: absolute;
+     right: 20px;
+     bottom: 20px;
+ }
 

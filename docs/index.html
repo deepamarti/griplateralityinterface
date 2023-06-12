@@ -12,8 +12,8 @@
       <title>BRaINlab Grip Symmetry Measurement</title>
    </head> 
    <body> 
-      <div id="mainBody" style="display:none;">
-         <div class="banner_main">
+      <div id="mainBody">
+         <div class="banner_main">   
             <h1>BRaINLab Grip Symmetry Measurement</h1>
             <form class="sign_in" id = "signInForm">
                <label for="email"><b>Email</b></label>
@@ -25,6 +25,30 @@
                <button class="login" id="submit" type="submit">Login</button>
                <p id="bad_sign_in" style="color:red"></p>
             </form>
+         </div>
+         
+      </div>   
+      <style>
+         body {
+           background-image: url('./aggieimpact_design/images/brainlab_text.png');
+           background-repeat: no-repeat;
+           background-position: left bottom;
+           background-attachment: fixed;
+           background-size: 600px;
+         }
+         @media all and (max-height: 600px){
+            body {
+               background-image: none;
+               overflow: auto;
+            }
+         }
+         @media all and (max-width: 600px){
+            body {
+               background-image: none;
+               overflow: auto;
+            }
+         }
+      </style> 
    </body>
    
 </html>
