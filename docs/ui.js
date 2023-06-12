@@ -37,6 +37,10 @@ function BackToPatient() {
     document.getElementById("data_collection_section").style.display = 'none';
     document.getElementById("results_section").style.display = 'none';
     document.getElementById("admin_section").style.display = 'none';
+
+    // clear patient table
+    document.getElementById('patientBody').innerHTML = '';
+    document.getElementById('firebaseBtn').click();
 }
 
 export function ShowDataCollection() {

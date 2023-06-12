@@ -58,6 +58,8 @@ auth.onAuthStateChanged(async (user) => {
     console.log("auth state changed");
     console.log(user);
     console.log("user: ", currUser);
+    // populate patient serch automatically
+    document.getElementById('firebaseBtn').click();
     //localStorage.setItem("uid", currUser.uid);
   } else {
     // User is signed out
@@ -189,7 +191,6 @@ const fireBtn = document.getElementById("firebaseBtn");
 //     //let profiles = await getAllPatients();
 // }
 
-
 let patients = []
 
 if (fireBtn != null) {
@@ -222,6 +223,7 @@ if (fireBtn != null) {
         AddItemsToTable(name, birthdate,healthStatus, patID);
       }
     }
+
     function ClearPatientTable() {
       var tbody = document.getElementById('patientBody');
       tbody.innerHTML = '';

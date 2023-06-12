@@ -6,7 +6,7 @@ let trials_complete_right = 0;
 let trials_complete_left = 0;
 
 function Initialize() {
-    document.getElementById('patient_search').style.display = 'block'
+    document.getElementById('patient_search').style.display = 'block';
     document.getElementById("data_collection_section").style.display = 'none';
     document.getElementById("results_section").style.display = 'none';
     document.getElementById("admin_section").style.display = 'none';
