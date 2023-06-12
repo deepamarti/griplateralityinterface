@@ -1,3 +1,24 @@
+# ECS 193 Team 9, Grip Symmetry Measure Website
+
+Website to connect via bluetooth to hand dynomometer to collect grip strength measurements and calculate a ratio based on noramative data. Made in collaboration with the UC Davis Biomechanics, Rehabilitation, and Integrative Neuroscience (BRaIN) Lab.
+
+## Developers
+- Deepa Marti
+- Kajal Patel
+- Sophie Mi
+- Hammud Haq
+
+## System Architecture
+![SystemArch](/systemarch.jpg)
+
+## Tech Stack
+- **Website:** HTML, CSS, Javascript
+- **Database:** Firebase
+- **Authentication:** Firebase
+- **Project Management:** Google Drive, Discord
+
+## Resources
+
 bluetooth icon:
 <a href="https://www.flaticon.com/free-icons/bluetooth" title="bluetooth icons">Bluetooth icons created by Bombasticon Studio - Flaticon</a>
 search icon:
