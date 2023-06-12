@@ -488,8 +488,12 @@
                 lock_method_selection();
                 enable_button('ble_disconnect');
                 // enable first two trials, one for left and right
-                enable_trial_button(left_trial_btn[0]);
-                enable_trial_button(right_trial_btn[0]);
+                if (left_trial_cnt < 2) {
+                    enable_trial_button(left_trial_btn[left_trial_cnt]);
+                }
+                if (right_trial_cnt < 2) {
+                    enable_trial_button(right_trial_btn[right_trial_cnt]);
+                }
             } catch (err) {
                 console.error(err);
             }
@@ -644,7 +648,6 @@
                     }else {
                         // done
                         document.getElementById("myProgress").style.visibility = 'hidden';
-                        document.getElementById("myProgress").style.height = "0%";
                         document.getElementById("graph_accept_reject").style.display = 'flex';
                         clearInterval(id);
                         count = 0;
@@ -722,8 +725,14 @@
             // reenable the trial button
             if (current_index > 2){
                 enable_trial_button(left_trial_btn[left_trial_cnt]);
+                if (right_trial_cnt < 2) {
+                    enable_trial_button(right_trial_btn[right_trial_cnt]);
+                }
             } else {
                 enable_trial_button(right_trial_btn[right_trial_cnt]);
+                if (left_trial_cnt < 2) {
+                    enable_trial_button(left_trial_btn[left_trial_cnt]);
+                }
             }
             
             // hide graphs again
