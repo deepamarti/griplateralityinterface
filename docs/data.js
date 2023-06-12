@@ -35,6 +35,20 @@ function check_BLE_support() {
     }
 }
 
+function DisableAllTrials() {
+    const trial_btn = [
+        document.getElementById('ble_right_t1'), 
+        document.getElementById('ble_right_t2'),
+        document.getElementById('ble_right_t3'), 
+        document.getElementById('ble_left_t1'), 
+        document.getElementById('ble_left_t2'), 
+        document.getElementById('ble_left_t3')];
+    
+    for (var i=0; i<6; i++) {
+        trial_btn[i].disabled = true;
+    }
+}
+
 // prompt user to confirm switching tabs if the manual entry form is not empty
 function check_man_form_empty() {
     if ((document.getElementById("man_right_t1").value.length != 0) || 
@@ -156,6 +170,8 @@ function ResetBLE(){
         enable_trial_button(right_name);
         enable_trial_button(left_name);
     }
+
+    DisableAllTrials();
 }
 
 function ResetManual(){

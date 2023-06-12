@@ -1,4 +1,3 @@
-let next = 0;
 const trial_btn = [
     document.getElementById('ble_right_t1'), 
     document.getElementById('ble_right_t2'),
@@ -71,27 +70,6 @@ export function ShowResults(is_ble) {
         document.getElementById('left_bar_results').style.display = 'block';
     }
 } 
-
-const btn_connect = document.getElementById('ble_connect');
-const accept = document.getElementById('accept_button');
-if (btn_connect != null) {
-    btn_connect.addEventListener('click', EnableTrial);
-}
-if (accept != null) {
-    accept.addEventListener('click', EnableTrial);
-}
-
-function EnableTrial() {
-    //console.log('enable next trial');
-    //console.log(next);
-    if (next < 6){
-        trial_btn[next].disabled = false;
-        next = next + 1;
-    } else {
-        next = 0;
-    }
-    
-}
 
 const adminBTN = document.getElementById('adminNav');
 if (adminBTN != null) {

@@ -450,8 +450,6 @@
 
     <!--ble functions-->
     <script>
-        // manual variables
-        let man_data = Array(6);
 
         const btn_connect = document.getElementById('ble_connect');
         const btn_disconnect = document.getElementById("ble_disconnect");
@@ -487,8 +485,11 @@
                 console.log(`Connected to: ${gdxDevice.name}`);
                 graph_interval = setInterval(updateValue, 100);
                 disable_button('ble_connect');
-                enable_button('ble_disconnect');
                 lock_method_selection();
+                enable_button('ble_disconnect');
+                // enable first two trials, one for left and right
+                enable_trial_button(left_trial_btn[0]);
+                enable_trial_button(right_trial_btn[0]);
             } catch (err) {
                 console.error(err);
             }
@@ -515,6 +516,8 @@
         function Collect(evt) {
             // can't disconnect during trial
             disable_button('ble_disconnect');
+            // can't start another trial during a trial
+            DisableAllTrials();
             evt.currentTarget.disabled = true;
             current_index = evt.currentTarget.index;
             ProgressBar();
@@ -612,7 +615,6 @@
         }
         });
 
-        // TODO: progress bar (for sampling)
         async function ProgressBar() {
             if (count == 0) {
                 count = 1;
@@ -674,16 +676,39 @@
 
     <!--accept/reject-->
     <script>
-        const trial_btn = [
-            'ble_right_t1', 
-            'ble_right_t2',
-            'ble_right_t3', 
-            'ble_left_t1', 
-            'ble_left_t2', 
-            'ble_left_t3'];
-
+        const left_trial_btn = ['ble_left_t1', 'ble_left_t2', 'ble_left_t3'];
+        const right_trial_btn = ['ble_right_t1', 'ble_right_t2','ble_right_t3'];
+        let left_trial_cnt = 0;
+        let right_trial_cnt = 0;
         function Accept() {
+            // when we go in here, all trials are still disabled
             AcceptTrial(current_index);
+            if (current_index > 2) {
+                // left
+                if (left_trial_cnt == 2){
+                    if (right_trial_cnt < 2) {
+                        enable_trial_button(right_trial_btn[right_trial_cnt]);
+                    }
+                } else {
+                    if (right_trial_cnt < 2) {
+                        enable_trial_button(right_trial_btn[right_trial_cnt]);
+                    }
+                    enable_trial_button(left_trial_btn[++left_trial_cnt]);
+                }
+            } else {
+                // right
+                if (right_trial_cnt == 2) {
+                    if (left_trial_cnt < 2) {
+                        enable_trial_button(left_trial_btn[left_trial_cnt]);
+                    }
+                } else {
+                    if (left_trial_cnt < 2) {
+                        enable_trial_button(left_trial_btn[left_trial_cnt]);
+                    }
+                    enable_trial_button(right_trial_btn[++right_trial_cnt]); 
+                }
+                
+            }
         }
 
         function Reject() {
@@ -695,7 +720,12 @@
             updateValue();
 
             // reenable the trial button
-            enable_trial_button(trial_btn[current_index]);
+            if (current_index > 2){
+                enable_trial_button(left_trial_btn[left_trial_cnt]);
+            } else {
+                enable_trial_button(right_trial_btn[right_trial_cnt]);
+            }
+            
             // hide graphs again
             document.getElementById("graph_accept_reject").style.display = 'none';
             document.getElementById("myProgress").style.visibility = 'visible';
@@ -714,6 +744,7 @@
         let dBtn = document.getElementById("ble_submit");
         dBtn.addEventListener('click', StoreBLEData);
         function StoreBLEData() {
+            DisableAllTrials();
             console.log(sample_data);
             console.log(opt_sample_data);
             console.log(opt_sample_time);
