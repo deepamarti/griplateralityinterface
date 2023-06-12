@@ -323,21 +323,49 @@
     <!--navigation functions-->
     <script>
         // checks if manual entry form is empty
-        function checkIsFormEmpty() {
-
+        function checkIsManFormEmpty() {
+            if (document.getElementById("man_right_t1").value != "" ||
+                document.getElementById("man_right_t2").value != "" ||
+                document.getElementById("man_right_t3").value != "" ||
+                document.getElementById("man_left_t1").value != "" ||
+                document.getElementById("man_left_t2").value != "" ||
+                document.getElementById("man_left_t3").value != "") {
+                return false;
+            } else {
+                return true;
+            }
+            right_trials[0] = parseFloat(document.getElementById("man_right_t1").value).toFixed(2);
+      right_trials[1] = parseFloat(document.getElementById("man_right_t2").value).toFixed(2);
+      right_trials[2] = parseFloat(document.getElementById("man_right_t3").value).toFixed(2);
+      left_trials[0] = parseFloat(document.getElementById("man_left_t1").value).toFixed(2);
+      left_trials[1] = parseFloat(document.getElementById("man_left_t2").value).toFixed(2);
+      left_trials[2] = parseFloat(document.getElementById("man_left_t3").value).toFixed(2);
         }
 
         document.getElementById("PatientNav").addEventListener('click', ClearData);
         function ClearData() {
-            // add alert here "you are discarding any data - do you want to continue"
+            var msg = "You will lose any data already entered if you leave this screen. Do you wish to continue?";          
             if (gdxDevice != "") {
-                // warning: you are clearing unfinished bluetooth data
-               DisconnectDevice(); 
-            } else if (checkIsFormEmpty()) {
+                // bluetooth device needs to be disconnected
+                if (confirm(msg)) {
+                    DisconnectDevice();
+                    ResetBLE();
+                }
+            } else if (!checkIsManFormEmpty()) {
                 // warning: you are clearing unfinished manual data
+                if (confirm(msg)) {
+                    ResetBLE();
+                    ResetManual();
+                }
+            } else {
+                // can nav back, no error
+                ResetBLE();
+                ResetManual();
             }
-            ResetBLE();
-            ResetManual();
+            // default tab back to bluetooth
+            if (check_BLE_support()) {
+                SwitchTab(onload, "Bluetooth");
+            }
         }
 
         // switch tab explicitly disconnects device
@@ -354,7 +382,6 @@
             }
         }
 
-        // listeners on the retakes buttons (make these)
         function RetakeTrial(is_ble) {
             if (is_ble) {
                 ResetBLE();
