@@ -141,7 +141,7 @@
         <div id="patient_search">
             <div class="searchBar">
                 <img src="./aggieimpact_design/images/magnifying-glass-solid.svg" alt="#" id="firebaseBtn" 
-                        style="width: 30px; padding: 5px; border-radius: 10px;"></img>
+                        style="width: 30px; padding: 5px; border-radius: 10px;">
                 <input type="search" id="searchingFor" placeholder=" Patient Lookup" maxlength="20" onkeyup="filterTable()">
             </div>
                 
@@ -225,7 +225,7 @@
                                 <h3>Left Hand Measurements</h3>
                              </div>
                              <div class="col-md-12">
-                                <img id="undo_ble_left_t1" src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px; border-radius: 10px;"></button>
+                                <img id="undo_left_t1" src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px; border-radius: 10px;">
                                 <button class="trial_button" id ="ble_left_t1"> Trial 1</button>
                              </div>
                              <div class="col-md-12">
@@ -502,6 +502,7 @@
 
         function DisconnectDevice() {
             try {
+                DisableAllTrials();
                 if (gdxDevice != null) {
                     gdxDevice.close();
                     console.log(`Disconnected from: ${gdxDevice.name}`);
@@ -579,6 +580,31 @@
         btn_collect_4.index = 4;
         btn_collect_5.addEventListener('click', Collect);
         btn_collect_5.index = 5;
+
+        const btn_undo_0 = document.getElementById('undo_right_t1');
+        const btn_undo_1 = document.getElementById('undo_right_t2');
+        const btn_undo_2 = document.getElementById('undo_right_t3');
+        const btn_undo_3 = document.getElementById('undo_left_t1');
+        const btn_undo_4 = document.getElementById('undo_left_t2');
+        const btn_undo_5 = document.getElementById('undo_left_t3');
+
+        function UndoTrial(evt) {
+            //evt.currentTargte.index
+            alert(evt.currentTarget.index);
+        }
+        
+        btn_undo_0.addEventListener('click', UndoTrial);
+        btn_undo_0.index = 0;
+        btn_undo_1.addEventListener('click', UndoTrial);
+        btn_undo_1.index = 1;
+        btn_undo_2.addEventListener('click', UndoTrial);
+        btn_undo_2.index = 2;
+        btn_undo_3.addEventListener('click', UndoTrial);
+        btn_undo_3.index = 3;
+        btn_undo_4.addEventListener('click', UndoTrial);
+        btn_undo_4.index = 4;
+        btn_undo_5.addEventListener('click', UndoTrial);
+        btn_undo_5.index = 5;
     </script>
 
     <!--graphing functions-->
