@@ -83,6 +83,7 @@ const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const form = document.getElementById('signInForm');
 const signOutBtn = document.getElementById('signOut');
+const dropdownSignOut = document.getElementById("dropdown_signout");
 const signUp = document.getElementById('signUpForm');
 const emailSU = document.getElementById('emailSignUp');
 const passwordSU = document.getElementById('passwordSignUp');
@@ -174,6 +175,17 @@ if (form != null) {
 
 if (signOutBtn != null) {
   signOutBtn.addEventListener("click", function() {
+    auth.signOut().then(function() {
+      console.log('Signed Out');
+      window.location.href = "./index.html";
+    }, function(error) {
+      console.error('Sign Out Error', error);
+    });
+  });
+}
+
+if (dropdownSignOut != null) {
+  dropdownSignOut.addEventListener('click', function() {
     auth.signOut().then(function() {
       console.log('Signed Out');
       window.location.href = "./index.html";

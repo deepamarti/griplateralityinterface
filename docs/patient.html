@@ -81,11 +81,61 @@
         </div>
     </section>
 
+    <style>
+        .dropdown {
+        position: relative;
+        display: inline-block;
+        }
+
+        .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        }
+
+        .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        }
+
+        .dropdown a:hover {background-color: #ddd;}
+
+        .show {display: block;}
+    </style>
+    <!--dropdown menu to sign out-->
+    <script>
+        function DropdownSignOut() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+            }
+        }
+        }
+    </script>
     <section id="interface">
         <div class ="navBar">
             <div class="Profile">
                 <p id="headerName" style="margin-right: 15px; color: white;">Welcome!</p>
-                <img src="aggieimpact_design/images/avatar.jpg" alt="">
+                <img src="aggieimpact_design/images/avatar.jpg" alt="" class="dropbtn" onclick="DropdownSignOut()">
+                <div id="myDropdown" class="dropdown-content">
+                    <a href="#" id="dropdown_signout">Sign Out</a>
+                </div>
             </div>
         </div>
         <div id="patient_search">
