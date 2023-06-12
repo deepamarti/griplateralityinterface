@@ -1246,7 +1246,7 @@ async function calcGripRatio(patientUid, avgRH, avgLH) {
     await addMetric(metric);
 
     return {
-      "ratio": gripRatio,
+      "grip_ratio": gripRatio,
       "avgRH": avgRH,
       "avgLH": avgLH,
       "hand": domHand,

@@ -732,7 +732,7 @@
         function Accept() {
             // when we go in here, all trials are still disabled
             // enable the undo button for the latest trial, disable it for the trial before it
-            DisableAllTrials();     // hides all undo buttons
+            //DisableAllTrials();     // hides all undo buttons
             AcceptTrial(current_index);
             // show most recent one
             btn_undo[current_index].style.visibility = 'visible';
@@ -752,7 +752,7 @@
             } else {
                 // right
                 if (right_trial_cnt == 2) {
-                    if (left_trial_cnt < 2) {
+                    if (left_trial_cnt <= 2) {
                         enable_trial_button(left_trial_btn[left_trial_cnt]);
                     }
                 } else {
