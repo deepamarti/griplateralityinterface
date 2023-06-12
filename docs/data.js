@@ -56,6 +56,7 @@ function DisableAllTrials() {
     for (var i=0; i<6; i++) {
         trial_btn[i].disabled = true;
         undo_btn[i].disabled = true;
+        undo_btn[i].style.visibility = 'hidden';
     }
 }
 
@@ -281,6 +282,14 @@ function ClearOptTable() {
 const accept_btn = document.getElementById('accept_button')
 if (accept_btn != null) {
     accept_btn.addEventListener('click', AcceptTrial);
+}
+
+function UndoTrialCnt(index) {
+    if (index > 2) {
+        trials_complete_left--;
+    } else {
+        trials_complete_right--;
+    }
 }
 
 function AcceptTrial(index) {

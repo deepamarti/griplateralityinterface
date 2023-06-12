@@ -497,8 +497,6 @@
         let sample_data = Array(6);
         let opt_sample_data = Array(6);
         let opt_sample_time = Array(6);
-        let right_num_samples = 0;
-        let left_num_samples = 0;
 
         let done_sampling = false;
         let count = 0;
@@ -521,7 +519,6 @@
                 }
                 if (right_trial_cnt < 2) {
                     enable_trial_button(right_trial_btn[right_trial_cnt]);
-                    
                 }
             } catch (err) {
                 console.error(err);
@@ -604,9 +601,23 @@
 
         function UndoTrial(evt) {
             // can only undo the mot recent trial per hand
+            // clear all data arrays
+            sample_data[evt.currentTarget.index] = [];
+            opt_sample_data[evt.currentTarget.index] = [];
+            opt_sample_graph_data[evt.currentTarget.index] = Array(51).fill(NaN);
+            opt_sample_time[evt.currentTarget.index] = []; 
 
-            alert(evt.currentTarget.index);
-
+            UndoTrialCnt();
+            // disable the undo button
+            btn_undo[evt.currentTarget.index].disabled = true;
+            btn_undo[evt.currentTarget.index].style.visibility = 'hidden';
+            if (evt.currentTarget.index > 2){
+                left_trial_cnt--;
+            } else {
+                right_trial_cnt--;
+            }
+            btn_collect[evt.currentTarget.index].disabled = false;
+            btn_collect[evt.currentTarget.index].style.backgroundColor = "#4164da";
         }
 
         for (var i=0; i<6; i++) {
@@ -720,8 +731,12 @@
         let right_trial_cnt = 0;
         function Accept() {
             // when we go in here, all trials are still disabled
-            AcceptTrial(current_index);
             // enable the undo button for the latest trial, disable it for the trial before it
+            DisableAllTrials();     // hides all undo buttons
+            AcceptTrial(current_index);
+            // show most recent one
+            btn_undo[current_index].style.visibility = 'visible';
+            btn_undo[current_index].disabled = false;
             if (current_index > 2) {
                 // left
                 if (left_trial_cnt == 2){
