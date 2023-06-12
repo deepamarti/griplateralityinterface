@@ -207,9 +207,9 @@
                         </div>
                         
                     </div>
-                    <input id="man_submit" class="manual_entry_form" style="width:70%; margin: 20px auto;" type="submit" value="Submit">
+                    <input id="man_submit" class="manual_entry_form" style="width:70%; margin: 10px auto;" type="submit" value="Submit">
                 </form>
-                <button id ="man_retake" style="width:70%; margin: 0px auto 20px;" onclick="RetakeTrial(0)"> Take Another Measurement</button>
+                <button id ="man_retake" style="width:70%; margin: 0px auto 10px;" onclick="RetakeTrial(0)"> Take Another Measurement</button>
             </div>
             <div id="Bluetooth" class="tabcontent">
                 <div id="ble_collection" class="ble_collection">
@@ -225,15 +225,21 @@
                                 <h3>Left Hand Measurements</h3>
                              </div>
                              <div class="col-md-12">
-                                <img class="undo_button" id="undo_left_t1" src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px;" onclick="UndoTrial(3)">
+                                <button class="undo_button" id="undo_left_t1">
+                                    <img src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px;">
+                                </button>
                                 <button class="trial_button" id ="ble_left_t1"> Trial 1</button>
                              </div>
                              <div class="col-md-12">
-                                <img class="undo_button" id="undo_left_t2" src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px;" onclick="UndoTrial(4)">
+                                <button class="undo_button" id="undo_left_t2">
+                                    <img src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px;">
+                                </button>
                                 <button class="trial_button" id ="ble_left_t2"> Trial 2</button>
                              </div>
                              <div class="col-md-12">
-                                <img class="undo_button" id="undo_left_t3" src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px;" onclick="UndoTrial(5)">
+                                <button class="undo_button" id="undo_left_t3">
+                                    <img src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px;">
+                                </button>
                                 <button class="trial_button" id ="ble_left_t3"> Trial 3</button>
                              </div>
                         </div>
@@ -242,23 +248,29 @@
                                 <h3>Right Hand Measurements</h3>
                              </div>
                              <div class="col-md-12">
-                                <img class="undo_button" id="undo_right_t1" src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px; border-radius: 10px;" onclick="UndoTrial(0)">
+                                <button class="undo_button" id="undo_right_t1">
+                                    <img src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px;">
+                                </button>
                                 <button class="trial_button" id ="ble_right_t1">Trial 1</button>
                              </div>
                              <div class="col-md-12">
-                                <img class="undo_button" id="undo_right_t2" src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px; border-radius: 10px;" onclick="UndoTrial(1)">
+                                <button class="undo_button" id="undo_right_t2">
+                                    <img src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px;">
+                                </button>
                                 <button class="trial_button" id ="ble_right_t2"> Trial 2</button>
                              </div>
                              <div class="col-md-12">
-                                <img class="undo_button" id="undo_right_t3" src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px; border-radius: 10px;" onclick="UndoTrial(2)">
+                                <button class="undo_button" id="undo_right_t3">
+                                    <img src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px;">
+                                </button>
                                 <button class="trial_button" id ="ble_right_t3"> Trial 3</button>
                              </div>
                         </div>
                         
                     </div>
                     <div class="form_entry_row">
-                        <button id ="ble_submit" style="width:70%; margin: 20px auto;"> Submit</button>
-                        <button id ="ble_retake" style="width:70%; margin: 0px auto 20px;" onclick="RetakeTrial(1)"> Take Another Measurement</button>
+                        <button id ="ble_submit" style="width:70%; margin: 10px auto;"> Submit</button>
+                        <button id ="ble_retake" style="width:70%; margin: 0px auto 10px;" onclick="RetakeTrial(1)"> Take Another Measurement</button>
                     </div>
                     <div id="myProgress">
                         <p class="blink_display" id="blinking_text" style="height: 0;"></p>
@@ -429,7 +441,6 @@
             // explicitly disconnect device, if connected
             DisconnectDevice();
             SwitchTab(event,'Manual');
-
         }
 
         function SwitchtoBLE() {
@@ -458,12 +469,24 @@
 
         const btn_connect = document.getElementById('ble_connect');
         const btn_disconnect = document.getElementById("ble_disconnect");
-        const btn_collect_0 = document.getElementById('ble_right_t1');
-        const btn_collect_1 = document.getElementById('ble_right_t2');
-        const btn_collect_2 = document.getElementById('ble_right_t3');
-        const btn_collect_3 = document.getElementById('ble_left_t1');
-        const btn_collect_4 = document.getElementById('ble_left_t2');
-        const btn_collect_5 = document.getElementById('ble_left_t3');
+        const btn_collect = [
+            document.getElementById('ble_right_t1'),
+            document.getElementById('ble_right_t2'),
+            document.getElementById('ble_right_t3'),
+            document.getElementById('ble_left_t1'),
+            document.getElementById('ble_left_t2'),
+            document.getElementById('ble_left_t3')
+        ];
+
+        const btn_undo = [
+            document.getElementById('undo_right_t1'),
+            document.getElementById('undo_right_t2'),
+            document.getElementById('undo_right_t3'),
+            document.getElementById('undo_left_t1'),
+            document.getElementById('undo_left_t2'),
+            document.getElementById('undo_left_t3')
+        ];
+
         const ble_status = document.getElementById('ble_status');
 
         const graph = document.getElementById("ble_graph_sample");
@@ -498,6 +521,7 @@
                 }
                 if (right_trial_cnt < 2) {
                     enable_trial_button(right_trial_btn[right_trial_cnt]);
+                    
                 }
             } catch (err) {
                 console.error(err);
@@ -573,30 +597,23 @@
             }
             
         }
-        btn_collect_0.addEventListener('click', Collect);
-        btn_collect_0.index = 0;
-        btn_collect_1.addEventListener('click', Collect);
-        btn_collect_1.index = 1;
-        btn_collect_2.addEventListener('click', Collect);
-        btn_collect_2.index = 2;
-        btn_collect_3.addEventListener('click', Collect);
-        btn_collect_3.index = 3;
-        btn_collect_4.addEventListener('click', Collect);
-        btn_collect_4.index = 4;
-        btn_collect_5.addEventListener('click', Collect);
-        btn_collect_5.index = 5;
-
-        const btn_undo_0 = document.getElementById('undo_right_t1');
-        const btn_undo_1 = document.getElementById('undo_right_t2');
-        const btn_undo_2 = document.getElementById('undo_right_t3');
-        const btn_undo_3 = document.getElementById('undo_left_t1');
-        const btn_undo_4 = document.getElementById('undo_left_t2');
-        const btn_undo_5 = document.getElementById('undo_left_t3');
-
-        function UndoTrial(index) {
-            //evt.currentTargte.index
-            alert(index);
+        for (var i=0; i<6; i++) {
+            btn_collect[i].addEventListener('click', Collect);
+            btn_collect[i].index = i;
         }
+
+        function UndoTrial(evt) {
+            // can only undo the mot recent trial per hand
+
+            alert(evt.currentTarget.index);
+
+        }
+
+        for (var i=0; i<6; i++) {
+            btn_undo[i].addEventListener('click', UndoTrial);
+            btn_undo[i].index = i;
+        }
+
     </script>
 
     <!--graphing functions-->
@@ -704,6 +721,7 @@
         function Accept() {
             // when we go in here, all trials are still disabled
             AcceptTrial(current_index);
+            // enable the undo button for the latest trial, disable it for the trial before it
             if (current_index > 2) {
                 // left
                 if (left_trial_cnt == 2){

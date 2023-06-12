@@ -6,6 +6,14 @@ const trial_btn = [
     document.getElementById('ble_left_t2'), 
     document.getElementById('ble_left_t3')];
 
+const undo_btn = [
+    document.getElementById('undo_right_t1'), 
+    document.getElementById('undo_right_t2'),
+    document.getElementById('undo_right_t3'), 
+    document.getElementById('undo_left_t1'), 
+    document.getElementById('undo_left_t2'), 
+    document.getElementById('undo_left_t3')];
+
 function InitializeData() {
     document.getElementById("ble_submit").disabled = true;
     document.getElementById('ble_submit').style.backgroundColor = "lightgray";
@@ -20,6 +28,7 @@ function InitializeData() {
     
     for (let i=0; i<6; i++) {
         trial_btn[i].disabled = true;
+        undo_btn[i].disabled = true;
     }
 
     document.getElementById('graph_accept_reject').style.display = 'none';

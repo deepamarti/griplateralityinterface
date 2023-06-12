@@ -43,9 +43,19 @@ function DisableAllTrials() {
         document.getElementById('ble_left_t1'), 
         document.getElementById('ble_left_t2'), 
         document.getElementById('ble_left_t3')];
+
+    const undo_btn = [
+        document.getElementById('undo_right_t1'), 
+        document.getElementById('undo_right_t2'),
+        document.getElementById('undo_right_t3'), 
+        document.getElementById('undo_left_t1'), 
+        document.getElementById('undo_left_t2'), 
+        document.getElementById('undo_left_t3')];
+        
     
     for (var i=0; i<6; i++) {
         trial_btn[i].disabled = true;
+        undo_btn[i].disabled = true;
     }
 }
 
@@ -206,13 +216,12 @@ function disable_button(button_name) {
 }
 
 function disable_trial_button(button_name) {
-    // if we accept a trial, turn button green
+    // once we accept a trial, disable and turn button green
     document.getElementById(button_name).disabled = true;
     document.getElementById(button_name).style.backgroundColor = "#abd699";
 }
 
 function enable_trial_button(button_name) {
-    // if we accept a trial, turn button green
     document.getElementById(button_name).disabled = false;
     document.getElementById(button_name).style.backgroundColor = "#4164da";
 }
