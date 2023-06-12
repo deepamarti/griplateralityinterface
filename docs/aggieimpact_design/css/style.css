@@ -71,14 +71,6 @@ h6 {
      font-size: 13px
 }
 
-*,
-*::after,
-*::before {
-     -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-     box-sizing: border-box;
-}
-
 h1 a,
 h2 a,
 h3 a,
