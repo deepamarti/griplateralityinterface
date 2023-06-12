@@ -29,7 +29,13 @@ auth.onAuthStateChanged(async (user) => {
       document.getElementById("mainBody").style.display = "inline";
       var nameHeader = document.getElementById("headerName");
       if (nameHeader != null) {
-        var text = "Welcome, " + user.displayName + "!";
+        var text = "";
+        if (user.displayName != null) {
+          text = "Welcome, " + user.displayName + "!";
+        } else {
+          text = "Welcome!";
+        }
+        
         document.getElementById("headerName").innerHTML = text;
       }
       if (adminUser) {
