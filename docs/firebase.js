@@ -189,6 +189,7 @@ if (dropdownSignOut != null) {
     auth.signOut().then(function() {
       console.log('Signed Out');
       window.location.href = "./index.html";
+      // not supported on mobile - ios uses window.location.replace, android uses document.replace??
     }, function(error) {
       console.error('Sign Out Error', error);
     });
