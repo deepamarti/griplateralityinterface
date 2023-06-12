@@ -225,13 +225,15 @@
                                 <h3>Left Hand Measurements</h3>
                              </div>
                              <div class="col-md-12">
-                                <img id="undo_left_t1" src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px; border-radius: 10px;">
+                                <img id="undo_left_t1" src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px;" onclick="UndoTrial(3)">
                                 <button class="trial_button" id ="ble_left_t1"> Trial 1</button>
                              </div>
                              <div class="col-md-12">
+                                <img id="undo_left_t2" src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px;" onclick="UndoTrial(4)">
                                 <button class="trial_button" id ="ble_left_t2"> Trial 2</button>
                              </div>
                              <div class="col-md-12">
+                                <img id="undo_left_t3" src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px;" onclick="UndoTrial(5)">
                                 <button class="trial_button" id ="ble_left_t3"> Trial 3</button>
                              </div>
                         </div>
@@ -240,12 +242,15 @@
                                 <h3>Right Hand Measurements</h3>
                              </div>
                              <div class="col-md-12">
+                                <img id="undo_right_t1" src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px; border-radius: 10px;" onclick="UndoTrial(0)">
                                 <button class="trial_button" id ="ble_right_t1">Trial 1</button>
                              </div>
                              <div class="col-md-12">
+                                <img id="undo_right_t2" src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px; border-radius: 10px;" onclick="UndoTrial(1)">
                                 <button class="trial_button" id ="ble_right_t2"> Trial 2</button>
                              </div>
                              <div class="col-md-12">
+                                <img id="undo_right_t3" src="./aggieimpact_design/images/undo-circular-arrow.png" style="width: 30px; padding: 5px; border-radius: 10px;" onclick="UndoTrial(2)">
                                 <button class="trial_button" id ="ble_right_t3"> Trial 3</button>
                              </div>
                         </div>
@@ -588,23 +593,10 @@
         const btn_undo_4 = document.getElementById('undo_left_t2');
         const btn_undo_5 = document.getElementById('undo_left_t3');
 
-        function UndoTrial(evt) {
+        function UndoTrial(index) {
             //evt.currentTargte.index
-            alert(evt.currentTarget.index);
+            alert(index);
         }
-        
-        btn_undo_0.addEventListener('click', UndoTrial);
-        btn_undo_0.index = 0;
-        btn_undo_1.addEventListener('click', UndoTrial);
-        btn_undo_1.index = 1;
-        btn_undo_2.addEventListener('click', UndoTrial);
-        btn_undo_2.index = 2;
-        btn_undo_3.addEventListener('click', UndoTrial);
-        btn_undo_3.index = 3;
-        btn_undo_4.addEventListener('click', UndoTrial);
-        btn_undo_4.index = 4;
-        btn_undo_5.addEventListener('click', UndoTrial);
-        btn_undo_5.index = 5;
     </script>
 
     <!--graphing functions-->
