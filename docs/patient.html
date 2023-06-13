@@ -806,6 +806,7 @@
         let dBtn = document.getElementById("ble_submit");
         dBtn.addEventListener('click', StoreBLEData);
         function StoreBLEData() {
+            DisconnectDevice();
             DisableAllTrials();
             console.log(sample_data);
             console.log(opt_sample_data);
