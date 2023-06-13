@@ -618,6 +618,9 @@
             } else {
                 right_trial_cnt--;
             }
+            if (left_trial_cnt + right_trial_cnt != 6) {
+                document.getElementById('ble_submit').disabled = false;
+            }
             btn_collect[evt.currentTarget.index].disabled = false;
             btn_collect[evt.currentTarget.index].style.backgroundColor = "#4164da";
         }
@@ -762,8 +765,6 @@
                     }
                 }  
             }
-            console.log(left_trial_cnt);
-            console.log(right_trial_cnt);
         }
 
         function Reject() {
