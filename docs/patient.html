@@ -613,13 +613,20 @@
             // disable the undo button
             btn_undo[evt.currentTarget.index].disabled = true;
             btn_undo[evt.currentTarget.index].style.visibility = 'hidden';
+            // disable next trial
+            if (evt.currentTarget.index == 5) {
+                btn_collect[evt.currentTarget.index - 1].disabled = true;
+            } else {
+                btn_collect[evt.currentTarget.index + 1].disabled = true;
+            }
+
             if (evt.currentTarget.index > 2){
                 left_trial_cnt--;
             } else {
                 right_trial_cnt--;
             }
-            if (left_trial_cnt + right_trial_cnt != 6) {
-                document.getElementById('ble_submit').disabled = false;
+            if (left_trial_cnt + right_trial_cnt < 6) {
+                document.getElementById('ble_submit').disabled = true;
             }
             btn_collect[evt.currentTarget.index].disabled = false;
             btn_collect[evt.currentTarget.index].style.backgroundColor = "#4164da";
@@ -807,7 +814,11 @@
         dBtn.addEventListener('click', StoreBLEData);
         function StoreBLEData() {
             DisconnectDevice();
-            DisableAllTrials();
+
+            for (var i=1; i<6; i++) {
+                btn_collect[i].disabled = true;
+                btn_collect[i].style.backgroundColor = "#abd699";
+            }
             console.log(sample_data);
             console.log(opt_sample_data);
             console.log(opt_sample_time);
