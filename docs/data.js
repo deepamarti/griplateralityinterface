@@ -24,7 +24,7 @@ function check_BLE_support() {
         let msg_text = "Bluetooth is not supported on this browser. Please enter data manually.";
         ResetBLE();
         ResetManual();
-        document.getElementById(id="ble_status").style.backgroundColor = "lightgray";
+        document.getElementById("ble_status").style.backgroundColor = "lightgray";
         if (confirm(msg_text)) {
             SwitchTab(onload, 'Manual');
             
@@ -249,7 +249,7 @@ function max_index_to_time_range(max_index) {
         start = 4.6;
         end = 5.0;
     } else {
-        let temp = Math.round((max_index * 0.1 * 10)) / 10
+        let temp = Math.round((max_index * 0.1 * 10)) / 10;
         start = Math.round((temp - 0.2) * 10) / 10; 
         end = Math.round((temp + 0.2) * 10) / 10; 
     }
@@ -279,7 +279,7 @@ function ClearOptTable() {
     tbody.innerHTML = '';
 }
 
-const accept_btn = document.getElementById('accept_button')
+const accept_btn = document.getElementById('accept_button');
 if (accept_btn != null) {
     accept_btn.addEventListener('click', AcceptTrial);
 }
