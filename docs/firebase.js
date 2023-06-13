@@ -210,7 +210,7 @@ const fireBtn = document.getElementById("firebaseBtn");
 //     //let profiles = await getAllPatients();
 // }
 
-let patients = []
+let patients = [];
 
 if (fireBtn != null) {
 //function getPatientDashboard() {
@@ -312,7 +312,7 @@ async function setPatient(id, name) {
   ShowDataCollection();
   document.getElementById('dataCollectionH2').innerHTML = "Data Collection for " + name;
   document.getElementById('resultsH2').innerHTML = "Results for " + name;
-};
+}
 
 async function getAllDataByCollection(emr, patientUid, collectionName, fields) {
   const q = query(
@@ -324,7 +324,7 @@ async function getAllDataByCollection(emr, patientUid, collectionName, fields) {
     return {"empty": true, "data": []};
   }
   else {
-    var data = []
+    var data = [];
     querySnapshot.forEach((doc) => {
       var obj = doc.data();
       var new_obj = {};
@@ -519,7 +519,7 @@ const mForm = document.getElementById("manual_entry");
           "hand": 0, 
           maxRange: [0, 0], 
           "manual_entry": 1
-        }
+        };
         let manual_opt_data = {
           "uid": global_patient, 
           "date": dateNow,
@@ -528,7 +528,7 @@ const mForm = document.getElementById("manual_entry");
           "keep_trial": 1, 
           "hand": 0,
           "manual_entry": 1
-        }
+        };
         console.log(typeof(valueRH), valueRH);
         sumRH += valueRH;
         console.log(sumRH);
@@ -547,7 +547,7 @@ const mForm = document.getElementById("manual_entry");
           "hand": 1, 
           maxRange: [0, 0], 
           "manual_entry": 1
-        }
+        };
         let manual_opt_data = {
           "uid": global_patient, 
           "date": dateNow,
@@ -556,7 +556,7 @@ const mForm = document.getElementById("manual_entry");
           "keep_trial": 1, 
           "hand": 1,
           "manual_entry": 1
-        }
+        };
         sumLH += valueLH;
         addDeviceData(manual_data);
         addOptDeviceData(manual_opt_data);
@@ -696,17 +696,18 @@ async function getData() {
   console.log("in get data");
   if (scorelist != null) {
       var result = await getAllPatients();
+      var li = "";
       if (result["empty"] == false) {
           var patients = result["profiles"];
           for (var i = 0; i < patients.length; i++) {
               var name = patients[i].first_name;
-              var li = document.createElement("li");
+              li = document.createElement("li");
               li.innerHTML = name;
               scorelist.appendChild(li);
           }
       }
       else {
-          var li = document.createElement("li");
+          li = document.createElement("li");
           li.innerHTML = "No results found";
           scorelist.appendChild(li);
       }
@@ -809,7 +810,7 @@ async function isAdmin(uid) {
   }
 }
 
-var emailUp, passwordUp, conPassUp, adminSelected, name;
+var emailUp, passwordUp, conPassUp, adminSelected, nameUp;
 
 function validateUpEmail() {
   emailUp = emailSU.value;
@@ -835,17 +836,17 @@ function validateUpEmail() {
 }
 
 function validateNameUp() {
-  name = nameSU.value;
+  nameUp = nameSU.value;
 
-  console.log(name);
+  console.log(nameUp);
   // name can't be longer than 25 characters
-  if (name.length > 25) {
+  if (nameUp.length > 25) {
     document.getElementById("bad_name_up_error").innerHTML = "You entered a name that is too long";
   }
 
   // no special characters or numbers
   var re = /^[A-Za-z ]+$/;
-  if (re.test(name)) {
+  if (re.test(nameUp)) {
     document.getElementById("bad_name_up_error").innerHTML = "";
     return true;
   } else {
@@ -1005,7 +1006,7 @@ async function getMetricHistory(patientUid) {
     return {"empty": true, "data": []};
   }
   else {
-    var data = []
+    var data = [];
     querySnapshot.forEach((doc) => {
       data.push(doc.data());
     });
@@ -1205,7 +1206,7 @@ async function calcStrokeGripRatio(patientInfo, avgRH, avgLH) {
     "avgLH": avgLH,
     "hand": domHand,
     "empty": false
-  }
+  };
   // } else {
   //   return {
   //     "empty": true
@@ -1251,7 +1252,7 @@ async function calcGripRatio(patientUid, avgRH, avgLH) {
       "avgLH": avgLH,
       "hand": domHand,
       "empty": false
-    }
+    };
   }
     // let avgs = await calcAvgTrials(patientUid, typeEntry); // 1 = manual entry 
     // if (avgs["empty"] == false) {
