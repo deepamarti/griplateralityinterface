@@ -609,7 +609,7 @@
             opt_sample_graph_data[evt.currentTarget.index] = Array(51).fill(NaN);
             opt_sample_time[evt.currentTarget.index] = []; 
 
-            UndoTrialCnt();
+            
             // disable the undo button
             btn_undo[evt.currentTarget.index].disabled = true;
             btn_undo[evt.currentTarget.index].style.visibility = 'hidden';
@@ -619,12 +619,22 @@
             } else {
                 btn_collect[evt.currentTarget.index + 1].disabled = true;
             }
-
+            
+            UndoTrialCnt();
             if (evt.currentTarget.index > 2){
-                left_trial_cnt--;
+                if (left_trial_cnt != 2) {
+                   left_trial_cnt--; 
+                }
             } else {
-                right_trial_cnt--;
+                if (right_trial_cnt != 2) {
+                    right_trial_cnt--;
+                }
+                
             }
+
+            console.log(left_trial_cnt);
+            console.log(right_trial_cnt);
+
             if (left_trial_cnt + right_trial_cnt < 6) {
                 document.getElementById('ble_submit').disabled = true;
             }
@@ -772,6 +782,8 @@
                     }
                 }  
             }
+            console.log(left_trial_cnt);
+            console.log(right_trial_cnt);
         }
 
         function Reject() {
