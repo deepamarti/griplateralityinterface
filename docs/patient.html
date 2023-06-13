@@ -514,6 +514,8 @@
                 lock_method_selection();
                 enable_button('ble_disconnect');
                 // enable first two trials, one for left and right
+                left_trial_cnt = 0;
+                right_trial_cnt = 0;
                 if (left_trial_cnt < 2) {
                     enable_trial_button(left_trial_btn[left_trial_cnt]);
                 }
@@ -739,28 +741,26 @@
             btn_undo[current_index].disabled = false;
             if (current_index > 2) {
                 // left
-                if (left_trial_cnt == 2){
-                    if (right_trial_cnt < 2) {
-                        enable_trial_button(right_trial_btn[right_trial_cnt]);
-                    }
-                } else {
-                    if (right_trial_cnt < 2) {
-                        enable_trial_button(right_trial_btn[right_trial_cnt]);
-                    }
-                    enable_trial_button(left_trial_btn[++left_trial_cnt]);
+                if (left_trial_cnt <= 2){
+                    if (left_trial_cnt == 2) {
+                        if (right_trial_cnt != 2) {
+                            enable_trial_button(right_trial_btn[right_trial_cnt]);
+                        }
+                    } else {
+                       enable_trial_button(left_trial_btn[++left_trial_cnt]); 
+                    }  
                 }
             } else {
                 // right
-                if (right_trial_cnt == 2) {
-                    if (left_trial_cnt <= 2) {
-                        enable_trial_button(left_trial_btn[left_trial_cnt]);
+                if (right_trial_cnt <= 2) {
+                    if (right_trial_cnt == 2) {
+                        if (left_trial_cnt !=2) {
+                            enable_trial_button(left_trial_btn[left_trial_cnt]);
+                        }
+                    } else {
+                        enable_trial_button(right_trial_btn[++right_trial_cnt]);
                     }
-                } else {
-                    if (left_trial_cnt < 2) {
-                        enable_trial_button(left_trial_btn[left_trial_cnt]);
-                    }
-                    enable_trial_button(right_trial_btn[++right_trial_cnt]); 
-                }
+                }  
             }
             console.log(left_trial_cnt);
             console.log(right_trial_cnt);
