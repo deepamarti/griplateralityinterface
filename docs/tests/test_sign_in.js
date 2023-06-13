@@ -11,7 +11,7 @@ document.getElementById('password').value = "notpassword";
 document.getElementById("email").value = "notkajal@gmail.com";
 document.getElementById('password').value = "password";
 
-// TEST_INVALID_USERNAME
+// TEST_INVALID_EMAIL
 // test 1: special characters
 document.getElementById("email").value = "#ello&g00dbye@gmail.com";
 document.getElementById('password').value = "password";
