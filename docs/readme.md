@@ -1,6 +1,6 @@
 # ECS 193 Team 9, Grip Symmetry Measure Website
 
-Website to connect via bluetooth to hand dynomometer to collect grip strength measurements and calculate a ratio based on noramative data. Made in collaboration with the UC Davis Biomechanics, Rehabilitation, and Integrative Neuroscience (BRaIN) Lab.
+Website to connect via bluetooth to hand dynamometer to collect grip strength measurements and calculate a ratio based on normative data. Made in collaboration with the UC Davis Biomechanics, Rehabilitation, and Integrative Neuroscience (BRaIN) Lab.
 
 ## Developers
 - Deepa Marti
