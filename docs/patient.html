@@ -825,7 +825,7 @@
         dBtn.addEventListener('click', StoreBLEData);
         function StoreBLEData() {
             DisconnectDevice();
-
+            disable_button('ble_connect');
             for (var i=1; i<6; i++) {
                 btn_collect[i].disabled = true;
                 btn_collect[i].style.backgroundColor = "#abd699";
