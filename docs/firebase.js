@@ -129,6 +129,7 @@ function validatePassword() {
     console.log("password too short");
     document.getElementById("bad_password_error").innerHTML = "Passwords must be at least 6 characters long";
     passwordInput.value = "";
+    return false;
   } else {
     return true;
   }
@@ -877,6 +878,7 @@ function validateUpPassword1() {
     console.log("password too short");
     document.getElementById("bad_password1_up_error").innerHTML = "Passwords must be at least 6 characters long";
     passwordInput.value = "";
+    return false;
   } else {
     return true;
   }
@@ -908,6 +910,7 @@ function validateUpPassword2() {
     console.log("password too short");
     document.getElementById("bad_password2_up_error").innerHTML = "Passwords must be at least 6 characters long";
     passwordInput.value = "";
+    return false;
   } else {
     return true;
   }
