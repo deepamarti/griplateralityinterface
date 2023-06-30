@@ -122,23 +122,30 @@ function validatePassword() {
   // password can be no longer than 256 characters
   if (password.length > 256) {
     console.log("password too long");
-    document.getElementById("bad_password_error").innerHTML = "You entered a password that is too long";
+    document.getElementById("bad_password_error").innerHTML = "Passwords cannot be longer than 256 characters";
     passwordInput.value = "";
     return false;
+  } else if (password.length < 6) {
+    console.log("password too short");
+    document.getElementById("bad_password_error").innerHTML = "Passwords must be at least 6 characters long";
+    passwordInput.value = "";
+  } else {
+    return true;
   }
 
-  // password can't have special characters
-  var re = /^[A-Za-z0-9 ]+$/;
-  if (re.test(password)) {
-    console.log("valid password");
-    document.getElementById("bad_password_error").innerHTML = "";
-    return true;
-  } else {
-    console.log("invalid password");
-    document.getElementById("bad_password_error").innerHTML = "Please enter a valid password";
-    passwordInput.value = "";
-    return false;
-  }
+  
+  // // password can't have special characters
+  // var re = /^[A-Za-z0-9 ]+$/;
+  // if (re.test(password)) {
+  //   console.log("valid password");
+  //   document.getElementById("bad_password_error").innerHTML = "";
+  //   return true;
+  // } else {
+  //   console.log("invalid password");
+  //   document.getElementById("bad_password_error").innerHTML = "Please enter a valid password";
+  //   passwordInput.value = "";
+  //   return false;
+  // }
   
 }
 
@@ -863,23 +870,29 @@ function validateUpPassword1() {
   // password can be no longer than 256 characters
   if (passwordUp.length > 256) {
     console.log("password too long");
-    document.getElementById("bad_password1_up_error").innerHTML = "You entered a password that is too long";
+    document.getElementById("bad_password1_up_error").innerHTML = "Passwords cannot be longer than 256 characters";
     passwordSU.value = "";
     return false;
+  } else if (passwordUp.length < 6) {
+    console.log("password too short");
+    document.getElementById("bad_password1_up_error").innerHTML = "Passwords must be at least 6 characters long";
+    passwordInput.value = "";
+  } else {
+    return true;
   }
 
-  // password can't have special characters
-  var re = /^[A-Za-z0-9 ]+$/;
-  if (re.test(passwordUp)) {
-    console.log("valid password");
-    document.getElementById("bad_password1_up_error").innerHTML = "";
-    return true;
-  } else {
-    console.log("invalid password");
-    document.getElementById("bad_password1_up_error").innerHTML = "Please enter a valid password";
-    passwordSU.value = "";
-    return false;
-  }
+  // // password can't have special characters
+  // var re = /^[A-Za-z0-9 ]+$/;
+  // if (re.test(passwordUp)) {
+  //   console.log("valid password");
+  //   document.getElementById("bad_password1_up_error").innerHTML = "";
+  //   return true;
+  // } else {
+  //   console.log("invalid password");
+  //   document.getElementById("bad_password1_up_error").innerHTML = "Please enter a valid password";
+  //   passwordSU.value = "";
+  //   return false;
+  // }
 }
 
 function validateUpPassword2() {
@@ -888,23 +901,30 @@ function validateUpPassword2() {
   // password can be no longer than 256 characters
   if (conPassUp.length > 256) {
     console.log("password too long");
-    document.getElementById("bad_password2_up_error").innerHTML = "You entered a password that is too long";
+    document.getElementById("bad_password2_up_error").innerHTML = "Passwords cannot be longer than 256 characters";
     confirmPassword.value = "";
     return false;
+  } else if (conPassUp.length < 6) {
+    console.log("password too short");
+    document.getElementById("bad_password2_up_error").innerHTML = "Passwords must be at least 6 characters long";
+    passwordInput.value = "";
+  } else {
+    return true;
   }
 
-  // password can't have special characters
-  var re = /^[A-Za-z0-9 ]+$/;
-  if (re.test(conPassUp)) {
-    console.log("valid password");
-    document.getElementById("bad_password2_up_error").innerHTML = "";
-    return true;
-  } else {
-    console.log("invalid password");
-    document.getElementById("bad_password2_up_error").innerHTML = "Please enter a valid password";
-    confirmPassword.value = "";
-    return false;
-  }
+  // // password can only have the special characters: 
+  // var regex = /^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]{6,}$/g
+  // var re = /^[A-Za-z0-9 ]+$/;
+  // if (re.test(conPassUp)) {
+  //   console.log("valid password");
+  //   document.getElementById("bad_password2_up_error").innerHTML = "";
+  //   return true;
+  // } else {
+  //   console.log("invalid password");
+  //   document.getElementById("bad_password2_up_error").innerHTML = "Please enter a valid password";
+  //   confirmPassword.value = "";
+  //   return false;
+  // }
 }
 
 if (signUp != null) {
